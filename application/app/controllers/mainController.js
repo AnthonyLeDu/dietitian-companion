@@ -1,7 +1,11 @@
+const dataMapper = require("../data/dataMapper");
+
 const mainController = {
   
-  homePage: (req, res) => {
-    res.render('index');
+  homePage: async (req, res) => {
+    const users = await dataMapper.getAllUsers();
+    console.log(users);
+    res.render('index', {users});
   }
   
 }
