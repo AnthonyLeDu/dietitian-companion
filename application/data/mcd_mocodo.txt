@@ -1,0 +1,37 @@
+PATIENT: code patient, nom, prénom, sexe
+CONCERNE, 11 RELEVÉ ALIMENTAIRE, 0N PATIENT
+:
+:
+:
+:
+
+:
+RELEVÉ ALIMENTAIRE: code ration, âge patient, poids patient
+:
+:
+:
+:
+
+:
+COMPORTE_1, 0N RELEVÉ ALIMENTAIRE, 11 SEMAINE
+SEMAINE: code semaine, position dans le relevé
+:
+:
+:
+
+:
+JOUR: code jour, jour de la semaine
+COMPORTE_2, ON SEMAINE, 11 JOUR
+::
+
+:
+COMPORTE_3, 0N JOUR, 11 REPAS
+REPAS: code repas, moment de la journée
+::
+
+
+ALIMENT: code aliment, nom, énergie (kJ), énergie (kcal), eau, protéines, lipides, ...
+CORRESPOND À, 11 PLAT, 11 ALIMENT
+PLAT: code plat, position dans le repas, quantité
+COMPORTE_4, 0N REPAS, 11 PLAT
+::::
