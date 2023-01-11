@@ -13,9 +13,24 @@
 <body>
   <h1>Hello World!</h1>
   <br>
-  <% for (food of foods) { %>
-    <p><%= food.name_fr %></p>
-  <% } %>
+  <table>
+    <thead>
+      <td>Food</td>
+      <td>Food Group</td>
+      <td>Food Sub Group</td>
+      <td>Food Sub Sub Group</td>
+    </thead>
+    <tbody>
+      <% for (food of foods) { %>
+        <tr>
+        <td><%= food.name %></td>
+        <td><%= food.group %></td>
+        <td><%= food.sub_group %></td>
+        <td><%= food.sub_sub_group %></td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
   <br>
   <aside>Anses. 2020. Table de composition nutritionnelle des aliments Ciqual téléchargée sur <a
       href="https://ciqual.anses.fr"> https://ciqual.anses.fr </a> le 5 janvier 2023.</aside>
