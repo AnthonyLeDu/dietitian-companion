@@ -1,4 +1,4 @@
-require('dotenv').config({path: __dirname + '/../.env'});
+require('dotenv').config({ path: __dirname + '/../.env' });
 console.log(process.env.DB_ENV);
 
 const {
@@ -8,7 +8,15 @@ const {
   FoodSubSubGroup
 } = require('../app/models/ciqual');
 
-async function test() {
+const {
+  Day,
+  Dish,
+  Journal,
+  Meal,
+  Patient
+} = require('../app/models/food_journal');
+
+async function logAllFoods() {
   const foods = await Food.findAll({
     include: ['food_grp', 'food_ssgrp', 'food_ssssgrp'],
     limit: 2
@@ -23,6 +31,41 @@ async function test() {
     }
   })
   console.log(foodsDisplay);
+}
+
+async function createPatient(first_name, last_name, gender) {
+  const patient = await Patient.create({
+    first_name,
+    last_name,
+    gender
+  });
+  console.log(patient);
+  return patient;
+}
+
+async function createJournal(patient) {
+  const journal = await Journal.create({
+    patient_id: patient.id,
+    patient_age: 25,
+    patient_weight: 58,
+  });
+  console.log(journal);
+}
+
+async function test() {
+  const [patient, created] = await Patient.findOrCreate({
+    where: {
+      first_name: 'Jeanine',
+      last_name: 'Dupont',
+      gender: 'Female',
+      birth_date: new Date(1985, 07, 15)
+    }
+  });
+  if (created) {
+    console.log('New patient created!');
+  }
+  await createJournal(patient);
+
   process.exit(1);
 }
 
