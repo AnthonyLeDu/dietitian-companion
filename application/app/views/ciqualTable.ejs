@@ -1,0 +1,33 @@
+<%- include ('partials/header') %> 
+
+<main>
+  <h2>Table des aliments Ciqual</h2>
+  <table>
+    <thead>
+      <td>Aliment</td>
+      <td>Groupe</td>
+      <td>Sous-groupe</td>
+      <td>Sous-sous-groupe</td>
+    </thead>
+    <tbody>
+      <% for (food of foods) { %>
+        <tr>
+          <td>
+            <%= food.name_fr %>
+          </td>
+          <td>
+            <%= food.food_grp.name_fr %>
+          </td>
+          <td>
+            <%= food.food_ssgrp.name_fr %>
+          </td>
+          <td>
+            <%= food.food_ssssgrp.name_fr %>
+          </td>
+        </tr>
+        <% } %>
+    </tbody>
+  </table>
+</main>
+
+<%- include ('partials/footer') %> 

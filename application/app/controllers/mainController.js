@@ -1,21 +1,26 @@
 const { Food } = require('../models/ciqual/');
+const { Patient } = require('../models/food_journal/');
 
 const mainController = {
   
   homePage: async (req, res) => {
-    let foods = await Food.findAll({
+    res.render('index');
+  },
+
+  journalsPage: async (req, res) => {
+    const patients = await Patient.findAll({
+      include: {
+        association: 'journals',
+      }
+    })
+    res.render('journals', {patients});
+  },
+  
+  ciqualTablePage: async (req, res) => {
+    const foods = await Food.findAll({
       include: ['food_grp', 'food_ssgrp', 'food_ssssgrp'],
-      // limit: 1000
     });
-    foods = foods.map(food => {
-      return {
-        name: food.name_fr,
-        group: food.food_grp.name_fr,
-        sub_group: food.food_ssgrp.name_fr,
-        sub_sub_group: food.food_ssssgrp.name_fr,
-      };
-    });
-    res.render('index', {foods});
+    res.render('ciqualTable', {foods});
   }
   
 }

@@ -1,0 +1,35 @@
+<%- include ('partials/header') %>
+
+  <main>
+    <h2>Journaux alimentaires</h2>
+    <table>
+      <thead>
+        <td>Patient</td>
+        <td>Date du journal</td>
+        <td>Âge du patient (au moment du journal)</td>
+        <td>Poids du patient (au moment du journal)</td>
+      </thead>
+      <tbody>
+        <% for (patient of patients) {
+          for (journal of patient.journals) { %>
+          <tr>
+            <td>
+              <%= patient.fullNameWithGenderLetter %>
+            </td>
+            <td>
+              <%= journal.created_at %>
+            </td>
+            <td>
+              <%= journal.patient_age %>
+            </td>
+            <td>
+              <%= journal.patient_weight %>
+            </td>
+          </tr>
+          <% }
+        } %>
+      </tbody>
+    </table>
+  </main>
+
+  <%- include ('partials/footer') %>

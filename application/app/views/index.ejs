@@ -1,40 +1,7 @@
-<!DOCTYPE html>
-<html lang="fr">
+<%- include ('partials/header') %> 
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dietitian Companion</title>
-  <link rel="stylesheet" href="/css/reset.css">
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+<main>
+  <h2>Bienvenue !</h2>
+</main>
 
-<body>
-  <h1>Hello World!</h1>
-  <br>
-  <table>
-    <thead>
-      <td>Food</td>
-      <td>Food Group</td>
-      <td>Food Sub Group</td>
-      <td>Food Sub Sub Group</td>
-    </thead>
-    <tbody>
-      <% for (food of foods) { %>
-        <tr>
-        <td><%= food.name %></td>
-        <td><%= food.group %></td>
-        <td><%= food.sub_group %></td>
-        <td><%= food.sub_sub_group %></td>
-      </tr>
-      <% } %>
-    </tbody>
-  </table>
-  <br>
-  <aside>Anses. 2020. Table de composition nutritionnelle des aliments Ciqual téléchargée sur <a
-      href="https://ciqual.anses.fr"> https://ciqual.anses.fr </a> le 5 janvier 2023.</aside>
-
-</body>
-
-</html>
+<%- include ('partials/footer') %> 

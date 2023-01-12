@@ -1,7 +1,15 @@
 const { Model, DataTypes } = require('sequelize');
 const getConnexion = require('./getConnexion');
 
-class Patient extends Model {}
+class Patient extends Model {
+  get fullName() {
+    return `${this.first_name} ${this.last_name}`;
+  }
+
+  get fullNameWithGenderLetter() {
+    return `${this.first_name} ${this.last_name} (${this.gender.charAt(0)})`;
+  }
+}
 
 Patient.init(
   {
@@ -17,7 +25,7 @@ Patient.init(
       type: DataTypes.STRING,  // 'Male' or 'Female'
       allowNull: false
     },
-    birth_date: DataTypes.DATE,
+    birth_date: DataTypes.DATEONLY,
     created_at: DataTypes.DATE,
     updated_at: DataTypes.DATE
   },
