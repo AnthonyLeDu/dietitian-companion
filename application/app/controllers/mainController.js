@@ -1,5 +1,5 @@
 const { Food } = require('../models/ciqual/');
-const { Patient } = require('../models/food_journal/');
+const { Journal } = require('../models/food_journal/');
 
 const mainController = {
   
@@ -8,12 +8,13 @@ const mainController = {
   },
 
   journalsPage: async (req, res) => {
-    const patients = await Patient.findAll({
+    const journals = await Journal.findAll({
+      order: [['updated_at', 'DESC']],
       include: {
-        association: 'journals',
+        association: 'patient',
       }
     })
-    res.render('journals', {patients});
+    res.render('journals', {journals});
   },
   
   ciqualTablePage: async (req, res) => {

@@ -6,7 +6,7 @@ class Patient extends Model {
     return `${this.first_name} ${this.last_name}`;
   }
 
-  get fullNameWithGenderLetter() {
+  get fullNameAndGender() {
     return `${this.first_name} ${this.last_name} (${this.gender.charAt(0)})`;
   }
 }
