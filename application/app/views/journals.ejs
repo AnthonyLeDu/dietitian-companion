@@ -1,7 +1,14 @@
 <%- include ('partials/header') %>
 
   <main>
-    <h2>Journaux alimentaires</h2>
+    <h2>Journaux alimentaires<% if (filtered && journals.length> 0) {
+        const patient = journals[0].patient;
+        %>
+        de <a href="/patient/<%= patient.id %>">
+          <%= journals[0].patient.fullName %>
+        </a>
+        <% } %>
+    </h2>
     <table>
       <thead>
         <td>Date de dernière mise à jour</td>
