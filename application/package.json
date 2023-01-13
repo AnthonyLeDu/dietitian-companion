@@ -5,7 +5,9 @@
   "main": "app/index.js",
   "scripts": {
     "dev": "nodemon app/index.js",
-    "test": "node test/index.js"
+    "test": "node test/index.js",
+    "food_journal_reset_tables": "psql -U food_journal -d food_journal -f ./data/food_journal_create_tables.sql",
+    "ciqual_reset_db": "psql -U ciqual -d ciqual -f ./data/ciqual_create_db.sql"
   },
   "repository": {
     "type": "git",
@@ -18,6 +20,7 @@
   },
   "homepage": "https://github.com/AnthonyLeDu/dietitian-companion#readme",
   "dependencies": {
+    "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
     "express": "^4.18.2",
