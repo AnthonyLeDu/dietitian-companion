@@ -46,8 +46,8 @@ async function createPatient(first_name, last_name, gender) {
 async function createJournal(patient) {
   const journal = await Journal.create({
     patient_id: patient.id,
-    patient_age: 25,
-    patient_weight: 58,
+    patient_age: 68,
+    patient_weight: 75,
   });
   console.log(journal);
 }
@@ -55,10 +55,10 @@ async function createJournal(patient) {
 async function test() {
   const [patient, created] = await Patient.findOrCreate({
     where: {
-      first_name: 'Jeanine',
-      last_name: 'Dupont',
-      gender: 'Female',
-      birth_date: new Date(1985, 07, 15)
+      first_name: 'Joseph',
+      last_name: 'Staline',
+      gender: 'Male',
+      birth_date: new Date(1900, 01, 01)
     }
   });
   if (created) {

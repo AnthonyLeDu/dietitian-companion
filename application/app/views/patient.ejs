@@ -1,0 +1,24 @@
+<%- include ('partials/header') %>
+
+  <main>
+    <h2>
+      <%= patient.fullName %>
+    </h2>
+
+    <h3>Sexe</h3>
+    <p>
+      <%= patient.gender %>
+    </p>
+
+    <h3>Date de naissance</h3>
+    <p>
+      <%= patient.birth_date %>
+    </p>
+
+    <a href="/patient/<%= patient.id %>/journals">
+      <p>Voir les journaux du patient</p>
+    </a>
+
+  </main>
+
+  <%- include ('partials/footer') %>
