@@ -1,0 +1,18 @@
+<%- include ('partials/header') %>
+
+  <main>
+    <h2>Journal alimentaire</h2>
+    <% for (day of journal.days) { %>
+      <h3>
+        <%= day.name %>
+      </h3>
+      <% for (meal of day.meals) { %>
+        <h4>
+          <%= meal.time %>
+        </h4>
+        <% for (dish of meal.dishes) { %>
+          <p><%= dish.position %>. <%= dish.food.name_fr %> (<%= dish.amount %>g ) </p>
+        <% }}} %>
+  </main>
+
+  <%- include ('partials/footer') %>

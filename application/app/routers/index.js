@@ -6,6 +6,7 @@ router = express.Router();
 router.get('/', mainController.homePage);
 router.get('/ciqualTable', mainController.ciqualTablePage);
 router.get('/journals', mainController.journalsPage);
+router.get('/journal/:id', mainController.journalPage);
 router.get('/patients', mainController.patientsPage);
 router.get('/patient/:id', mainController.patientPage);
 

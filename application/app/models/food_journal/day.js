@@ -11,7 +11,7 @@ Day.init(
       autoIncrement: true,
       primaryKey: true
     },
-    position: DataTypes.INTEGER, // Just for ordering the days
+    position: DataTypes.INTEGER, // Relative to journal.start_day
     created_at: DataTypes.DATE,
     updated_at: DataTypes.DATE
   },

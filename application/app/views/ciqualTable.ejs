@@ -4,6 +4,7 @@
   <h2>Table des aliments Ciqual</h2>
   <table>
     <thead>
+      <td>Code</td>
       <td>Aliment</td>
       <td>Groupe</td>
       <td>Sous-groupe</td>
@@ -12,6 +13,9 @@
     <tbody>
       <% for (food of foods) { %>
         <tr>
+          <td>
+            <%= food.code %>
+          </td>
           <td>
             <%= food.name_fr %>
           </td>

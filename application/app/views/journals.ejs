@@ -11,6 +11,7 @@
     </h2>
     <table>
       <thead>
+        <td></td>
         <td>Date de dernière mise à jour</td>
         <td>Date de création</td>
         <td>Patient</td>
@@ -20,6 +21,9 @@
       <tbody>
         <% for (journal of journals) { %>
           <tr>
+            <td>
+              <a href="/journal/<%= journal.id %>">Voir</a>
+            </td>
             <td>
               <%= journal.updated_at %>
             </td>

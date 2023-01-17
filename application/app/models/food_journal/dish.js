@@ -1,7 +1,16 @@
 const { Model, DataTypes } = require('sequelize');
+const { Food } = require('../ciqual');
 const getConnexion = require('./getConnexion');
 
-class Dish extends Model {}
+class Dish extends Model {
+  food;
+
+  async fetchFood(force=false) {
+    if (this.food === undefined || force) {
+      this.food = await Food.findByPk(this.food_code);
+    }
+  }
+}
 
 Dish.init(
   {

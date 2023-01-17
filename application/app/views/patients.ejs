@@ -4,7 +4,7 @@
     <h2>Patients</h2>
     <table>
       <thead>
-        <td>Id</td>
+        <td></td>
         <td>Nom</td>
         <td>Prénom</td>
         <td>Sexe</td>
@@ -15,7 +15,7 @@
         <% for (patient of patients) { %>
           <tr>
             <td>
-              <a href="/patient/<%= patient.id %>"><%= patient.id %></a>
+              <a href="/patient/<%= patient.id %>">Profil</a>
             </td>
             <td>
               <%= patient.last_name %>

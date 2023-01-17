@@ -19,6 +19,10 @@ Journal.init(
       type: DataTypes.INTEGER, // kg
       allowNull: false
     },
+    start_day: {
+      type: DataTypes.DATEONLY,
+      allowNull: false
+    },
     created_at: DataTypes.DATE,
     updated_at: DataTypes.DATE
   },
