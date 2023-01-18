@@ -1,22 +1,26 @@
 const dayjs = require('dayjs');
-const { Journal } = require('../models');
+const { Journal, Patient } = require('../models');
 
 const journalController = {
 
-  journalsPage: async (req, res) => {
+  journalsPage: async (req, res, next) => {
     const findData = {
       order: [['updated_at', 'DESC']],
-      include: 'patient'
+      // 'association' is important here because we may add 'where' below
+      include: { association: 'patient' }
     }
     // Check if we want to filter by patient id
     const patient_id = req.query.patient;
-    filtered = false;
-    if (patient_id) {
-      filtered = true;
+    patient = undefined;
+    if (patient_id !== undefined) {
+      patient = await Patient.findByPk(patient_id);
+      if (!patient) {
+        return next(); // 404
+      }
       findData.include.where = { id: patient_id };
     }
     const journals = await Journal.findAll(findData);
-    res.render('journals', { journals, filtered });
+    res.render('journals', { journals, patient });
   },
 
   journalPage: async (req, res, next) => {
@@ -32,8 +36,7 @@ const journalController = {
     });
 
     if (!journal) {
-      next(); // 404
-      return;
+      return next(); // 404
     }
 
     // Using 'for of' here is important to be synchronous !
