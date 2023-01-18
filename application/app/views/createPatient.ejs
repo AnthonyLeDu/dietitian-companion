@@ -1,0 +1,37 @@
+<%- include ('partials/header') %>
+
+  <main class="container">
+    <h2>Ajout d'un patient</h2>
+    <form action="" method="post" class="container">
+
+      <fieldset>
+        <label for="last_name">Nom de famille</label>
+        <input type="text" name="last_name" id="last_name" placeholder="Dupont" required>
+      </fieldset>
+
+      <fieldset>
+        <label for="first_name">Prénom</label>
+        <input type="text" name="first_name" id="first_name" placeholder="Jean" required>
+      </fieldset>
+
+      <fieldset>
+        <label for="gender">Sexe</label>
+        <input type="radio" name="gender" id="gender-male" value="Homme" checked required>Homme
+        <input type="radio" name="gender" id="gender-female" value="Femme" required>Femme
+      </fieldset>
+
+      <fieldset>
+        <label for="birth_date">Date de naissance</label>
+        <input type="date" name="birth_date" id="birth_date" max=<%= maxDate %> required>
+      </fieldset>
+
+      <button type="submit">Créer le patient</button>
+
+      <% if (typeof feedbackMessage !== 'undefined') { %>
+        <mark><%= feedbackMessage %></mark>
+      <% } %>
+
+    </form>
+  </main>
+
+  <%- include ('partials/footer') %>

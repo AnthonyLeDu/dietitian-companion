@@ -8,6 +8,8 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', './app/views'); // Path relative to the location of the file that will require this server
 
+app.use(express.urlencoded({ extended: true })); // To be able to read POST req.body content
+
 app.use(express.static('public'));  // Path relative to the location of the file that will require this server
 
 // Main router
