@@ -48,8 +48,7 @@ const patientController = {
       { include: 'journals' }
     );
     if (!patient) {
-      next(); // 404
-      return;
+      return next(); // 404
     }
     res.render('patient', { patient });
   },
