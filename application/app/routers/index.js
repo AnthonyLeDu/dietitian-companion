@@ -12,6 +12,8 @@ router.get('/ciqualTable', catchErrors(mainController.ciqualTablePage));
 router.get('/journals', catchErrors(journalController.journalsPage));
 router.get('/journal/:id', catchErrors(journalController.journalPage));
 
+router.get('/patient/create', catchErrors(patientController.createPatientPage));
+router.post('/patient/create', catchErrors(patientController.createPatient));
 router.get('/patients', catchErrors(patientController.patientsPage));
 router.get('/patient/:id', catchErrors(patientController.patientPage));
 
