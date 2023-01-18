@@ -1,21 +1,18 @@
 const express = require('express');
+const { catchErrors } = require('../middlewares/handlers/errorHandlers');
 const journalController = require('../controllers/journalController');
 const mainController = require('../controllers/mainController');
 const patientController = require('../controllers/patientController');
 
 router = express.Router();
 
-router.get('/', mainController.homePage);
-router.get('/ciqualTable', mainController.ciqualTablePage);
+router.get('/', catchErrors(mainController.homePage));
+router.get('/ciqualTable', catchErrors(mainController.ciqualTablePage));
 
-router.get('/journals', journalController.journalsPage);
-router.get('/journal/:id', journalController.journalPage);
+router.get('/journals', catchErrors(journalController.journalsPage));
+router.get('/journal/:id', catchErrors(journalController.journalPage));
 
-router.get('/patients', patientController.patientsPage);
-router.get('/patient/:id', patientController.patientPage);
-
-router.use((req, res) => {
-  res.status(404).render('404'); // 404
-});
+router.get('/patients', catchErrors(patientController.patientsPage));
+router.get('/patient/:id', catchErrors(patientController.patientPage));
 
 module.exports = router;
