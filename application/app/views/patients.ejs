@@ -31,7 +31,7 @@
               <%= patient.birth_date %>
             </td>
             <td>
-              <a href="/patient/<%= patient.id %>/journals">
+              <a href="/journals/?patient=<%= patient.id %>">
                 <%= patient.journals.length %>
               </a>
             </td>
