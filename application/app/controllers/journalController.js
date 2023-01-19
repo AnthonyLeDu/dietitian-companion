@@ -1,4 +1,3 @@
-const dayjs = require('dayjs');
 const { Journal, Patient } = require('../models');
 
 const journalController = {
@@ -11,12 +10,10 @@ const journalController = {
     }
     // Check if we want to filter by patient id
     const patient_id = req.query.patient;
-    patient = undefined;
+    let patient;
     if (patient_id !== undefined) {
       patient = await Patient.findByPk(patient_id);
-      if (!patient) {
-        return next(); // 404
-      }
+      if (!patient) return next(); // 404
       findData.include.where = { id: patient_id };
     }
     const journals = await Journal.findAll(findData);
@@ -24,41 +21,8 @@ const journalController = {
   },
 
   journalPage: async (req, res, next) => {
-    const journal = await Journal.findByPk(
-      req.params.id, {
-      include: [
-        'patient',
-        {
-          association: 'days', include:
-            { association: 'meals', include: 'dishes' },
-        }
-      ]
-    });
-
-    if (!journal) {
-      return next(); // 404
-    }
-
-    // Using 'for of' here is important to be synchronous !
-    journal.days.sort((a, b) => a.position - b.position); // Sorting days according to position
-    for (const day of journal.days) {
-      // Getting the days name
-      day.name = dayjs(journal.start_day)
-        // Adding the day position to the journal's start_day  
-        .add(day.position, 'day')
-        .toDate().toLocaleString('fr-FR', { weekday: 'long' });
-
-      // Getting the Food corresponding to the dish food_code
-      day.meals.sort((a, b) => a.time_float - b.time_float); // Sorting days according to time
-      // console.table(day.meals[0].toJSON());
-      for (const meal of day.meals) {
-        meal.dishes.sort((a, b) => a.position - b.position); // Sorting dishes according to position
-        for (const dish of meal.dishes) {
-          await dish.fetchFood();
-        }
-      }
-    }
-
+    const journal = await Journal.fetchByPkWithCalculations(req.params.id);
+    if (!journal) return next(); // 404
     res.render('journal', { journal });
   },
 

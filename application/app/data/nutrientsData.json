@@ -1,0 +1,404 @@
+[
+  {
+    "dbName": "energy_kj_ue_1169_2011",
+    "shortName": "Énergie kJ (UE)",
+    "longName": "Énergie, Règlement UE N° 1169/2011 (kJ/100 g)",
+    "unit": "kJ"
+  },
+  {
+    "dbName": "energy_kcal_ue_1169_2011",
+    "shortName": "Énergie kcal (UE)",
+    "longName": "Énergie, Règlement UE N° 1169/2011 (kcal/100 g)",
+    "unit": "kcal"
+  },
+  {
+    "dbName": "energy_kj_jones_factor",
+    "shortName": "Énergie kJ (N x Jones)",
+    "longName": "Énergie, N x facteur Jones, avec fibres (kJ/100 g)",
+    "unit": "kJ"
+  },
+  {
+    "dbName": "energy_kcal_jones_factor",
+    "shortName": "Énergie kcal (N x Jones)",
+    "longName": "Énergie, N x facteur Jones, avec fibres (kcal/100 g)",
+    "unit": "kcal"
+  },
+  {
+    "dbName": "water",
+    "shortName": "Eau",
+    "longName": "Eau (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "protein_jones_factor",
+    "shortName": "Protéines (N x Jones)",
+    "longName": "Protéines, N x facteur de Jones (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "protein_6_25",
+    "shortName": "Protéines (N x 6.25)",
+    "longName": "Protéines, N x 6.25 (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "carbohydrate",
+    "shortName": "Glucides",
+    "longName": "Glucides (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "lipid",
+    "shortName": "Lipides",
+    "longName": "Lipides (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "sugar",
+    "shortName": "Sucres",
+    "longName": "Sucres (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fructose",
+    "shortName": "Fructose",
+    "longName": "Fructose (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "galactose",
+    "shortName": "Galactose",
+    "longName": "Galactose (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "glucose",
+    "shortName": "Glucose",
+    "longName": "Glucose (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "lactose",
+    "shortName": "Lactose",
+    "longName": "Lactose (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "maltose",
+    "shortName": "Maltose",
+    "longName": "Maltose (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "sucrose",
+    "shortName": "Saccharose",
+    "longName": "Saccharose (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "starch",
+    "shortName": "Amidon",
+    "longName": "Amidon (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fibre",
+    "shortName": "Fibres alimentaires",
+    "longName": "Fibres alimentaires (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "polyol",
+    "shortName": "Polyols",
+    "longName": "Polyols totaux (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "ash",
+    "shortName": "Cendres",
+    "longName": "Cendres (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "alcohol",
+    "shortName": "Alcool",
+    "longName": "Alcool (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "organic_acid",
+    "shortName": "Acides organiques",
+    "longName": "Acides organiques (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fatty_acid_saturated",
+    "shortName": "AG saturés",
+    "longName": "AG saturés (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fatty_acid_monounsaturated",
+    "shortName": "AG monoinsaturés",
+    "longName": "AG monoinsaturés (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fatty_acid_polyunsaturated",
+    "shortName": "AG polyinsaturés",
+    "longName": "AG polyinsaturés (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fatty_acid_butyric",
+    "shortName": "AG butyrique",
+    "longName": "AG 4:0, butyrique (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fatty_acid_caproic",
+    "shortName": "AG caproïque",
+    "longName": "AG 6:0, caproïque (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fatty_acid_caprylic",
+    "shortName": "AG caprylique",
+    "longName": "AG 8:0, caprylique (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fatty_acid_capric",
+    "shortName": "AG caprique",
+    "longName": "AG 10:0, caprique (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fatty_acid_lauric",
+    "shortName": "AG laurique",
+    "longName": "AG 12:0, laurique (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fatty_acid_myristic",
+    "shortName": "AG myristique",
+    "longName": "AG 14:0, myristique (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fatty_acid_palmitic",
+    "shortName": "AG palmitique",
+    "longName": "AG 16:0, palmitique (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fatty_acid_stearic",
+    "shortName": "AG stéarique",
+    "longName": "AG 18:0, stéarique (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fatty_acid_oleic",
+    "shortName": "AG oléique",
+    "longName": "AG 18:1 9c (n-9), oléique (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fatty_acid_linoleic",
+    "shortName": "AG linoléique",
+    "longName": "AG 18:2 9c,12c (n-6), linoléique (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fatty_acid_alpha_linoleic",
+    "shortName": "AG alpha-linolénique",
+    "longName": "AG 18:3 c9,c12,c15 (n-3), alpha-linolénique (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fatty_acid_arachidonic",
+    "shortName": "AG arachidonique",
+    "longName": "AG 20:4 5c,8c,11c,14c (n-6), arachidonique (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fatty_acid_epa",
+    "shortName": "AG EPA",
+    "longName": "AG 20:5 5c,8c,11c,14c,17c (n-3) EPA (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "fatty_acid_dha",
+    "shortName": "AG DHA",
+    "longName": "AG 22:6 4c,7c,10c,13c,16c,19c (n-3) DHA (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "cholesterol",
+    "shortName": "Cholestérol",
+    "longName": "Cholestérol",
+    "unit": "mg"
+  },
+  {
+    "dbName": "salt",
+    "shortName": "Sel",
+    "longName": "Sel chlorure de sodium (g/100 g)",
+    "unit": "g"
+  },
+  {
+    "dbName": "calcium",
+    "shortName": "Calcium",
+    "longName": "Calcium",
+    "unit": "mg"
+  },
+  {
+    "dbName": "chloride",
+    "shortName": "Chlorure",
+    "longName": "Chlorure",
+    "unit": "mg"
+  },
+  {
+    "dbName": "copper",
+    "shortName": "Cuivre",
+    "longName": "Cuivre",
+    "unit": "mg"
+  },
+  {
+    "dbName": "iron",
+    "shortName": "Fer",
+    "longName": "Fer",
+    "unit": "mg"
+  },
+  {
+    "dbName": "iodine",
+    "shortName": "Iode",
+    "longName": "Iode",
+    "unit": "µg"
+  },
+  {
+    "dbName": "magnesium",
+    "shortName": "Magnésium",
+    "longName": "Magnésium",
+    "unit": "mg"
+  },
+  {
+    "dbName": "manganese",
+    "shortName": "Manganèse",
+    "longName": "Manganèse",
+    "unit": "mg"
+  },
+  {
+    "dbName": "phosphorus",
+    "shortName": "Phosphore",
+    "longName": "Phosphore",
+    "unit": "mg"
+  },
+  {
+    "dbName": "potassium",
+    "shortName": "Potassium",
+    "longName": "Potassium",
+    "unit": "mg"
+  },
+  {
+    "dbName": "selenium",
+    "shortName": "Sélénium",
+    "longName": "Sélénium",
+    "unit": "µg"
+  },
+  {
+    "dbName": "sodium",
+    "shortName": "Sodium",
+    "longName": "Sodium",
+    "unit": "mg"
+  },
+  {
+    "dbName": "zinc",
+    "shortName": "Zinc",
+    "longName": "Zinc",
+    "unit": "mg"
+  },
+  {
+    "dbName": "retinol",
+    "shortName": "Rétinol",
+    "longName": "Rétinol",
+    "unit": "µg"
+  },
+  {
+    "dbName": "beta_carotene",
+    "shortName": "Beta-Carotène",
+    "longName": "Beta-Carotène",
+    "unit": "µg"
+  },
+  {
+    "dbName": "vitamin_d",
+    "shortName": "Vitamine D",
+    "longName": "Vitamine D",
+    "unit": "µg"
+  },
+  {
+    "dbName": "vitamin_e",
+    "shortName": "Vitamine E",
+    "longName": "Vitamine E",
+    "unit": "mg"
+  },
+  {
+    "dbName": "vitamin_k1",
+    "shortName": "Vitamine K1",
+    "longName": "Vitamine K1",
+    "unit": "µg"
+  },
+  {
+    "dbName": "vitamin_k2",
+    "shortName": "Vitamine K2",
+    "longName": "Vitamine K2",
+    "unit": "µg"
+  },
+  {
+    "dbName": "vitamin_c",
+    "shortName": "Vitamine C",
+    "longName": "Vitamine C",
+    "unit": "mg"
+  },
+  {
+    "dbName": "vitamin_b1",
+    "shortName": "Vitamine B1",
+    "longName": "Vitamine B1 ou Thiamine",
+    "unit": "mg"
+  },
+  {
+    "dbName": "vitamin_b2",
+    "shortName": "Vitamine B2",
+    "longName": "Vitamine B2 ou Riboflavine",
+    "unit": "mg"
+  },
+  {
+    "dbName": "vitamin_b3",
+    "shortName": "Vitamine B3",
+    "longName": "Vitamine B3 ou PP ou Niacine",
+    "unit": "mg"
+  },
+  {
+    "dbName": "vitamin_b5",
+    "shortName": "Vitamine B5",
+    "longName": "Vitamine B5 ou Acide pantothénique",
+    "unit": "mg"
+  },
+  {
+    "dbName": "vitamin_b6",
+    "shortName": "Vitamine B6",
+    "longName": "Vitamine B6",
+    "unit": "mg"
+  },
+  {
+    "dbName": "vitamin_b9",
+    "shortName": "Vitamine B9",
+    "longName": "Vitamine B9 ou Folates totaux",
+    "unit": "µg"
+  },
+  {
+    "dbName": "vitamin_b12",
+    "shortName": "Vitamine B12",
+    "longName": "Vitamine B12",
+    "unit": "µg"
+  }
+]
