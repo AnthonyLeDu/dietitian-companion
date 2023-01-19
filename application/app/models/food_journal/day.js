@@ -1,7 +1,14 @@
-const { Model, DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
+const JournalElement = require('./journalElement');
 const getConnexion = require('./getConnexion');
 
-class Day extends Model {}
+class Day extends JournalElement {
+  nutrientsSources = this.meals;
+  
+  getClassName() {
+    return "Day";
+  }
+}
 
 Day.init(
   {

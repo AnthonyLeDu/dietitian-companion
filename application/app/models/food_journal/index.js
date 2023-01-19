@@ -1,3 +1,4 @@
+const dayjs = require('dayjs');
 const Day = require('./day');
 const Dish = require('./dish');
 const Journal = require('./journal');
@@ -27,6 +28,15 @@ Day.belongsTo(Journal, {
   as: 'journal',
   foreignKey: 'journal_id'
 });
+
+Object.defineProperty(Day.prototype, 'name', {
+  get: function() {
+    return dayjs(this.journal.start_day)
+      // Adding the day position to the journal's start_day  
+      .add(day.position, 'day')
+      .toDate().toLocaleString('fr-FR', { weekday: 'long' });
+  }
+})
 
 // Meal-Day association
 

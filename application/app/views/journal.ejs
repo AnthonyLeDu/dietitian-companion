@@ -3,16 +3,25 @@
   <main class="container">
     <h2>Journal alimentaire</h2>
     <% for (day of journal.days) { %>
-      <h3>
-        <%= day.name %>
-      </h3>
+      <section>
+        <hgroup>
+          <h3><%= day.name %></h3>
+          <%- include('partials/nutrients', { nutrients: day.nutrients }) %>
+        </hgroup>
       <% for (meal of day.meals) { %>
-        <h4>
-          <%= meal.time %>
-        </h4>
+        <hgroup>
+          <h4>Repas de <%= meal.time %></h4>
+          <%- include('partials/nutrients', { nutrients: meal.nutrients }) %>
+        </hgroup>
         <% for (dish of meal.dishes) { %>
-          <p><%= dish.position %>. <%= dish.food.name_fr %> (<%= dish.amount %>g ) </p>
-        <% }}} %>
+          <hgroup>
+            <p><%= dish.position %>. <%= dish.food.name_fr %> (<%= dish.amount %>g)</p>
+            <%- include('partials/nutrients', { nutrients: dish.nutrients }) %>
+          </hgroup>
+        <% } %>
+      <% } %>
+      </section>
+    <% } %>
   </main>
 
   <%- include ('partials/footer') %>
