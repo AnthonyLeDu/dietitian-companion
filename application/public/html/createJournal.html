@@ -31,22 +31,10 @@
 
     <form action="" method="post" id="journal" class="container">
 
-      <datalist id="dishes">
-        <option value="Poulet"></option>
-        <option value="Frite"></option>
-      </datalist>
-
       <div id="patient-info">
         <fieldset id="patient__fullname">
           <label for="patient__fullname">Patient</label>
-          <select name="patient__fullname" required>
-            <optgroup label="Hommes">
-              <option value="0">M. Robert Dujardin (12/01/1980)</option>
-            </optgroup>
-            <optgroup label="Femmes">
-              <option value="1">Mme Jacqueline Marin (25/12/1952)</option>
-            </optgroup>
-          </select>
+          <input list="patients-datalist" name="patient__fullname" required>
         </fieldset>
         <fieldset>
           <label for="patient__age">Âge</label>
@@ -65,34 +53,37 @@
 
       <div id="days-row">
         <div id="days">
-          <div class="day">
+          <!-- <div class="day">
             <div class="day-header">
-              <img src="../../public/images/trash.svg" alt="Delete day" class="img-trash">
+              <div class="img-trash"></div>
               <h4>Jour 1 (???)</h4>
-              <div>
-                <img src="../../public/images/arrow_left_off.svg" alt="Move to left" class="move-arrow --off">
-                <img src="../../public/images/arrow_right.svg" alt="Move to right" class="move-arrow">
+              <div class="arrows">
+                <div class="img-arrow-left --off"></div>
+                <div class="img-arrow-right"></div>
               </div>
             </div>
             <div class="meals-row">
               <div class="meals">
                 <div class="meal">
                   <div class="meal-header">
-                    <img class="img-clock" src="../images/clock.svg"></img>
+                    <h5 class="meal__title">Repas de</h5>
                     <input type="time" name="day1-meal1__time" required>
                     <span>X</span>
                   </div>
-                  <div class="meal-row">
-                    <span>x</span>
-                    <input list="dishes" name="day1-meal1-dish1__name" required>
-                    <input class="dish__amount" type="number" step="10" name="day1-meal1-dish1__amount" required>
-                    <span>g</span>
+
+                  <div class="dishes">
+                    <div class="dish">
+                      <span>x</span>
+                      <input list="dishes-datalist" name="day1-meal1-dish1__name" required>
+                      <input class="dish__amount" type="number" step="10" name="day1-meal1-dish1__amount" required>
+                      <span>g</span>
+                    </div>
                   </div>
                   <input type="button" value="Ajouter un aliment">
                 </div>
                 <div class="meal">
                   <div class="meal-row">
-                    <span>&#128336;</span>
+                    <h5 class="meal__title">Repas de</h5>
                     <input type="time" name="day1-meal2__time" required>
                     <span>X</span>
                   </div>
@@ -101,18 +92,7 @@
                 <input type="button" class="add-meal" value="Ajouter un repas">
               </div>
             </div>
-          </div>
-          <div class="day">
-            <div class="day-header">
-              <img class="img-trash" src="../../public/images/trash.svg" alt="Delete day">
-              <h4>Jour 2 (???)</h4>
-              <div class="day-header__move-buttons">
-                <img src="../../public/images/arrow_left.svg" alt="Move to left" class="move-arrow">
-                <img src="../../public/images/arrow_right.svg" alt="Move to right" class="move-arrow">
-              </div>
-            </div>
-            <input type="button" value="Ajouter un repas">
-          </div>
+          </div> -->
         </div>
         <input type="button" id="add-day" value="Ajouter un jour">
       </div>
