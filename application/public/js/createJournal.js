@@ -1,3 +1,6 @@
+const PATIENTS_DATALIST = 'patients-datalist'
+const DISHES_DATALIST = 'dishes-datalist'
+
 function isScrollbarVisible(element) {
   return element.scrollWidth > element.clientWidth;
 }
@@ -40,6 +43,35 @@ class CoreObject {
   }
 }
 
+class Dish extends CoreObject {
+  static childrenClass; // undefined
+
+  /**
+   * Create the Dish DOM Element
+   * @param {Meal} parent 
+   * @param {Number} index Index in the Meal parent's Dish instances array
+   */
+  constructor(parent, index, mainElem = null) {
+    mainElem = mainElem || createChildElement(parent.childrenElem, 'div', 'dish');
+    super(parent, index, mainElem);
+    const dishCodeName = `day${this.parent.parent.index}-meal${this.parent.index}-dish${this.index}`;
+    // Delete button
+    const deleteElem = createChildElement(this.mainElem, 'div', 'img-trash');
+    // Food selection
+    const foodElem = createChildElement(this.mainElem, 'input', 'dish__food');
+    foodElem.setAttribute('list', DISHES_DATALIST);
+    foodElem.required = true;
+    foodElem.name = `${dishCodeName}__name`;
+    // Amount input
+    const amountElem = createChildElement(this.mainElem, 'input', 'dish__amount');
+    amountElem.type = 'number';
+    amountElem.step = '10';
+    amountElem.name = `${dishCodeName}__amount`;
+
+    createChildElement(this.mainElem, 'span').textContent = 'g';
+  }
+}
+
 class Meal extends CoreObject {
   static childrenClass; // Dish
 
@@ -51,24 +83,34 @@ class Meal extends CoreObject {
   constructor(parent, index, mainElem = null) {
     mainElem = mainElem || createChildElement(parent.childrenElem, 'div', 'meal');
     super(parent, index, mainElem);
-    // this.childrenClass = Dish;
+    this.childrenClass = Dish;
 
-    // Header
     const headerElem = createChildElement(this.mainElem, 'div', 'meal-header');
-    const clockElem = createChildElement(headerElem, 'img', 'img-clock');
-    clockElem.src = '../../public/images/clock.svg';
+    // Delete button
+    const deleteElem = createChildElement(headerElem, 'div', 'img-trash');
+    // Title
+    const titleElem = createChildElement(headerElem, 'h5', 'meal__title');
+    titleElem.textContent = 'Repas de';
+    // Time
     const timeElem = createChildElement(headerElem, 'input');
     timeElem.type = 'time';
     timeElem.required = true;
     timeElem.name = `day${this.parent.index}-meal${this.index}__time`;
-    const deleteElem = createChildElement(headerElem, 'span');
-    deleteElem.textContent = 'X';
+    // Dishes
+    this.childrenRowElem = createChildElement(this.mainElem, 'div', 'meal-row');
+    this.childrenElem = createChildElement(this.childrenRowElem, 'div', 'dishes');
+    const addDishElem = createChildElement(this.childrenRowElem, 'input', 'add-dish');
+    addDishElem.type = 'button';
+    addDishElem.value = 'Ajouter un aliment';
+    addDishElem.addEventListener('click', () => this.self.addChild());
+    // Auto-add one dish
+    this.addChild();
   }
 
 }
 
 class Day extends CoreObject {
-  static childrenClass;
+  static childrenClass; // Meal
   titleElem;
   arrowLeftElem;
   arrowRightElem;
@@ -83,15 +125,14 @@ class Day extends CoreObject {
     super(parent, index, mainElem);
     this.childrenClass = Meal;
 
-    const dayHeaderElem = createChildElement(this.mainElem, 'div', 'day-header');
-    this.titleElem = createChildElement(dayHeaderElem, 'h4', 'day__title');
+    const headerElem = createChildElement(this.mainElem, 'div', 'day-header');
+    const deleteElem = createChildElement(headerElem, 'div', 'img-trash');
+    this.titleElem = createChildElement(headerElem, 'h4', 'day__title');
     this.updateTitle();
     // Header-Arrows
-    const dayArrowsElem = createChildElement(dayHeaderElem, 'div');
-    this.arrowLeftElem = createChildElement(dayArrowsElem, 'img', 'move-arrow');
-    this.arrowLeftElem.alt = 'Move day to the left';
-    this.arrowRightElem = createChildElement(dayArrowsElem, 'img', 'move-arrow');
-    this.arrowRightElem.alt = 'Move day to the right';
+    const arrowsElem = createChildElement(headerElem, 'div');
+    this.arrowLeftElem = createChildElement(arrowsElem, 'div', 'img-arrow-left');
+    this.arrowRightElem = createChildElement(arrowsElem, 'img', 'img-arrow-right');
     // Image sources set will be triggered by the parent.updateDaysArrows
 
     // Meals
@@ -120,26 +161,17 @@ class Day extends CoreObject {
   updateArrows() {
     // Is first day, disable the 'left' move arrow
     if (this.index === 0) {
-      this.arrowLeftElem.src = '../../public/images/arrow_left_off.svg';
       this.arrowLeftElem.classList.add('--off');
     } else {
-      this.arrowLeftElem.src = '../../public/images/arrow_left.svg';
       this.arrowLeftElem.classList.remove('--off');
     }
     // If last day, disable the 'right' move arrow
     if ((this.index + 1) === this.parent.children.length) {
-      this.arrowRightElem.src = '../../public/images/arrow_right_off.svg';
       this.arrowRightElem.classList.add('--off');
     } else {
-      this.arrowRightElem.src = '../../public/images/arrow_right.svg';
       this.arrowRightElem.classList.remove('--off');
     }
   }
-
-  // addChild() {
-  //   super();
-  // }
-
 }
 
 class Journal extends CoreObject {
@@ -147,6 +179,8 @@ class Journal extends CoreObject {
   patientAge;
   patientWeight;
   #startDate;
+  patientsDataListElem;
+  dishesDataListElem;
 
   /**
    * @param {HTMLElement} mainElem Form div
@@ -156,6 +190,16 @@ class Journal extends CoreObject {
     this.childrenClass = Day;
     this.childrenRowElem = document.getElementById('days-row');
     this.childrenElem = document.getElementById('days');
+
+    // Init datalists
+    this.patientsDataListElem = createChildElement(this.mainElem, 'datalist', null, PATIENTS_DATALIST);
+    for (const val of ['M. Robert Dujardin (12/01/1980)', 'Mme Jacqueline Marin (25/12/1952)']) {
+      createChildElement(this.patientsDataListElem, 'option').value = val;
+    }
+    this.dishesDataListElem = createChildElement(this.mainElem, 'datalist', null, DISHES_DATALIST);
+    for (const val of ['Poulet', 'Frites', 'Boeuf']) {
+      createChildElement(this.dishesDataListElem, 'option').value = val;
+    }
 
     // Init event listeners
     document.getElementById('add-day').addEventListener('click', () => this.self.addChild());

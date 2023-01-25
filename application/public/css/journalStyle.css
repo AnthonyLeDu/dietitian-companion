@@ -49,14 +49,18 @@
   gap: 0.5em;
 }
 
-.meal-row, .meal-header {
+.dish, .meal-header {
   display: flex;
   gap: 0.5em;
   align-items: center;
 }
 
+.meal__title {
+  width: fit-content;
+}
+
 .dish__amount {
-  flex-basis: 15%;
+  flex-basis: 30%;
 }
 
 .meal {
@@ -71,9 +75,33 @@
 
 .img-trash,
 .img-clock,
-.move-arrow {
+.img-arrow-left,
+.img-arrow-right {
   height: 1em;
+  width: 1em;
   cursor: pointer;
+  background-size: cover;
+  display: inline-block;
+}
+
+.img-trash {
+  background-image: url("../../public/images/trash.svg");
+}
+
+.img-arrow-left {
+  background-image: url("../../public/images/arrow_left.svg");
+}
+
+.img-arrow-left.--off {
+  background-image: url("../../public/images/arrow_left_off.svg");
+}
+
+.img-arrow-right {
+  background-image: url("../../public/images/arrow_right.svg");
+}
+
+.img-arrow-right.--off {
+  background-image: url("../../public/images/arrow_right_off.svg");
 }
 
 .--off {
