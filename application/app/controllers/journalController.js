@@ -2,6 +2,10 @@ const { Journal, Patient } = require('../models');
 
 const journalController = {
 
+  createJournalPage: (req, res) => {
+    res.render('createJournal');
+  },
+
   journalsPage: async (req, res, next) => {
     const findData = {
       order: [['updated_at', 'DESC']],
