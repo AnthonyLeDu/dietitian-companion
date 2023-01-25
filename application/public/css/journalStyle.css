@@ -1,0 +1,81 @@
+#patient-info{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+
+#patient__fullname {
+  flex-grow: 1;
+}
+
+#days-row {
+  display: flex;
+  overflow-x: auto;
+  gap: 0.5em;
+  align-items: stretch;
+}
+
+#add-day {
+  flex-basis: 0;
+}
+
+#days {
+  display: flex;
+  gap: 0.5em;
+}
+
+.day-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.day,
+.meal {
+  border: 1px solid black;
+}
+
+.day {
+  width: 350px;
+  padding: 0.5em;
+  background-color: #EEE;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.meals {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.meal-row, .meal-header {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+}
+
+.dish__amount {
+  flex-basis: 15%;
+}
+
+.meal {
+  padding: 0.5em;
+  background-color: #FFF;
+}
+
+#save-button {
+  margin-top: 1em;
+  background-color: #292;
+}
+
+.img-trash,
+.img-clock,
+.move-arrow {
+  height: 1em;
+  cursor: pointer;
+}
+
+.--off {
+  cursor: initial;
+}
