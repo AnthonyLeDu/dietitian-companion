@@ -1,4 +1,4 @@
-// TODO: Ré-organisation des repas quand heure changée, suppression des éléments, récupération dynamique des dish et patients
+// TODO: Récupération dynamique des dish et patients
 
 const PATIENTS_DATALIST = 'patients-datalist'
 const DISHES_DATALIST = 'dishes-datalist'
@@ -13,6 +13,19 @@ function createChildElement(parentElement, elementTag, elementClass = null, elem
   if (elementClass) newElem.className = elementClass;
   if (elementId) newElem.id = elementId;
   return newElem;
+}
+
+/**
+ * Shorthand to create a delete button, calling a function when clicked.
+ * @param {HTMLElement} parentElement The parent element
+ * @param {Function} deleteFunction The function to call when the deleteElem is clicked
+ * @returns {HTMLElement} The created element
+ */
+function createDeleteElement(parentElement, deleteFunction) {
+  console.log('ouep');
+  const deleteElem = createChildElement(parentElement, 'div', 'img-trash');
+  deleteElem.addEventListener('click', () => deleteFunction());
+  return deleteElem;
 }
 
 /**
@@ -49,6 +62,25 @@ class CoreObject {
   }
 
   /**
+   * Remove an instance from the children and from the DOM.
+   * @param {CoreObject} child Instance to remove.
+   */
+  removeChild(child) {
+    this.children.splice(child.index, 1);
+    child.mainElem.remove();
+    this.updateChildren();
+  }
+
+  /**
+   * Ask the parent to remove the instance
+   */
+  destroy() {
+    console.log('toto');
+    this.parent.removeChild(this);
+  }
+
+
+  /**
    * Getter returning the index of the instance in its parent's children array.
    * @returns {Integer} The index.
    */
@@ -67,6 +99,7 @@ class CoreObject {
   addChild(mainElem = null) {
     this.children.push(
       new this.childrenClass(this, mainElem));
+    this.updateChildren();
   }
 
   /**
@@ -88,7 +121,7 @@ class CoreObject {
     }
     // Moving the child in the array and update the DOM
     this.children.splice(targetIndex, 0, this.children.splice(child.index, 1)[0]);
-    this.sortChildrenElem();
+    this.updateChildren();
   }
 
   sortChildrenElem() {
@@ -98,6 +131,10 @@ class CoreObject {
         this.self.childrenElem.insertBefore(child.mainElem, htmlElem);
       }
     });
+  }
+
+  updateChildren() {
+    this.sortChildrenElem();
   }
 
 }
@@ -115,7 +152,7 @@ class Dish extends CoreObject {
     super(parent, mainElem);
     const dishCodeName = `day${this.parent.parent.index}-meal${this.parent.index}-dish${this.index}`;
     // Delete button
-    const deleteElem = createChildElement(this.mainElem, 'div', 'img-trash');
+    createDeleteElement(this.mainElem, () => this.destroy());
     // Food selection
     const foodElem = createChildElement(this.mainElem, 'input', 'dish__food');
     foodElem.setAttribute('list', DISHES_DATALIST);
@@ -147,7 +184,7 @@ class Meal extends CoreObject {
 
     const headerElem = createChildElement(this.mainElem, 'div', 'meal-header');
     // Delete button
-    const deleteElem = createChildElement(headerElem, 'div', 'img-trash');
+    createDeleteElement(headerElem, () => this.destroy());
     // Title
     const titleElem = createChildElement(headerElem, 'h5', 'meal__title');
     titleElem.textContent = 'Repas de';
@@ -165,8 +202,6 @@ class Meal extends CoreObject {
     addDishElem.type = 'button';
     addDishElem.value = 'Ajouter un aliment';
     addDishElem.addEventListener('click', () => this.self.addChild());
-    // Auto-add one dish
-    this.addChild();
   }
 
 }
@@ -188,7 +223,9 @@ class Day extends CoreObject {
     this.childrenClass = Meal;
     // Header
     const headerElem = createChildElement(this.mainElem, 'div', 'day-header');
-    const deleteElem = createChildElement(headerElem, 'div', 'img-trash');
+    // Delete button
+    createDeleteElement(headerElem, () => this.destroy());
+    // Title
     this.titleElem = createChildElement(headerElem, 'h4', 'day__title');
     setTimeout(() => this.updateTitle(), 0); // this needs to be pushed in parent's children array first to have an index
     // Arrows
@@ -201,7 +238,7 @@ class Day extends CoreObject {
     this.arrowRightElem.addEventListener('click', (event) => {
       callIfEnabled(() => this.self.index += 1, event.target);
     });
-    // Image sources set will be triggered by the parent.updateChildrenUI
+    // Image sources set will be triggered by the parent.updateChildrenLook
 
     // Meals
     this.childrenRowElem = createChildElement(this.mainElem, 'div', 'meals-row');
@@ -241,6 +278,9 @@ class Day extends CoreObject {
     }
   }
 
+  /**
+   * Sorting children based on their timeElem.value.
+   */
   sortChildren() {
     this.children.sort((childA, childB) => {
       // Empty times will be put at the end
@@ -249,6 +289,11 @@ class Day extends CoreObject {
       return Date.parse(`01/01/2000 ${valueA}`) - Date.parse(`01/01/2000 ${valueB}`);
     });
     this.sortChildrenElem();
+  }
+
+  updateChildren() {
+    this.sortChildren();
+    super.updateChildren();
   }
 
 }
@@ -293,7 +338,6 @@ class Journal extends CoreObject {
 
   addChild() {
     super.addChild();
-    this.updateChildrenLook();
     // Move scrollbar to the right (if visible)
     if (isScrollbarVisible(this.childrenRowElem)) {
       this.childrenRowElem.scrollLeft += this.childrenRowElem.scrollWidth;
@@ -310,8 +354,8 @@ class Journal extends CoreObject {
     });
   }
 
-  moveChild(child, increment) {
-    super.moveChild(child, increment);
+  updateChildren() {
+    this.sortChildrenElem();
     this.updateChildrenLook();
   }
 
