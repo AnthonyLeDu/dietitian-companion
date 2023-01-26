@@ -1,3 +1,5 @@
+// TODO: Ré-organisation des repas quand heure changée, suppression des éléments, récupération dynamique des dish et patients
+
 const PATIENTS_DATALIST = 'patients-datalist'
 const DISHES_DATALIST = 'dishes-datalist'
 
@@ -11,6 +13,18 @@ function createChildElement(parentElement, elementTag, elementClass = null, elem
   if (elementClass) newElem.className = elementClass;
   if (elementId) newElem.id = elementId;
   return newElem;
+}
+
+/**
+ * Wrapper to call a function (e.g. eventListener handler) only if
+ * a given HTMLElement has not the '--disabled' class.
+ * @param {Function} fn The function to call.
+ * @param {HTMLElement} element The element whose classList we want to check.
+ */
+function callIfEnabled(fn, element) {
+  if (!element.classList.contains('--disabled')) {
+    fn();
+  }
 }
 
 class CoreObject {
@@ -40,6 +54,39 @@ class CoreObject {
   addChild(mainElem = null) {
     this.children.push(
       new this.childrenClass(this, this.children.length, mainElem));
+  }
+
+  getChildAt(index) {
+    return this.children.find(child => child.index === index);
+  }
+
+  /**
+   * Switch to children in the children array and update the DOM acccordingly.
+   * @param {Integer} firstChildIndex First child's index property value
+   * @param {Integer} secondChildIndex Second child's index property value
+   */
+  switchChildren(firstChildIndex, secondChildIndex) {
+    if (firstChildIndex === secondChildIndex) return;
+
+    const firstChild = this.getChildAt(firstChildIndex);
+    if (!firstChild) throw new Error(`Child index '${firstChildIndex}' not found in ${this.constructor.name} children.`);
+    const secondChild = this.getChildAt(secondChildIndex);
+    if (!secondChild) throw new Error(`Child index '${secondChildIndex}' not found in ${this.constructor.name} children.`);
+
+    firstChild.index = secondChildIndex;
+    secondChild.index = firstChildIndex;
+    this.sortChildren();
+  }
+
+  sortChildren() {
+    this.children.sort((childA, childB) => childA.index - childB.index);
+    this.children.forEach((child, index) => {
+      const htmlElem = this.self.childrenElem.children[index];
+      if (htmlElem !== child.mainElem) { // Element is not at expected position, insert it
+        this.self.childrenElem.insertBefore(child.mainElem, htmlElem);
+      }
+    });
+    this.children.forEach(child => child.updateArrows());
   }
 }
 
@@ -124,15 +171,21 @@ class Day extends CoreObject {
     mainElem = mainElem || createChildElement(parent.childrenElem, 'div', 'day');
     super(parent, index, mainElem);
     this.childrenClass = Meal;
-
+    // Header
     const headerElem = createChildElement(this.mainElem, 'div', 'day-header');
     const deleteElem = createChildElement(headerElem, 'div', 'img-trash');
     this.titleElem = createChildElement(headerElem, 'h4', 'day__title');
     this.updateTitle();
-    // Header-Arrows
+    // Arrows
     const arrowsElem = createChildElement(headerElem, 'div');
     this.arrowLeftElem = createChildElement(arrowsElem, 'div', 'img-arrow-left');
+    this.arrowLeftElem.addEventListener('click', (event) => {
+      callIfEnabled(() => this.self.move(-1), event.target);
+    });
     this.arrowRightElem = createChildElement(arrowsElem, 'img', 'img-arrow-right');
+    this.arrowRightElem.addEventListener('click', (event) => {
+      callIfEnabled(() => this.self.move(1), event.target);
+    });
     // Image sources set will be triggered by the parent.updateDaysArrows
 
     // Meals
@@ -161,17 +214,27 @@ class Day extends CoreObject {
   updateArrows() {
     // Is first day, disable the 'left' move arrow
     if (this.index === 0) {
-      this.arrowLeftElem.classList.add('--off');
+      this.arrowLeftElem.classList.add('--disabled');
     } else {
-      this.arrowLeftElem.classList.remove('--off');
+      this.arrowLeftElem.classList.remove('--disabled');
     }
     // If last day, disable the 'right' move arrow
     if ((this.index + 1) === this.parent.children.length) {
-      this.arrowRightElem.classList.add('--off');
+      this.arrowRightElem.classList.add('--disabled');
     } else {
-      this.arrowRightElem.classList.remove('--off');
+      this.arrowRightElem.classList.remove('--disabled');
     }
   }
+
+  /**
+   * In the parent's children array, move this instance nth time in the direction
+   * given by the positive/negative nature of increment.
+   * @param {Integer} increment Positive increment = to the right ; negative increment = to the left.
+   */
+  move(increment) {
+    this.parent.switchChildren(this.index, this.index + increment);
+  }
+
 }
 
 class Journal extends CoreObject {
