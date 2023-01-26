@@ -30,20 +30,17 @@ function callIfEnabled(fn, element) {
 class CoreObject {
   static childrenClass;
   parent;
-  index;
   mainElem;
-  children; // Array of children CoreObjects
+  children; // Ordered array of children CoreObjects
   childrenRowElem;
   childrenElem;
 
   /**
-   * @param {HTMLElement} mainElem Corresponding DOM Element
    * @param {CoreObject} parent Parent CoreObject
-   * @param {Number} index Index in the siblings array
+   * @param {HTMLElement} mainElem Corresponding DOM Element
   */
-  constructor(parent = null, index = null, mainElem = null) {
+  constructor(parent = null, mainElem = null) {
     this.parent = parent;
-    this.index = index;
     this.mainElem = mainElem;
     this.children = [];
     // Needed for eventListeners definition because 'this' corresponds
@@ -51,43 +48,58 @@ class CoreObject {
     this.self = this;
   }
 
-  addChild(mainElem = null) {
-    this.children.push(
-      new this.childrenClass(this, this.children.length, mainElem));
-  }
-
-  getChildAt(index) {
-    return this.children.find(child => child.index === index);
+  /**
+   * Getter returning the index of the instance in its parent's children array.
+   * @returns {Integer} The index.
+   */
+  get index() {
+    const index = this.parent.children.indexOf(this);
+    return (index !== -1) ? index : undefined;
   }
 
   /**
-   * Switch to children in the children array and update the DOM acccordingly.
-   * @param {Integer} firstChildIndex First child's index property value
-   * @param {Integer} secondChildIndex Second child's index property value
+   * Setter moving the instance to the given index in its parent's children array.
    */
-  switchChildren(firstChildIndex, secondChildIndex) {
-    if (firstChildIndex === secondChildIndex) return;
-
-    const firstChild = this.getChildAt(firstChildIndex);
-    if (!firstChild) throw new Error(`Child index '${firstChildIndex}' not found in ${this.constructor.name} children.`);
-    const secondChild = this.getChildAt(secondChildIndex);
-    if (!secondChild) throw new Error(`Child index '${secondChildIndex}' not found in ${this.constructor.name} children.`);
-
-    firstChild.index = secondChildIndex;
-    secondChild.index = firstChildIndex;
-    this.sortChildren();
+  set index(value) {
+    this.parent.moveChild(this, value - this.index);
   }
 
-  sortChildren() {
-    this.children.sort((childA, childB) => childA.index - childB.index);
+  addChild(mainElem = null) {
+    this.children.push(
+      new this.childrenClass(this, mainElem));
+  }
+
+  /**
+   * Move a child in the children array and update the DOM acccordingly.
+   * @param {CoreObject} child Child instance
+   * @param {Integer} increment Positive increment = to the end ; negative increment = to the start.
+   */
+  moveChild(child, increment) {
+    if (child.index === undefined) throw new Error(`Child not found in ${this.constructor.name} children.`);
+    if (increment === 0) return; // No move needed
+
+    const targetIndex = child.index + increment
+    // Check that child can be moved in the array
+    if (targetIndex < 0 || (this.children.length <= targetIndex)) {
+      throw new Error(`
+        Child cannot be moved to index '${targetIndex}' as it falls outside of the ${this.constructor.name} 
+        children array range (i.e. it is below '0' or above '${this.children.length - 1}').
+      `);
+    }
+    // Moving the child in the array and update the DOM
+    this.children.splice(targetIndex, 0, this.children.splice(child.index, 1)[0]);
+    this.sortChildrenElem();
+  }
+
+  sortChildrenElem() {
     this.children.forEach((child, index) => {
       const htmlElem = this.self.childrenElem.children[index];
       if (htmlElem !== child.mainElem) { // Element is not at expected position, insert it
         this.self.childrenElem.insertBefore(child.mainElem, htmlElem);
       }
     });
-    this.children.forEach(child => child.updateArrows());
   }
+
 }
 
 class Dish extends CoreObject {
@@ -96,11 +108,11 @@ class Dish extends CoreObject {
   /**
    * Create the Dish DOM Element
    * @param {Meal} parent 
-   * @param {Number} index Index in the Meal parent's Dish instances array
+   * @param {HTMLElement} mainElem The DOM Element (optional)
    */
-  constructor(parent, index, mainElem = null) {
+  constructor(parent, mainElem = null) {
     mainElem = mainElem || createChildElement(parent.childrenElem, 'div', 'dish');
-    super(parent, index, mainElem);
+    super(parent, mainElem);
     const dishCodeName = `day${this.parent.parent.index}-meal${this.parent.index}-dish${this.index}`;
     // Delete button
     const deleteElem = createChildElement(this.mainElem, 'div', 'img-trash');
@@ -121,15 +133,16 @@ class Dish extends CoreObject {
 
 class Meal extends CoreObject {
   static childrenClass; // Dish
+  timeElem;
 
   /**
    * Create the Meal DOM Element
    * @param {Day} parent 
-   * @param {Number} index Index in the Day parent's Meal instances array
+   * @param {HTMLElement} mainElem The DOM Element (optional)
    */
-  constructor(parent, index, mainElem = null) {
+  constructor(parent, mainElem = null) {
     mainElem = mainElem || createChildElement(parent.childrenElem, 'div', 'meal');
-    super(parent, index, mainElem);
+    super(parent, mainElem);
     this.childrenClass = Dish;
 
     const headerElem = createChildElement(this.mainElem, 'div', 'meal-header');
@@ -139,10 +152,12 @@ class Meal extends CoreObject {
     const titleElem = createChildElement(headerElem, 'h5', 'meal__title');
     titleElem.textContent = 'Repas de';
     // Time
-    const timeElem = createChildElement(headerElem, 'input');
-    timeElem.type = 'time';
-    timeElem.required = true;
-    timeElem.name = `day${this.parent.index}-meal${this.index}__time`;
+    this.timeElem = createChildElement(headerElem, 'input');
+    this.timeElem.type = 'time';
+    this.timeElem.required = true;
+    this.timeElem.onkeydown = "return false";
+    this.timeElem.name = `day${this.parent.index}-meal${this.index}__time`;
+    this.timeElem.addEventListener('change', () => this.self.parent.sortChildren());
     // Dishes
     this.childrenRowElem = createChildElement(this.mainElem, 'div', 'meal-row');
     this.childrenElem = createChildElement(this.childrenRowElem, 'div', 'dishes');
@@ -165,32 +180,32 @@ class Day extends CoreObject {
   /**
    * Create the Day DOM Element
    * @param {Journal} parent 
-   * @param {Number} index Index in the Journal parent's Day instances array
+   * @param {HTMLElement} mainElem The DOM Element (optional)
    */
-  constructor(parent, index, mainElem = null) {
+  constructor(parent, mainElem = null) {
     mainElem = mainElem || createChildElement(parent.childrenElem, 'div', 'day');
-    super(parent, index, mainElem);
+    super(parent, mainElem);
     this.childrenClass = Meal;
     // Header
     const headerElem = createChildElement(this.mainElem, 'div', 'day-header');
     const deleteElem = createChildElement(headerElem, 'div', 'img-trash');
     this.titleElem = createChildElement(headerElem, 'h4', 'day__title');
-    this.updateTitle();
+    setTimeout(() => this.updateTitle(), 0); // this needs to be pushed in parent's children array first to have an index
     // Arrows
     const arrowsElem = createChildElement(headerElem, 'div');
     this.arrowLeftElem = createChildElement(arrowsElem, 'div', 'img-arrow-left');
     this.arrowLeftElem.addEventListener('click', (event) => {
-      callIfEnabled(() => this.self.move(-1), event.target);
+      callIfEnabled(() => this.self.index -= 1, event.target);
     });
     this.arrowRightElem = createChildElement(arrowsElem, 'img', 'img-arrow-right');
     this.arrowRightElem.addEventListener('click', (event) => {
-      callIfEnabled(() => this.self.move(1), event.target);
+      callIfEnabled(() => this.self.index += 1, event.target);
     });
-    // Image sources set will be triggered by the parent.updateDaysArrows
+    // Image sources set will be triggered by the parent.updateChildrenUI
 
     // Meals
     this.childrenRowElem = createChildElement(this.mainElem, 'div', 'meals-row');
-    this.childrenElem = createChildElement(this.mainElem, 'div', 'meals');
+    this.childrenElem = createChildElement(this.childrenRowElem, 'div', 'meals');
     const addMealElem = createChildElement(this.childrenRowElem, 'input', 'add-meal');
     addMealElem.type = 'button';
     addMealElem.value = 'Ajouter un repas';
@@ -226,13 +241,14 @@ class Day extends CoreObject {
     }
   }
 
-  /**
-   * In the parent's children array, move this instance nth time in the direction
-   * given by the positive/negative nature of increment.
-   * @param {Integer} increment Positive increment = to the right ; negative increment = to the left.
-   */
-  move(increment) {
-    this.parent.switchChildren(this.index, this.index + increment);
+  sortChildren() {
+    this.children.sort((childA, childB) => {
+      // Empty times will be put at the end
+      const valueA = childA.timeElem.value || '23:59:59';
+      const valueB = childB.timeElem.value || '23:59:59';
+      return Date.parse(`01/01/2000 ${valueA}`) - Date.parse(`01/01/2000 ${valueB}`);
+    });
+    this.sortChildrenElem();
   }
 
 }
@@ -249,7 +265,7 @@ class Journal extends CoreObject {
    * @param {HTMLElement} mainElem Form div
    */
   constructor(mainElem) {
-    super(null, null, mainElem);
+    super(null, mainElem);
     this.childrenClass = Day;
     this.childrenRowElem = document.getElementById('days-row');
     this.childrenElem = document.getElementById('days');
@@ -277,15 +293,26 @@ class Journal extends CoreObject {
 
   addChild() {
     super.addChild();
-    this.updateDaysArrows();
+    this.updateChildrenLook();
     // Move scrollbar to the right (if visible)
     if (isScrollbarVisible(this.childrenRowElem)) {
       this.childrenRowElem.scrollLeft += this.childrenRowElem.scrollWidth;
     }
   }
 
-  updateDaysArrows() {
-    this.children.forEach(day => day.updateArrows());
+  /**
+   * Updates the children arrows and titles
+   */
+  updateChildrenLook() {
+    this.children.forEach(child => {
+      child.updateArrows();
+      child.updateTitle();
+    });
+  }
+
+  moveChild(child, increment) {
+    super.moveChild(child, increment);
+    this.updateChildrenLook();
   }
 
 }
