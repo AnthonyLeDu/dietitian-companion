@@ -107,3 +107,8 @@
 .--disabled {
   cursor: initial;
 }
+
+.--is-danger {
+  color: #AA3333;
+  background-color: #FFDDDD;
+}

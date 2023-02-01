@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../../public/css/reset.css">
   <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
   <link rel="stylesheet" href="../../public/css/journalStyle.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
   <script src="./../js/createJournal.js" defer></script>
 </head>
 
@@ -20,7 +21,7 @@
       </h1>
       <a href="/patients">Patients</a>
       <a href="/journals">Journaux alimentaires</a>
-      <a href="/ciqualTable">Table des aliments</a>
+      <a href="/foods">Table des aliments</a>
     </nav>
   </header>
 
@@ -31,24 +32,27 @@
 
     <form action="" method="post" id="journal" class="container">
 
+      <datalist id="patients-datalist"></datalist>
+      <datalist id="foods-datalist"></datalist>
+
       <div id="patient-info">
         <fieldset id="patient__fullname">
-          <label for="patient__fullname">Patient</label>
-          <input list="patients-datalist" name="patient__fullname" required>
+          <label>Patient</label>
+          <input list="patients-datalist" name="patient__fullname" autocomplete="off" required>
         </fieldset>
         <fieldset>
-          <label for="patient__age">Âge</label>
-          <input type="number" min="0" required>
+          <label>Âge</label>
+          <input type="number" name="patient__age" min="0" required>
         </fieldset>
         <fieldset>
-          <label for="patient__weight">Poids</label>
-          <input type="number" min="0" required>
+          <label>Poids</label>
+          <input type="number" name="patient__weight" min="0" required>
         </fieldset>
       </div>
 
       <fieldset>
-        <label for="start_date">Date de début</label>
-        <input type="date" name="start_date" id="start-date">
+        <label>Date de début</label>
+        <input type="date" name="start-date">
       </fieldset>
 
       <div id="days-row">
@@ -74,7 +78,7 @@
                   <div class="dishes">
                     <div class="dish">
                       <span>x</span>
-                      <input list="dishes-datalist" name="day1-meal1-dish1__name" required>
+                      <input list="foods-datalist" name="day1-meal1-dish1__name" required>
                       <input class="dish__amount" type="number" step="10" name="day1-meal1-dish1__amount" required>
                       <span>g</span>
                     </div>
