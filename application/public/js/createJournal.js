@@ -1,7 +1,9 @@
-// TODO: Récupération dynamique des dish et patients
+moment.locale('fr');
 
-const PATIENTS_DATALIST = 'patients-datalist'
-const DISHES_DATALIST = 'dishes-datalist'
+const PATIENTS_DATALIST = 'patients-datalist';
+const FOODS_DATALIST = 'foods-datalist';
+const BASE_URL = 'http://localhost:3000';
+
 
 function isScrollbarVisible(element) {
   return element.scrollWidth > element.clientWidth;
@@ -22,7 +24,6 @@ function createChildElement(parentElement, elementTag, elementClass = null, elem
  * @returns {HTMLElement} The created element
  */
 function createDeleteElement(parentElement, deleteFunction) {
-  console.log('ouep');
   const deleteElem = createChildElement(parentElement, 'div', 'img-trash');
   deleteElem.addEventListener('click', () => deleteFunction());
   return deleteElem;
@@ -75,7 +76,6 @@ class CoreObject {
    * Ask the parent to remove the instance
    */
   destroy() {
-    console.log('toto');
     this.parent.removeChild(this);
   }
 
@@ -155,7 +155,7 @@ class Dish extends CoreObject {
     createDeleteElement(this.mainElem, () => this.destroy());
     // Food selection
     const foodElem = createChildElement(this.mainElem, 'input', 'dish__food');
-    foodElem.setAttribute('list', DISHES_DATALIST);
+    foodElem.setAttribute('list', FOODS_DATALIST);
     foodElem.required = true;
     foodElem.name = `${dishCodeName}__name`;
     // Amount input
@@ -254,11 +254,7 @@ class Day extends CoreObject {
     // Get the day name if user selected the date already
     let dayName;
     if (this.parent.startDate !== undefined) {
-      const dayDate = new Date(this.parent.startDate.valueOf())
-      dayDate.setDate(dayDate.getDate() + this.index)
-      dayName = dayDate.toLocaleString('fr-FR', { weekday: 'long' });
-    }
-    if (dayName) {
+      dayName = this.parent.startDate.add(this.index, 'days').format('dddd');
       this.titleElem.textContent += ` (${dayName})`;
     }
   }
@@ -286,7 +282,7 @@ class Day extends CoreObject {
       // Empty times will be put at the end
       const valueA = childA.timeElem.value || '23:59:59';
       const valueB = childB.timeElem.value || '23:59:59';
-      return Date.parse(`01/01/2000 ${valueA}`) - Date.parse(`01/01/2000 ${valueB}`);
+      return moment(`2000-01-01 ${valueA}`) - moment(`2000-01-01 ${valueB}`);
     });
     this.sortChildrenElem();
   }
@@ -302,9 +298,8 @@ class Journal extends CoreObject {
   static childrenClass;
   patientAge;
   patientWeight;
-  #startDate;
-  patientsDataListElem;
-  dishesDataListElem;
+  dbPatients;
+  dbFoods;
 
   /**
    * @param {HTMLElement} mainElem Form div
@@ -316,24 +311,94 @@ class Journal extends CoreObject {
     this.childrenElem = document.getElementById('days');
 
     // Init datalists
-    this.patientsDataListElem = createChildElement(this.mainElem, 'datalist', null, PATIENTS_DATALIST);
-    for (const val of ['M. Robert Dujardin (12/01/1980)', 'Mme Jacqueline Marin (25/12/1952)']) {
-      createChildElement(this.patientsDataListElem, 'option').value = val;
-    }
-    this.dishesDataListElem = createChildElement(this.mainElem, 'datalist', null, DISHES_DATALIST);
-    for (const val of ['Poulet', 'Frites', 'Boeuf']) {
-      createChildElement(this.dishesDataListElem, 'option').value = val;
-    }
+    this.fetchPatients();
+    this.fetchFoods();
 
-    // Init event listeners
-    document.getElementById('add-day').addEventListener('click', () => this.self.addChild());
+    // Event listeners
+    document.querySelector('input[name=patient__fullname]')
+      .addEventListener('change', (event) => this.self.handlePatientNameChange(event));
+    document.querySelector('input[name=start-date]')
+      .addEventListener('change', (event) => this.self.handleStartDateChange(event))
+    document.getElementById('add-day')
+      .addEventListener('click', () => this.self.addChild());
   }
 
   get startDate() {
-    if (!this.#startDate) {
-      this.#startDate = document.getElementById('start-date').value;
-      this.#startDate = this.#startDate !== '' ? new Date(this.#startDate) : undefined;
+    let startDate = document.querySelector('input[name=start-date]').value || undefined;
+    if (startDate !== undefined) {
+      startDate = moment(startDate);
     }
+    return startDate;
+  }
+
+  /**
+   * Fetch Patients from API and fill the related DOM datalist
+   */
+  async fetchPatients() {
+    try {
+      // Fetching using API
+      const response = await fetch(`${BASE_URL}/api/patients`);
+      const json = await response.json();
+      if (!response.ok) throw json;
+      // Add the fullname-and-gender
+      this.dbPatients = json.map(patient => {
+        patient.fullNameAndGender = `${patient.last_name} ${patient.first_name} (${patient.gender.charAt(0)})`;
+        return patient;
+      });
+    } catch (error) {
+      console.error(error.stack);
+      return;
+    }
+    // Fill the datalist
+    const patientsDataListElem = document.getElementById(PATIENTS_DATALIST);
+    for (const patient of this.dbPatients) {
+      createChildElement(patientsDataListElem, 'option').value = patient.fullNameAndGender;
+    }
+  }
+
+  /**
+   * Fetch Foods from API and fill the related DOM datalist
+   */
+  async fetchFoods() {
+    try {
+      // Fetching using API
+      const response = await fetch(`${BASE_URL}/api/foods`);
+      const json = await response.json();
+      if (!response.ok) throw json;
+      this.dbFoods = json;
+    } catch (error) {
+      console.error(error.stack);
+      return;
+    }
+    // Fill the datalist
+    const foodsDataListElem = document.getElementById(FOODS_DATALIST);
+    for (const food of this.dbFoods) {
+      createChildElement(foodsDataListElem, 'option').value = food.name_fr;
+    }
+  }
+
+  handlePatientNameChange(event) {
+    const patientInputElem = event.target;
+    // Check patient's name
+    patientInputElem.classList.remove('--is-danger');
+    const patientFullNameAndGender = patientInputElem.value
+    // Check if there's an input
+    if(!patientFullNameAndGender) {
+      return;
+    }
+    // Check if name matches a Patient
+    const patient = this.dbPatients.find(patient => patient.fullNameAndGender === patientFullNameAndGender);
+    if(!patient) {
+      patientInputElem.classList.add('--is-danger');
+    } else {
+      // Update age
+      const patientAge = moment().diff(moment(patient.birth_date), 'years');
+      document.querySelector('input[name=patient__age]').value = patientAge;
+    }
+  }
+
+  handleStartDateChange(event) {
+    this.updateChildrenLook();
   }
 
   addChild() {
