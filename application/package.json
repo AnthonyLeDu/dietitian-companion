@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/AnthonyLeDu/dietitian-companion#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
