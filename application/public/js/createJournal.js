@@ -315,18 +315,18 @@ class Journal extends CoreObject {
     this.fetchFoods();
 
     // Event listeners
-    document.querySelector('input[name=patient_fullname]')
-      .addEventListener('change', (event) => this.self.handlePatientNameChange(event));
-    document.querySelector('input[name=start_date]')
-      .addEventListener('change', (event) => this.self.handleStartDateChange(event))
-    document.getElementById('add-day')
-      .addEventListener('click', () => this.self.addChild());
-    this.mainElem
-      .addEventListener('submit', (event) => this.self.submit(event));
+    document.querySelector('input[name=patient_fullname]').addEventListener(
+      'change', (event) => this.self.handlePatientNameChange(event));
+    document.querySelector('input[name=start_day]').addEventListener(
+      'change', (event) => this.self.handleStartDateChange(event))
+    document.getElementById('add-day').addEventListener(
+      'click', () => this.self.addChild());
+    this.mainElem.addEventListener(
+      'submit', (event) => this.self.submit(event));
   }
 
   get startDate() {
-    let startDate = document.querySelector('input[name=start_date]').value || undefined;
+    let startDate = document.querySelector('input[name=start_day]').value || undefined;
     if (startDate !== undefined) {
       startDate = dayjs(startDate);
     }
@@ -348,7 +348,7 @@ class Journal extends CoreObject {
         return patient;
       });
     } catch (error) {
-      console.error(error.stack);
+      console.error(error.message);
       return;
     }
     // Fill the datalist
@@ -432,16 +432,27 @@ class Journal extends CoreObject {
     this.updateChildrenLook();
   }
 
-  submit(event) {
+  async submit(event) {
     event.preventDefault();
+    const feedbackElem = event.target.querySelector('#feedback');
     const formData = new FormData(event.target);
-    // Get patient ID
+    try {
+      // POST fetch
+      const response = await fetch(`${BASE_URL}/api/journal`, {
+        method: 'POST',
+        body: formData
+      });
+      const json = await response.json();
+      if (!response.ok) throw json;
+      feedbackElem.textContent = "Journal créé avec succès !"
+      feedbackElem.classList.remove('--is-danger');
+    } catch (error) {
+      feedbackElem.textContent = error.message;
+      feedbackElem.classList.add('--is-danger');
+      return;
+    }
+    // Store the current journal id in order to patch it next time we click on save
 
-    // Valider les données ?
-    console.log(formData.get('patient_id'));
-    console.log(formData.get('patient_fullname'));
-    console.log(formData.get('patient_age'));
-    console.log(formData.get('patient_weight'));
   }
 
 }
