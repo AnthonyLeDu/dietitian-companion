@@ -9,7 +9,8 @@
   <link rel="stylesheet" href="../../public/css/reset.css">
   <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
   <link rel="stylesheet" href="../../public/css/journalStyle.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/fr.js"></script>
   <script src="./../js/createJournal.js" defer></script>
 </head>
 
@@ -36,23 +37,24 @@
       <datalist id="foods-datalist"></datalist>
 
       <div id="patient-info">
-        <fieldset id="patient__fullname">
+        <fieldset id="patient_fullname">
           <label>Patient</label>
-          <input list="patients-datalist" name="patient__fullname" autocomplete="off" required>
+          <input list="patients-datalist" name="patient_fullname" autocomplete="off" required>
         </fieldset>
+        <input type="hidden" name="patient_id" value="-1">
         <fieldset>
           <label>Âge</label>
-          <input type="number" name="patient__age" min="0" required>
+          <input type="number" name="patient_age" min="0" required>
         </fieldset>
         <fieldset>
           <label>Poids</label>
-          <input type="number" name="patient__weight" min="0" required>
+          <input type="number" name="patient_weight" min="0" required>
         </fieldset>
       </div>
 
       <fieldset>
         <label>Date de début</label>
-        <input type="date" name="start-date">
+        <input type="date" name="start_date">
       </fieldset>
 
       <div id="days-row">
