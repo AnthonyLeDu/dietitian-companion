@@ -7,14 +7,14 @@ const journalController = {
   // GENERIC FUNCTIONS
   // -----------------
 
-  getJournals: async() => {
+  getJournals: async () => {
     return await Journal.findAll({
       order: [['updated_at', 'DESC']],
       include: 'patient'
     });
   },
 
-  getJournal: async(journalID) => {
+  getJournal: async (journalID) => {
     const journal = await Journal.findByPk(
       journalID, {
       include: [
@@ -56,7 +56,7 @@ const journalController = {
    * @param {Integer} patientID Patient's id
    * @returns {Array<Patient, Journal[]>} Patient instance and its Journals array.
    */
-  getPatientJournals: async(patientID) => {
+  getPatientJournals: async (patientID) => {
     const patient = await Patient.findByPk(patientID);
     if (!patient) return [undefined, undefined]; // 404
     const findData = {
@@ -75,7 +75,15 @@ const journalController = {
   // API FUNCTIONS
   // -------------
 
-  apiGetJournals: async(req, res, next) => {
+  submitJournal: async (req, res) => {
+    const journalData = req.body;
+    console.log(journalData);
+    // Create the journal
+    const journal = await Journal.create(journalData);
+    return res.json(journal);
+  },
+
+  apiGetJournals: async (req, res, next) => {
     let journals, patient;
     if (req.query.patient !== undefined) {
       [patient, journals] = await journalController.getPatientJournals(req.query.patient);
@@ -86,7 +94,7 @@ const journalController = {
     res.json(journals);
   },
 
-  apiGetJournal: async(req, res, next) => {
+  apiGetJournal: async (req, res, next) => {
     const journal = await journalController.getJournal(req.params.id);
     if (!journal) return next(); // 404
     res.json(journal);
@@ -105,7 +113,7 @@ const journalController = {
       if (!patient) return next(); // Patient id was provided but patient not found
     }
     const journals = await journalController.getJournals(patientID);
-    if (!journals) return next(); 
+    if (!journals) return next();
     res.render('journals', { journals, patient });
   },
 

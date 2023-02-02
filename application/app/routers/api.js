@@ -13,7 +13,7 @@ router
 router
   .get('/journals', journalController.apiGetJournals)
   .get('/journal/:id', catchErrors(journalController.apiGetJournal))
-  // .post('/journal', catchErrors(journalController.addJournal));
+  .post('/journal', catchErrors(journalController.submitJournal));
 
 router
   .get('/patients', catchErrors(patientController.apiGetPatients))
