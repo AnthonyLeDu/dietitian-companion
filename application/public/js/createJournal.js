@@ -1,4 +1,4 @@
-moment.locale('fr');
+dayjs.locale('fr');
 
 const PATIENTS_DATALIST = 'patients-datalist';
 const FOODS_DATALIST = 'foods-datalist';
@@ -282,7 +282,7 @@ class Day extends CoreObject {
       // Empty times will be put at the end
       const valueA = childA.timeElem.value || '23:59:59';
       const valueB = childB.timeElem.value || '23:59:59';
-      return moment(`2000-01-01 ${valueA}`) - moment(`2000-01-01 ${valueB}`);
+      return dayjs(`2000-01-01 ${valueA}`) - dayjs(`2000-01-01 ${valueB}`);
     });
     this.sortChildrenElem();
   }
@@ -315,18 +315,20 @@ class Journal extends CoreObject {
     this.fetchFoods();
 
     // Event listeners
-    document.querySelector('input[name=patient__fullname]')
+    document.querySelector('input[name=patient_fullname]')
       .addEventListener('change', (event) => this.self.handlePatientNameChange(event));
-    document.querySelector('input[name=start-date]')
+    document.querySelector('input[name=start_date]')
       .addEventListener('change', (event) => this.self.handleStartDateChange(event))
     document.getElementById('add-day')
       .addEventListener('click', () => this.self.addChild());
+    this.mainElem
+      .addEventListener('submit', (event) => this.self.submit(event));
   }
 
   get startDate() {
-    let startDate = document.querySelector('input[name=start-date]').value || undefined;
+    let startDate = document.querySelector('input[name=start_date]').value || undefined;
     if (startDate !== undefined) {
-      startDate = moment(startDate);
+      startDate = dayjs(startDate);
     }
     return startDate;
   }
@@ -352,7 +354,9 @@ class Journal extends CoreObject {
     // Fill the datalist
     const patientsDataListElem = document.getElementById(PATIENTS_DATALIST);
     for (const patient of this.dbPatients) {
-      createChildElement(patientsDataListElem, 'option').value = patient.fullNameAndGender;
+      const option = createChildElement(patientsDataListElem, 'option');
+      option.value = patient.fullNameAndGender;
+      option.dataset.patientId = patient.id;
     }
   }
 
@@ -386,14 +390,18 @@ class Journal extends CoreObject {
     if(!patientFullNameAndGender) {
       return;
     }
+    const patientIdInputElem = document.querySelector('input[name=patient_id]');
     // Check if name matches a Patient
     const patient = this.dbPatients.find(patient => patient.fullNameAndGender === patientFullNameAndGender);
     if(!patient) {
       patientInputElem.classList.add('--is-danger');
+      patientIdInputElem.value = -1;
     } else {
+      // Set patient id on form input
+      patientIdInputElem.value = patient.id;
       // Update age
-      const patientAge = moment().diff(moment(patient.birth_date), 'years');
-      document.querySelector('input[name=patient__age]').value = patientAge;
+      const patientAge = dayjs().diff(dayjs(patient.birth_date), 'years');
+      document.querySelector('input[name=patient_age]').value = patientAge;
     }
   }
 
@@ -422,6 +430,18 @@ class Journal extends CoreObject {
   updateChildren() {
     this.sortChildrenElem();
     this.updateChildrenLook();
+  }
+
+  submit(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    // Get patient ID
+
+    // Valider les données ?
+    console.log(formData.get('patient_id'));
+    console.log(formData.get('patient_fullname'));
+    console.log(formData.get('patient_age'));
+    console.log(formData.get('patient_weight'));
   }
 
 }
