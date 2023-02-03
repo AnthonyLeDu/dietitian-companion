@@ -335,7 +335,6 @@ class Journal extends CoreObject {
 
   get patientId() {
     const id = this.mainElem.querySelector('input[name=patient_id]').value;
-    console.log('Patient id = '+ id);
     return (id !== '') ? Number(id) : undefined;
   }
 
@@ -455,7 +454,6 @@ class Journal extends CoreObject {
       this.patientId = patient.id;
     }
     this.updatePatientAge();
-    
     this.patchInDatabase();
   }
   
@@ -511,17 +509,7 @@ class Journal extends CoreObject {
   }
 
   async patchInDatabase() {
-    console.log('Patch !');
     const formData = new FormData(this.form);
-    if (!this.patientId) formData.delete('patient_id');
-    if (!this.patientAge) formData.delete('patient_age');
-    if (!this.patientWeight) formData.delete('patient_weight');
-    if (!this.startDay) formData.delete('start_day');
-
-    console.log("ID"+formData.get('patient_id')+"ID");
-    console.log("AGE"+formData.get('patient_age')+"AGE");
-    console.log("WEIGHT"+formData.get('patient_weight')+"WEIGHT");
-    console.log("STARTDAY"+formData.get('start_day')+"STARTDAY");
     try {
       const response = await fetch(`${BASE_URL}/api/journal/${this.id}`, {
         method: 'PATCH',
@@ -529,7 +517,6 @@ class Journal extends CoreObject {
       });
       const json = await response.json();
       if (!response.ok) throw json;
-
       app.successFeedback('Journal mis à jour.');
     } catch (error) {
       console.log(error);
