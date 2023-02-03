@@ -61,15 +61,12 @@ Journal.init(
     },
     patient_age: {
       type: DataTypes.INTEGER, // years
-      allowNull: false
     },
     patient_weight: {
       type: DataTypes.INTEGER, // kg
-      allowNull: false
     },
     start_day: {
       type: DataTypes.DATEONLY,
-      allowNull: false
     },
     created_at: DataTypes.DATE,
     updated_at: DataTypes.DATE
