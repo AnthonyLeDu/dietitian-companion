@@ -29,35 +29,38 @@
   <!-- <%- include ('partials/header') %> -->
 
   <main class="container">
-    <h2>Ajout d'un journal</h2>
+    <h2>Édition de journal</h2>
+    <h5 id="feedback"></h5>
+    <button id="new-journal">Créer un nouveau journal</button>
+    
+    <div id="journal">
 
-    <form action="" method="post" id="journal" class="container">
+        <datalist id="patients-datalist"></datalist>
+        <datalist id="foods-datalist"></datalist>
 
-      <datalist id="patients-datalist"></datalist>
-      <datalist id="foods-datalist"></datalist>
-
-      <div id="patient-info">
-        <fieldset id="patient_fullname">
-          <label>Patient</label>
-          <input list="patients-datalist" name="patient_fullname" autocomplete="off" required>
-        </fieldset>
-        <input type="hidden" name="patient_id" value="-1">
-        <fieldset>
-          <label>Âge</label>
-          <input type="number" name="patient_age" min="0" required>
-        </fieldset>
-        <fieldset>
-          <label>Poids</label>
-          <input type="number" name="patient_weight" min="0" required>
-        </fieldset>
-      </div>
-
-      <fieldset>
-        <label>Date de début</label>
-        <input type="date" name="start_day">
-      </fieldset>
-
-      <div id="days-row">
+        <form id="journal-form">
+          <div id="patient-info">
+            <input type="hidden" name="patient_id">
+            <fieldset id="patient_fullname">
+              <label>Patient</label>
+              <input list="patients-datalist" name="patient_fullname" autocomplete="off" required>
+            </fieldset>
+            <fieldset>
+              <label>Âge</label>
+              <input type="number" name="patient_age" min="0" required>
+            </fieldset>
+            <fieldset>
+              <label>Poids</label>
+              <input type="number" name="patient_weight" min="0" required>
+            </fieldset>
+          </div>
+          <fieldset>
+            <label>Date de début</label>
+            <input type="date" name="start_day">
+          </fieldset>
+        </form>
+        
+        <div id="days-row">
         <div id="days">
           <!-- <div class="day">
             <div class="day-header">
@@ -102,9 +105,6 @@
         </div>
         <input type="button" id="add-day" value="Ajouter un jour">
       </div>
-      <button id="save-button" type="submit">Sauvegarder</button>
-      <p id="feedback"></p>
-    </form>
-  </main>
-
-  <!-- <%- include ('partials/footer') %> -->
+    </main>
+    
+    <!-- <%- include ('partials/footer') %> -->

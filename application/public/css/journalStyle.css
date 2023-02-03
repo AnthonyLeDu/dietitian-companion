@@ -1,3 +1,11 @@
+#feedback {
+  padding: 0.5em;
+}
+
+#journal {
+  display: none;
+}
+
 #patient-info{
   display: flex;
   flex-wrap: wrap;
@@ -68,11 +76,6 @@
   background-color: #FFF;
 }
 
-#save-button {
-  margin-top: 1em;
-  background-color: #292;
-}
-
 .img-trash,
 .img-clock,
 .img-arrow-left,
@@ -111,4 +114,13 @@
 .--is-danger {
   color: #AA3333;
   background-color: #FFDDDD;
+}
+
+.--is-success {
+  color: #33AA33;
+  background-color: #DDFFDD;
+}
+
+.--is-readonly {
+  background-color: #EEEEEE;
 }

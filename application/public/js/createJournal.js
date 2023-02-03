@@ -48,6 +48,7 @@ class CoreObject {
   children; // Ordered array of children CoreObjects
   childrenRowElem;
   childrenElem;
+  id;
 
   /**
    * @param {CoreObject} parent Parent CoreObject
@@ -253,8 +254,8 @@ class Day extends CoreObject {
     this.titleElem.textContent = `Jour ${this.index + 1}`;
     // Get the day name if user selected the date already
     let dayName;
-    if (this.parent.startDate !== undefined) {
-      dayName = this.parent.startDate.add(this.index, 'days').format('dddd');
+    if (this.parent.startDay) {
+      dayName = dayjs(this.parent.startDay).add(this.index, 'days').format('dddd');
       this.titleElem.textContent += ` (${dayName})`;
     }
   }
@@ -296,8 +297,6 @@ class Day extends CoreObject {
 
 class Journal extends CoreObject {
   static childrenClass;
-  patientAge;
-  patientWeight;
   dbPatients;
   dbFoods;
 
@@ -307,30 +306,70 @@ class Journal extends CoreObject {
   constructor(mainElem) {
     super(null, mainElem);
     this.childrenClass = Day;
-    this.childrenRowElem = document.getElementById('days-row');
-    this.childrenElem = document.getElementById('days');
+    this.childrenRowElem = this.mainElem.querySelector('.days-row');
+    this.childrenElem = this.mainElem.querySelector('.days');
 
     // Init datalists
     this.fetchPatients();
     this.fetchFoods();
 
     // Event listeners
-    document.querySelector('input[name=patient_fullname]').addEventListener(
-      'change', (event) => this.self.handlePatientNameChange(event));
-    document.querySelector('input[name=start_day]').addEventListener(
-      'change', (event) => this.self.handleStartDateChange(event))
+    document.getElementById('new-journal').addEventListener(
+      'click', event => this.self.handleCreateJournal(event));
+    this.mainElem.querySelector('input[name=patient_fullname]').addEventListener(
+      'change', event => this.self.handlePatientNameChange(event));
+    this.mainElem.querySelector('input[name=patient_age]').addEventListener(
+      'change', event => this.self.handlePatientAgeChange(event));
+    this.mainElem.querySelector('input[name=patient_weight]').addEventListener(
+      'change', event => this.self.handlePatientWeightChange(event));
+    this.mainElem.querySelector('input[name=start_day]').addEventListener(
+      'change', event => this.self.handleStartDayChange(event))
+    
     document.getElementById('add-day').addEventListener(
       'click', () => this.self.addChild());
-    this.mainElem.addEventListener(
-      'submit', (event) => this.self.submit(event));
   }
 
-  get startDate() {
-    let startDate = document.querySelector('input[name=start_day]').value || undefined;
-    if (startDate !== undefined) {
-      startDate = dayjs(startDate);
-    }
-    return startDate;
+  get form() {
+    return this.mainElem.querySelector('#journal-form');
+  }
+
+  get patientId() {
+    const id = this.mainElem.querySelector('input[name=patient_id]').value;
+    console.log('Patient id = '+ id);
+    return (id !== '') ? Number(id) : undefined;
+  }
+
+  /**
+   * @param {Integer} id
+   */
+  set patientId(id) {
+    this.mainElem.querySelector('input[name=patient_id]').value = (id !== undefined) ? String(id) : '';
+  }
+
+  get patient() {
+    if (!this.patientId) return undefined;
+    return this.dbPatients.find(patient => patient.id === this.patientId);
+  }
+
+  get patientAge() {
+    const age = this.mainElem.querySelector('input[name=patient_age]').value;
+    return (age !== '') ? Number(age) : undefined;
+  }
+  
+  /**
+   * @param {Integer} age
+   */
+  set patientAge(age) {
+    this.mainElem.querySelector('input[name=patient_age]').value = age;
+  }
+
+  get patientWeight() {
+    const weight = this.mainElem.querySelector('input[name=patient_weight]').value;
+    return (weight !== '') ? Number(weight) : undefined;
+  }
+
+  get startDay() {
+    return this.mainElem.querySelector('input[name=start_day]').value;
   }
 
   /**
@@ -381,34 +420,59 @@ class Journal extends CoreObject {
     }
   }
 
-  handlePatientNameChange(event) {
-    const patientInputElem = event.target;
-    // Check patient's name
-    patientInputElem.classList.remove('--is-danger');
-    const patientFullNameAndGender = patientInputElem.value
-    // Check if there's an input
-    if(!patientFullNameAndGender) {
+  async handleCreateJournal(event) {
+    event.preventDefault();
+    try {
+      // POST fetch
+      const response = await fetch(`${BASE_URL}/api/journal`, {
+        method: 'POST'
+      });
+      const json = await response.json();
+      if (!response.ok) throw json;
+      this.id = json.id;
+      event.target.style.display = 'none'; // Hide button
+      this.mainElem.style.display = 'block'; // Show journal form
+      app.successFeedback('Journal créé.');
+    } catch (error) {
+      console.log(error);
+      app.errorFeedback(error.message);
       return;
     }
-    const patientIdInputElem = document.querySelector('input[name=patient_id]');
-    // Check if name matches a Patient
-    const patient = this.dbPatients.find(patient => patient.fullNameAndGender === patientFullNameAndGender);
-    if(!patient) {
-      patientInputElem.classList.add('--is-danger');
-      patientIdInputElem.value = -1;
-    } else {
-      // Set patient id on form input
-      patientIdInputElem.value = patient.id;
-      // Update age
-      const patientAge = dayjs().diff(dayjs(patient.birth_date), 'years');
-      document.querySelector('input[name=patient_age]').value = patientAge;
-    }
   }
 
-  handleStartDateChange(event) {
+  handlePatientNameChange(event) {
+    const patientNameInputElem = event.target;
+    patientNameInputElem.classList.remove('--is-danger');
+    console.log('Name changed');
+    // Check if name matches a Patient
+    const patient = this.dbPatients.find(patient => patient.fullNameAndGender === patientNameInputElem.value);
+    if(!patient) {
+      this.patientId = undefined;
+      if (patientNameInputElem.value !== '') {
+        patientNameInputElem.classList.add('--is-danger');
+      }
+    } else {
+      this.patientId = patient.id;
+    }
+    this.updatePatientAge();
+    
+    this.patchInDatabase();
+  }
+  
+  handlePatientAgeChange(event) {
+    this.patchInDatabase();
+  }
+  
+  handlePatientWeightChange(event) {
+    this.patchInDatabase();
+  }
+  
+  handleStartDayChange(event) {
+    this.updatePatientAge();
+    this.patchInDatabase();
     this.updateChildrenLook();
   }
-
+  
   addChild() {
     super.addChild();
     // Move scrollbar to the right (if visible)
@@ -416,14 +480,28 @@ class Journal extends CoreObject {
       this.childrenRowElem.scrollLeft += this.childrenRowElem.scrollWidth;
     }
   }
-
+  
+  updatePatientAge() {
+    // Enable age input only if patient or date is not specified
+    const patientAgeInputElem = this.mainElem.querySelector('input[name=patient_age]');
+    if (!this.patientId || !this.startDay) {
+      patientAgeInputElem.readOnly = false;
+      patientAgeInputElem.classList.remove('--is-readonly');
+      return;
+    }
+    patientAgeInputElem.readOnly = true;
+    patientAgeInputElem.classList.add('--is-readonly');
+    // Calculate age
+    this.patientAge = dayjs(this.startDay).diff(dayjs(this.patient.birth_date), 'years');
+  }
+  
   /**
    * Updates the children arrows and titles
-   */
-  updateChildrenLook() {
-    this.children.forEach(child => {
-      child.updateArrows();
-      child.updateTitle();
+  */
+ updateChildrenLook() {
+   this.children.forEach(child => {
+     child.updateArrows();
+     child.updateTitle();
     });
   }
 
@@ -432,35 +510,61 @@ class Journal extends CoreObject {
     this.updateChildrenLook();
   }
 
-  async submit(event) {
-    event.preventDefault();
-    const feedbackElem = event.target.querySelector('#feedback');
-    const formData = new FormData(event.target);
+  async patchInDatabase() {
+    console.log('Patch !');
+    const formData = new FormData(this.form);
+    if (!this.patientId) formData.delete('patient_id');
+    if (!this.patientAge) formData.delete('patient_age');
+    if (!this.patientWeight) formData.delete('patient_weight');
+    if (!this.startDay) formData.delete('start_day');
+
+    console.log("ID"+formData.get('patient_id')+"ID");
+    console.log("AGE"+formData.get('patient_age')+"AGE");
+    console.log("WEIGHT"+formData.get('patient_weight')+"WEIGHT");
+    console.log("STARTDAY"+formData.get('start_day')+"STARTDAY");
     try {
-      // POST fetch
-      const response = await fetch(`${BASE_URL}/api/journal`, {
-        method: 'POST',
+      const response = await fetch(`${BASE_URL}/api/journal/${this.id}`, {
+        method: 'PATCH',
         body: formData
       });
       const json = await response.json();
       if (!response.ok) throw json;
-      feedbackElem.textContent = "Journal créé avec succès !"
-      feedbackElem.classList.remove('--is-danger');
+
+      app.successFeedback('Journal mis à jour.');
     } catch (error) {
-      feedbackElem.textContent = error.message;
-      feedbackElem.classList.add('--is-danger');
+      console.log(error);
+      app.errorFeedback(error.message);
       return;
     }
-    // Store the current journal id in order to patch it next time we click on save
-
   }
 
 }
 
 const app = {
+  feedbackElem: undefined,
+  
   init: function () {
     app.journal = new Journal(document.getElementById('journal'));
-  }
+    app.feedbackElem = document.getElementById('feedback');
+    app.feedbackElem.addEventListener('click', app.clearFeedback);
+  },
+
+  successFeedback(message) {
+    app.feedbackElem.className = '';
+    app.feedbackElem.textContent = message;
+    app.feedbackElem.classList.add('--is-success');
+  },
+  
+  errorFeedback(message) {
+    app.feedbackElem.className = '';
+    app.feedbackElem.textContent = message;
+    app.feedbackElem.classList.add('--is-danger');
+  },
+
+  clearFeedback() {
+    app.feedbackElem.textContent = '';
+    app.feedbackElem.className = '';
+  },
 }
 
 

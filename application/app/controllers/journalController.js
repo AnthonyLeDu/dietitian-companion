@@ -61,32 +61,35 @@ const journalController = {
     if (!patient) return [undefined, undefined]; // 404
     const findData = {
       order: [['updated_at', 'DESC']],
-      // Use of 'association' is important here because we may add 'where' below
-      include: {
-        association: 'patient',
-        where: { id: patientID }
-      }
+      where: { patient_id: patientID },
+      include: 'patient'
     }
     const journals = await Journal.findAll(findData);
-    return [patient, journals];
+    return journals;
   },
 
   // -------------
   // API FUNCTIONS
   // -------------
 
-  submitJournal: async (req, res) => {
+  apiCreateJournal: async (req, res) => {
     const journalData = req.body;
-    console.log(journalData);
     // Create the journal
     const journal = await Journal.create(journalData);
     return res.json(journal);
   },
 
+  apiUpdateJournal: async (req, res, next) => {
+    const journal = await journalController.getJournal(req.params.id);
+    if (!journal) return next(); // 404
+    console.log(req.body);
+    journal.update(req.body);
+  },
+
   apiGetJournals: async (req, res, next) => {
-    let journals, patient;
+    let journals;
     if (req.query.patient !== undefined) {
-      [patient, journals] = await journalController.getPatientJournals(req.query.patient);
+      journals = await journalController.getPatientJournals(req.query.patient);
     } else {
       journals = await journalController.getJournals();
     }
@@ -107,12 +110,15 @@ const journalController = {
   journalsPage: async (req, res, next) => {
     // Check if we want to filter by patient id
     const patientID = req.query.patient;
-    let patient;
+    let patient, journals;
     if (patientID !== undefined) {
       patient = await Patient.findByPk(patientID);
       if (!patient) return next(); // Patient id was provided but patient not found
+      journals = await journalController.getPatientJournals(patientID);
+    } else {
+      journals = await journalController.getJournals();
     }
-    const journals = await journalController.getJournals(patientID);
+    console.log(journals.length);
     if (!journals) return next();
     res.render('journals', { journals, patient });
   },
