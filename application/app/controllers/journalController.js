@@ -79,10 +79,14 @@ const journalController = {
   },
 
   apiUpdateJournal: async (req, res, next) => {
-    const journal = await journalController.getJournal(req.params.id);
+    let journal = await journalController.getJournal(req.params.id);
     if (!journal) return next(); // 404
-    console.log(req.body);
-    journal.update(req.body);
+    // Converting empy values to null
+    for (const prop in req.body) {
+      req.body[prop] = req.body[prop] || null;
+    }
+    journal = await journal.update(req.body);
+    res.json(journal);
   },
 
   apiGetJournals: async (req, res, next) => {
@@ -117,7 +121,6 @@ const journalController = {
     } else {
       journals = await journalController.getJournals();
     }
-    console.log(journals.length);
     if (!journals) return next();
     res.render('journals', { journals, patient });
   },
