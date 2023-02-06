@@ -17,7 +17,6 @@ exports.notFound = (req, res, next) => {
 }
 
 exports.errorsCollector = (error, req, res, next) => {
-
   console.log(new Error().stack);
   error.status = error.status || 500;
   return res.status(error.status).render('error', { error: error });
