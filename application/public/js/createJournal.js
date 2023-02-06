@@ -309,10 +309,6 @@ class Journal extends CoreObject {
     this.childrenRowElem = this.mainElem.querySelector('.days-row');
     this.childrenElem = this.mainElem.querySelector('.days');
 
-    // Init datalists
-    this.fetchPatients();
-    this.fetchFoods();
-
     // Event listeners
     document.getElementById('new-journal').addEventListener(
       'click', event => this.self.handleCreateJournal(event));
@@ -327,6 +323,20 @@ class Journal extends CoreObject {
     
     document.getElementById('add-day').addEventListener(
       'click', () => this.self.addChild());
+
+    this.fetchDataFromApi();
+  }
+
+  async fetchDataFromApi() {
+    // Init datalists
+    this.fetchFoods();
+    await this.fetchPatients();
+    // Load journal if searched for in URL
+    const match = document.location.search.match(/journal=(\d+)(&|$)/);
+    if (match && match[1]) {
+      this.id = Number(match[1]);
+      await this.loadJournal();
+    }
   }
 
   get form() {
@@ -369,6 +379,41 @@ class Journal extends CoreObject {
 
   get startDay() {
     return this.mainElem.querySelector('input[name=start_day]').value;
+  }
+
+  /**
+   * Load Journal in DOM
+   */
+  async loadJournal() {
+    const journal = await this.fetchJournal();
+    if (!journal) return;
+    // Hide 'create' button
+    document.getElementById('new-journal').style.display = 'none';
+    // Show journal form
+    this.mainElem.style.display = 'block';
+    // Fill the journal form
+    this.patientId = journal.patient.id;
+    this.mainElem.querySelector(`input[name=patient_fullname]`).value = this.patient.fullNameAndGender;
+    for (const inputName of ['patient_age', 'patient_weight', 'start_day']) {
+      this.mainElem.querySelector(`input[name=${inputName}]`).value = journal[inputName];
+    }
+  }
+
+  /**
+   * Fetch Journal from API
+   */
+  async fetchJournal() {
+    try {
+      // Fetching using API
+      const response = await fetch(`${BASE_URL}/api/journal/${this.id}`);
+      const json = await response.json();
+      if (!response.ok) throw json;
+      return json;
+    } catch (error) {
+      console.error(error.message);
+      app.errorFeedback(error.message);
+      return;
+    }
   }
 
   /**
@@ -428,10 +473,8 @@ class Journal extends CoreObject {
       });
       const json = await response.json();
       if (!response.ok) throw json;
-      this.id = json.id;
-      event.target.style.display = 'none'; // Hide button
-      this.mainElem.style.display = 'block'; // Show journal form
-      app.successFeedback('Journal créé.');
+      // Update URL
+      document.location.search = `?journal=${json.id}`; // Reloads the page
     } catch (error) {
       console.log(error);
       app.errorFeedback(error.message);
@@ -442,7 +485,6 @@ class Journal extends CoreObject {
   handlePatientNameChange(event) {
     const patientNameInputElem = event.target;
     patientNameInputElem.classList.remove('--is-danger');
-    console.log('Name changed');
     // Check if name matches a Patient
     const patient = this.dbPatients.find(patient => patient.fullNameAndGender === patientNameInputElem.value);
     if(!patient) {
