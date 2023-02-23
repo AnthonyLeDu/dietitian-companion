@@ -1,5 +1,4 @@
 const { Model } = require('sequelize');
-const journalController = require('../../controllers/journalController');
 
 /**
  * Core class for all the journal elements (Journal, Day, Meal and Dish).

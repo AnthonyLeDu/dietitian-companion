@@ -306,8 +306,8 @@ class Journal extends CoreObject {
   constructor(mainElem) {
     super(null, mainElem);
     this.childrenClass = Day;
-    this.childrenRowElem = this.mainElem.querySelector('.days-row');
-    this.childrenElem = this.mainElem.querySelector('.days');
+    this.childrenRowElem = document.getElementById('days-row');
+    this.childrenElem = document.getElementById('days');
 
     // Event listeners
     document.getElementById('new-journal').addEventListener(
