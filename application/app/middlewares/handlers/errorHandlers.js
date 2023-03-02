@@ -17,14 +17,18 @@ exports.notFound = (req, res, next) => {
 }
 
 exports.errorsCollector = (error, req, res, next) => {
-  console.log(new Error().stack);
+  console.log(error.message);
+  console.log(error.stack);
   error.status = error.status || 500;
   return res.status(error.status).render('error', { error: error });
 }
 
 exports.apiErrorsCollector = (error, req, res, next) => {
+  console.log(error.message);
+  console.log(error.stack);
+  error.status = error.status || 500;
   return res.status(error.status).json({
-    statusCode: error.status || 500,
+    statusCode: error.status,
     message: error.message
   });
 }
