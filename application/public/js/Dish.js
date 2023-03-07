@@ -1,3 +1,6 @@
+/* global FOODS_DATALIST, CoreObject, createChildElement, createDeleteElement */
+
+// eslint-disable-next-line no-unused-vars
 class Dish extends CoreObject {
   static childrenClass; // undefined
 

@@ -1,3 +1,6 @@
+/* global app, dayjs, CoreObject, Day, BASE_URL */
+
+// eslint-disable-next-line no-unused-vars
 class Journal extends CoreObject {
   static childrenClass;
 
@@ -124,15 +127,15 @@ class Journal extends CoreObject {
     this.patchInDatabase();
   }
   
-  handlePatientAgeChange(event) {
+  handlePatientAgeChange() {
     this.patchInDatabase();
   }
   
-  handlePatientWeightChange(event) {
+  handlePatientWeightChange() {
     this.patchInDatabase();
   }
   
-  handleStartDayChange(event) {
+  handleStartDayChange() {
     this.updatePatientAge();
     this.patchInDatabase();
     this.updateChildrenLook();
@@ -160,7 +163,7 @@ class Journal extends CoreObject {
     // Add to DOM
     super.addChild();
     // Move scrollbar to the right (if visible)
-    if (isScrollbarVisible(this.childrenRowElem)) {
+    if (this.childrenRowElem.scrollWidth > this.childrenRowElem.clientWidth) {
       this.childrenRowElem.scrollLeft += this.childrenRowElem.scrollWidth;
     }
   }

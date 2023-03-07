@@ -1,3 +1,6 @@
+/* global CoreObject, Dish, createChildElement, createDeleteElement */
+
+// eslint-disable-next-line no-unused-vars
 class Meal extends CoreObject {
   static childrenClass; // Dish
   timeElem;
@@ -22,7 +25,7 @@ class Meal extends CoreObject {
     this.timeElem = createChildElement(headerElem, 'input');
     this.timeElem.type = 'time';
     this.timeElem.required = true;
-    this.timeElem.onkeydown = "return false";
+    this.timeElem.onkeydown = 'return false';
     this.timeElem.name = `day${this.parent.index}-meal${this.index}__time`;
     this.timeElem.addEventListener('change', () => this.self.parent.sortChildren());
     // Dishes

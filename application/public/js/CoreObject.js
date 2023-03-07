@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 class CoreObject {
   static childrenClass;
   parent;
@@ -69,7 +70,7 @@ class CoreObject {
     if (child.index === undefined) throw new Error(`Child not found in ${this.constructor.name} children.`);
     if (increment === 0) return; // No move needed
 
-    const targetIndex = child.index + increment
+    const targetIndex = child.index + increment;
     // Check that child can be moved in the array
     if (targetIndex < 0 || (this.children.length <= targetIndex)) {
       throw new Error(`

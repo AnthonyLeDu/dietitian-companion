@@ -1,3 +1,6 @@
+/* global dayjs, CoreObject, Meal, callIfEnabled, createChildElement, createDeleteElement */
+
+// eslint-disable-next-line no-unused-vars
 class Day extends CoreObject {
   static childrenClass; // Meal
   titleElem;

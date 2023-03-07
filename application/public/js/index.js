@@ -4,11 +4,6 @@ const PATIENTS_DATALIST = 'patients-datalist';
 const FOODS_DATALIST = 'foods-datalist';
 const BASE_URL = 'http://localhost:3000';
 
-
-function isScrollbarVisible(element) {
-  return element.scrollWidth > element.clientWidth;
-}
-
 function createChildElement(parentElement, elementTag, elementClass = null, elementId = null) {
   const newElem = document.createElement(elementTag);
   parentElement.appendChild(newElem);
@@ -43,6 +38,9 @@ function callIfEnabled(fn, element) {
 
 const app = {
   feedbackElem: undefined,
+  dbPatients: undefined,
+  dbFoods: undefined,
+  journal: undefined,
   
   init: async function () {
     app.findDOMElements();   
@@ -104,7 +102,7 @@ const app = {
       const json = await response.json();
       if (!response.ok) throw json;
       // Add the fullname-and-gender
-      this.dbPatients = json.map(patient => {
+      app.dbPatients = json.map(patient => {
         patient.fullNameAndGender = `${patient.last_name} ${patient.first_name} (${patient.gender.charAt(0)})`;
         return patient;
       });
@@ -114,7 +112,7 @@ const app = {
     }
     // Fill the datalist
     const patientsDataListElem = document.getElementById(PATIENTS_DATALIST);
-    for (const patient of this.dbPatients) {
+    for (const patient of app.dbPatients) {
       const option = createChildElement(patientsDataListElem, 'option');
       option.value = patient.fullNameAndGender;
       option.dataset.patientId = patient.id;
