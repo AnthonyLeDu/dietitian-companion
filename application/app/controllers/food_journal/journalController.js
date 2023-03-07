@@ -1,4 +1,6 @@
-const { Journal, Patient } = require('../models');
+const dayjs = require('dayjs');
+const { Journal, Patient } = require('../../models');
+const patientController = require('../patientController');
 
 const journalController = {
 
@@ -24,18 +26,12 @@ const journalController = {
         }
       ]
     });
-    if (!journal) {
-      return undefined;
-    }
-    // Using 'for of' here is important to be synchronous !
-    journal.days.sort((a, b) => a.position - b.position); // Sorting days according to position
-    for (const day of journal.days) {
-      // Getting the days name
-      day.name = dayjs(journal.start_day)
-        // Adding the day position to the journal's start_day  
-        .add(day.position, 'day')
-        .toDate().toLocaleString('fr-FR', { weekday: 'long' });
+    if (!journal) return journal;
 
+    journal.days.sort((a, b) => a.position - b.position); // Sorting days according to position
+    // Using 'for of' here is important to be synchronous !
+    for (const day of journal.days) {
+      day.journal = journal;
       // Getting the Food corresponding to the dish food_code
       day.meals.sort((a, b) => a.time_float - b.time_float); // Sorting days according to time
       // console.table(day.meals[0].toJSON());
@@ -50,21 +46,19 @@ const journalController = {
   },
 
   /**
-   * Find journals assocaited to a patient's id.
-   * If provided id corresponds to no patient, returns a [undefined, undefined] array.
+   * Find journals associated to a patient's id.
    * @param {Integer} patientID Patient's id
-   * @returns {Array<Patient, Journal[]>} Patient instance and its Journals array.
+   * @returns {Array<Journal>} Matching journals array.
    */
   getPatientJournals: async (patientID) => {
     const patient = await Patient.findByPk(patientID);
-    if (!patient) return [undefined, undefined]; // 404
+    if (!patient) return [];
     const findData = {
       order: [['updated_at', 'DESC']],
       where: { patient_id: patientID },
       include: 'patient'
     }
-    const journals = await Journal.findAll(findData);
-    return journals;
+    return await Journal.findAll(findData);
   },
 
   // -------------
@@ -73,7 +67,13 @@ const journalController = {
 
   apiCreateJournal: async (req, res) => {
     const journalData = req.body;
-    // Create the journal
+    // Validate data
+    const { patient_id } = journalData;
+    if (patient_id !== undefined && !await patientController.getPatient(patient_id)) {
+      const err = new Error(`Le patient ${patient_id} n'existe pas.`);
+      err.status = 400;
+      throw err;
+    }
     const journal = await Journal.create(journalData);
     return res.json(journal);
   },

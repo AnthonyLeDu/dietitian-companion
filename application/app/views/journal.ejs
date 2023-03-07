@@ -2,10 +2,11 @@
 
   <main class="container">
     <h2>Journal alimentaire</h2>
-    <% for (day of journal.days) { %>
+    <% for (let d=0 ; d < journal.days.length ; d++) {
+      day = journal.days[d]; %>
       <section>
         <hgroup>
-          <h3><%= day.name %></h3>
+          <h3>Jour <%= d+1 %><% if (day.name) { %> (<%= day.name %>)<% } %></h3>
           <%- include('partials/nutrients', { nutrients: day.nutrients }) %>
         </hgroup>
       <% for (meal of day.meals) { %>

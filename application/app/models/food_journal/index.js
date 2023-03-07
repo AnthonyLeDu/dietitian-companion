@@ -31,6 +31,7 @@ Day.belongsTo(Journal, {
 
 Object.defineProperty(Day.prototype, 'name', {
   get: function() {
+    if (!this.journal.start_day) return '';
     return dayjs(this.journal.start_day)
       // Adding the day position to the journal's start_day  
       .add(day.position, 'day')
