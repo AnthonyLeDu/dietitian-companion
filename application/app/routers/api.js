@@ -1,11 +1,13 @@
+/* global module */
 const express = require('express');
 const { catchErrors, notFound, apiErrorsCollector } = require('../middlewares/handlers/errorHandlers');
 const foodController = require('../controllers/foodController');
 const journalController = require('../controllers/food_journal/journalController');
 const dayController = require('../controllers/food_journal/dayController');
+const mealController = require('../controllers/food_journal/mealController');
 const patientController = require('../controllers/patientController');
 
-router = express.Router();
+const router = express.Router();
 
 // All routes here are assumed to be prefixed with '/api' (see app/server/index.js)
 router
@@ -22,6 +24,12 @@ router
   .get('/day/:id', catchErrors(dayController.apiGetDay))
   .post('/day', catchErrors(dayController.apiCreateDay))
   .patch('/day/:id', catchErrors(dayController.apiUpdateDay));
+
+router
+  .get('/meals', catchErrors(mealController.apiGetMeals))
+  .get('/meal/:id', catchErrors(mealController.apiGetMeal))
+  .post('/meal', catchErrors(mealController.apiCreateMeal))
+  .patch('/meal/:id', catchErrors(mealController.apiUpdateMeal));
 
 router
   .get('/patients', catchErrors(patientController.apiGetPatients))

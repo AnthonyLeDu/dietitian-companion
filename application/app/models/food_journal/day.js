@@ -1,3 +1,4 @@
+/* global module */
 const { DataTypes } = require('sequelize');
 const JournalElement = require('./journalElement');
 const getConnexion = require('./getConnexion');
@@ -6,7 +7,7 @@ class Day extends JournalElement {
   nutrientsSources = this.meals;
   
   getClassName() {
-    return "Day";
+    return 'Day';
   }
 }
 
@@ -27,6 +28,6 @@ Day.init(
     modelName: 'Day',
     tableName: 'day'
   }
-)
+);
 
 module.exports = Day;

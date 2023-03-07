@@ -1,3 +1,4 @@
+/* global module */
 const { DataTypes } = require('sequelize');
 const JournalElement = require('./journalElement');
 const getConnexion = require('./getConnexion');
@@ -6,7 +7,7 @@ class Meal extends JournalElement {
   nutrientsSources = this.dishes;
 
   getClassName() {
-    return "Meal";
+    return 'Meal';
   }
 }
 
@@ -22,9 +23,10 @@ Meal.init(
     time_float: {
       type: DataTypes.VIRTUAL,
       get: function() {
+        if (this.time === null) return 0.0;
         // Convert minutes and seconds into hours
-        const timeArray = this.time.split(':').map((elem, idx) => Number(elem) / Math.pow(60, idx))
-        // Add hours, minutes and seconds
+        const timeArray = this.time.split(':').map((elem, idx) => Number(elem) / Math.pow(60, idx));
+        // Add all
         return timeArray.reduce((accumulator, curVal) => accumulator + curVal);
       }
     },
@@ -36,6 +38,6 @@ Meal.init(
     modelName: 'Meal',
     tableName: 'meal'
   }
-)
+);
 
 module.exports = Meal;

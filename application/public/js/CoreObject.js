@@ -55,9 +55,9 @@ class CoreObject {
     this.parent.moveChild(this, value - this.index);
   }
 
-  addChild(mainElem = null) {
+  addChild(mainElem = null, childData) {
     this.children.push(
-      new this.childrenClass(this, mainElem));
+      new this.childrenClass(this, mainElem, childData));
     this.updateChildren();
   }
 
@@ -88,6 +88,7 @@ class CoreObject {
       const htmlElem = this.self.childrenElem.children[index];
       if (htmlElem !== child.mainElem) { // Element is not at expected position, insert it
         this.self.childrenElem.insertBefore(child.mainElem, htmlElem);
+        // TODO : affect 'position' in DB
       }
     });
   }

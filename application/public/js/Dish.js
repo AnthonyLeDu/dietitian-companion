@@ -7,9 +7,10 @@ class Dish extends CoreObject {
   /**
    * Create the Dish DOM Element
    * @param {Meal} parent 
+   * @param {Object} data Dish data to load
    * @param {HTMLElement} mainElem The DOM Element (optional)
    */
-  constructor(parent, mainElem = null) {
+  constructor(parent, data, mainElem = null) {
     mainElem = mainElem || createChildElement(parent.childrenElem, 'div', 'dish');
     super(parent, mainElem);
     const dishCodeName = `day${this.parent.parent.index}-meal${this.parent.index}-dish${this.index}`;

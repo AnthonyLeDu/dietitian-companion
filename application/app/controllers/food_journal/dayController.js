@@ -1,3 +1,4 @@
+/* global module */
 const { Day, Journal } = require('../../models');
 
 const dayController = {
@@ -18,7 +19,6 @@ const dayController = {
         include: 'journal'
       }
     );
-    console.log(day);
     return day;
   },
 
@@ -34,7 +34,7 @@ const dayController = {
       order: ['position'],
       where: { journal_id: journalID },
       // include: 'journal'
-    }
+    };
     return await Day.findAll(findData);
   },
 
@@ -43,7 +43,6 @@ const dayController = {
   // -------------
 
   apiCreateDay: async (req, res) => {
-    console.log(req.body);
     const dayData = req.body;
     const day = await Day.create(dayData);
     return res.json(day);
@@ -72,12 +71,10 @@ const dayController = {
   },
 
   apiGetDay: async (req, res, next) => {
-    console.log(req.params);
     const day = await dayController.getDay(req.params.id);
-    console.log(day);
     if (!day) return next(); // 404
     res.json(day);
   },
-}
+};
 
 module.exports = dayController;

@@ -5,30 +5,29 @@ class Journal extends CoreObject {
   static childrenClass;
 
   /**
+   * @param {Object} data Journal data to load
    * @param {HTMLElement} mainElem Form div
-   * @param {Number} id Journal id in database.
    */
-  constructor(mainElem, id) {
+  constructor(data, mainElem) {
     super(null, mainElem);
-    this.id = id;
+    this.id = data.id;
     this.childrenClass = Day;
     this.childrenRowElem = document.getElementById('days-row');
     this.childrenElem = document.getElementById('days');
 
     // Patient inputs
-    this.mainElem.querySelector('input[name=patient_fullname]').addEventListener(
-      'change', event => this.self.handlePatientNameChange(event));
-    this.mainElem.querySelector('input[name=patient_age]').addEventListener(
-      'change', event => this.self.handlePatientAgeChange(event));
-    this.mainElem.querySelector('input[name=patient_weight]').addEventListener(
-      'change', event => this.self.handlePatientWeightChange(event));
-    this.mainElem.querySelector('input[name=start_day]').addEventListener(
-      'change', event => this.self.handleStartDayChange(event));
+    this.patientNameInputElem = this.mainElem.querySelector('input[name=patient_fullname]');
+    this.patientAgeInputElem = this.mainElem.querySelector('input[name=patient_age]');
+    this.patientWeightInputElem = this.mainElem.querySelector('input[name=patient_weight]');
+    this.startDayInputElem = this.mainElem.querySelector('input[name=start_day]');
     
-    document.getElementById('add-day').addEventListener(
-      'click', () => this.self.addChild());
+    this.patientNameInputElem.addEventListener('change', event => this.self.handlePatientNameChange(event));
+    this.patientAgeInputElem.addEventListener('change', event => this.self.handlePatientAgeChange(event));
+    this.patientWeightInputElem.addEventListener('change', event => this.self.handlePatientWeightChange(event));
+    this.startDayInputElem.addEventListener('change', event => this.self.handleStartDayChange(event));
+    document.getElementById('add-day').addEventListener('click', () => this.self.postChild());
     
-    this.loadJournal();
+    this.loadData(data);
   }
 
   get form() {
@@ -53,15 +52,14 @@ class Journal extends CoreObject {
   }
 
   get patientAge() {
-    const age = this.mainElem.querySelector('input[name=patient_age]').value;
-    return (age !== '') ? Number(age) : undefined;
+    return (this.patientAgeInputElem.value !== '') ? Number(this.patientAgeInputElem.value) : undefined;
   }
   
   /**
    * @param {Integer} age
    */
   set patientAge(age) {
-    this.mainElem.querySelector('input[name=patient_age]').value = age;
+    this.patientAgeInputElem.value = age;
   }
 
   get patientWeight() {
@@ -74,40 +72,22 @@ class Journal extends CoreObject {
   }
 
   /**
-   * Load Journal in DOM
+   * Load json data into the UI.
    */
-  async loadJournal() {
-    const journalData = await this.fetchJournal();
-    if (!journalData) return;
-    // Show journal form
+  async loadData(data) {
+    // Show the journal form and fill it
     this.mainElem.style.display = 'block';
-    // Fill the journal form
-    if (journalData.patient) {
-      this.patientId = journalData.patient.id;
-      this.mainElem.querySelector(`input[name=patient_fullname]`).value = this.patient.fullNameAndGender;
+    const { patient, patient_age, patient_weight, start_day } = data;
+    if (patient) {
+      this.patientId = patient.id;
+      this.patientNameInputElem.value = this.patient.fullNameAndGender;
     }
-    for (const inputName of ['patient_age', 'patient_weight', 'start_day']) {
-      this.mainElem.querySelector(`input[name=${inputName}]`).value = journalData[inputName];
-    }
-    // Load journal content
-    // TODO
-  }
+    this.patientAgeInputElem.value = patient_age;
+    this.patientWeightInputElem.value = patient_weight;
+    this.startDayInputElem.value = start_day;
 
-  /**
-   * Fetch Journal from API
-   */
-  async fetchJournal() {
-    try {
-      // Fetching using API
-      const response = await fetch(`${BASE_URL}/api/journal/${this.id}`);
-      const json = await response.json();
-      if (!response.ok) throw json;
-      return json;
-    } catch (error) {
-      console.error(error.message);
-      app.errorFeedback(error.message);
-      return;
-    }
+    // Load days
+    data.days?.forEach((dayData) => this.addChild(dayData));
   }
 
   handlePatientNameChange(event) {
@@ -142,12 +122,14 @@ class Journal extends CoreObject {
   }
   
   /**
-   * Add a Day.
+   * Post a new Day for this Journal in the DB.
+   * @returns {Object} Created Day data object.
    */
-  async addChild() {
+  async postChild() {
     try {
       const formData = new FormData();
       formData.append('journal_id', this.id);
+      formData.append('position', this.children.length);
       // POST fetch
       const response = await fetch(`${BASE_URL}/api/day`, {
         method: 'POST',
@@ -155,13 +137,21 @@ class Journal extends CoreObject {
       });
       const json = await response.json();
       if (!response.ok) throw json;
-    } catch (error) {
-      console.log(error);
-      app.errorFeedback(error.message);
-      return;
+      this.addChild(json);
     }
-    // Add to DOM
-    super.addChild();
+    catch (error) {
+      console.error(error);
+      return app.errorFeedback(error.message);
+    }
+  }
+
+  /**
+   * Add a Day child.
+   * @param {Object} childData Day data object.
+   */
+  addChild(childData) {
+    console.log(childData);
+    super.addChild(childData);
     // Move scrollbar to the right (if visible)
     if (this.childrenRowElem.scrollWidth > this.childrenRowElem.clientWidth) {
       this.childrenRowElem.scrollLeft += this.childrenRowElem.scrollWidth;
@@ -170,14 +160,13 @@ class Journal extends CoreObject {
   
   updatePatientAge() {
     // Enable age input only if patient or date is not specified
-    const patientAgeInputElem = this.mainElem.querySelector('input[name=patient_age]');
     if (!this.patientId || !this.startDay) {
-      patientAgeInputElem.readOnly = false;
-      patientAgeInputElem.classList.remove('--is-readonly');
+      this.patientAgeInputElem.readOnly = false;
+      this.patientAgeInputElem.classList.remove('--is-readonly');
       return;
     }
-    patientAgeInputElem.readOnly = true;
-    patientAgeInputElem.classList.add('--is-readonly');
+    this.patientAgeInputElem.readOnly = true;
+    this.patientAgeInputElem.classList.add('--is-readonly');
     // Calculate age
     this.patientAge = dayjs(this.startDay).diff(dayjs(this.patient.birth_date), 'years');
   }
@@ -208,9 +197,8 @@ class Journal extends CoreObject {
       if (!response.ok) throw json;
       app.successFeedback('Journal mis à jour.');
     } catch (error) {
-      console.log(error);
-      app.errorFeedback(error.message);
-      return;
+      console.error(error);
+      return app.errorFeedback(error.message);
     }
   }
 

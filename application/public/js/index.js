@@ -1,3 +1,4 @@
+/* global dayjs, Journal */
 dayjs.locale('fr');
 
 const PATIENTS_DATALIST = 'patients-datalist';
@@ -18,6 +19,7 @@ function createChildElement(parentElement, elementTag, elementClass = null, elem
  * @param {Function} deleteFunction The function to call when the deleteElem is clicked
  * @returns {HTMLElement} The created element
  */
+// eslint-disable-next-line no-unused-vars
 function createDeleteElement(parentElement, deleteFunction) {
   const deleteElem = createChildElement(parentElement, 'div', 'img-trash');
   deleteElem.addEventListener('click', () => deleteFunction());
@@ -30,6 +32,7 @@ function createDeleteElement(parentElement, deleteFunction) {
  * @param {Function} fn The function to call.
  * @param {HTMLElement} element The element whose classList we want to check.
  */
+// eslint-disable-next-line no-unused-vars
 function callIfEnabled(fn, element) {
   if (!element.classList.contains('--disabled')) {
     fn();
@@ -48,7 +51,7 @@ const app = {
     // Init datalists
     app.fetchFoods();
     await app.fetchPatients();
-    app.loadJournal();
+    app.loadJournalIfQueried();
   },
 
   findDOMElements() {
@@ -64,14 +67,26 @@ const app = {
   /**
    * Load journal if searched for in URL
    */
-  loadJournal() {
+  loadJournalIfQueried() {
     const match = document.location.search.match(/journal=(\d+)(&|$)/);
     if (match && match[1]) {
       document.getElementById('new-journal').style.display = 'none';
-      app.journal = new Journal(
-        document.getElementById('journal'),
-        Number(match[1]), // Journal ID
-      );
+      app.loadJournal(Number(match[1])); // Journal ID
+    }
+  },
+
+  /**
+   * Fetch Journal from API and load it in the App.
+   */
+  async loadJournal(id) {
+    try {
+      const response = await fetch(`${BASE_URL}/api/journal/${id}`);
+      const json = await response.json();
+      if (!response.ok) throw json;
+      app.journal = new Journal(json, document.getElementById('journal'));
+    } catch (error) {
+      console.error(error.message);
+      return app.errorFeedback(error.message);
     }
   },
 
@@ -152,9 +167,8 @@ const app = {
       // Update URL
       document.location.search = `?journal=${json.id}`; // Reloads the page
     } catch (error) {
-      console.log(error);
-      app.errorFeedback(error.message);
-      return;
+      console.error(error);
+      return app.errorFeedback(error.message);
     }
   },
 

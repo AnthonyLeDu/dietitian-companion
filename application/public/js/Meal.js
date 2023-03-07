@@ -8,9 +8,10 @@ class Meal extends CoreObject {
   /**
    * Create the Meal DOM Element
    * @param {Day} parent 
+   * @param {Object} data Meal data to load
    * @param {HTMLElement} mainElem The DOM Element (optional)
    */
-  constructor(parent, mainElem = null) {
+  constructor(parent, data, mainElem = null) {
     mainElem = mainElem || createChildElement(parent.childrenElem, 'div', 'meal');
     super(parent, mainElem);
     this.childrenClass = Dish;
@@ -34,7 +35,7 @@ class Meal extends CoreObject {
     const addDishElem = createChildElement(this.childrenRowElem, 'input', 'add-dish');
     addDishElem.type = 'button';
     addDishElem.value = 'Ajouter un aliment';
-    addDishElem.addEventListener('click', () => this.self.addChild());
+    addDishElem.addEventListener('click', () => this.self.createChild());
   }
 
 }

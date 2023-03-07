@@ -1,4 +1,4 @@
-/* global dayjs, CoreObject, Meal, callIfEnabled, createChildElement, createDeleteElement */
+/* global app, dayjs, BASE_URL, CoreObject, Meal, callIfEnabled, createChildElement, createDeleteElement */
 
 // eslint-disable-next-line no-unused-vars
 class Day extends CoreObject {
@@ -10,11 +10,13 @@ class Day extends CoreObject {
   /**
    * Create the Day DOM Element
    * @param {Journal} parent 
+   * @param {Object} data Day data to load
    * @param {HTMLElement} mainElem The DOM Element (optional)
    */
-  constructor(parent, mainElem = null) {
+  constructor(parent, data, mainElem = null) {
     mainElem = mainElem || createChildElement(parent.childrenElem, 'div', 'day');
     super(parent, mainElem);
+    this.id = data.id;
     this.childrenClass = Meal;
     // Header
     const headerElem = createChildElement(this.mainElem, 'div', 'day-header');
@@ -41,7 +43,41 @@ class Day extends CoreObject {
     const addMealElem = createChildElement(this.childrenRowElem, 'input', 'add-meal');
     addMealElem.type = 'button';
     addMealElem.value = 'Ajouter un repas';
-    addMealElem.addEventListener('click', () => this.self.addChild());
+    addMealElem.addEventListener('click', () => this.self.postChild());
+
+    this.loadData(data);
+  }
+
+  /**
+   * Load json data into the UI.
+   */
+  loadData(data) {
+    // Load days
+    data.meals?.forEach((mealData) => this.addChild(mealData));
+  }
+
+  /**
+   * Post a new Meal for this Day in the DB.
+   * @returns {Object} Created Meal data object.
+   */
+  async postChild() {
+    try {
+      const formData = new FormData();
+      formData.append('day_id', this.id);
+      // POST fetch
+      const response = await fetch(`${BASE_URL}/api/meal`, {
+        method: 'POST',
+        body: formData,
+      });
+      const json = await response.json();
+      if (!response.ok) throw json;
+      console.log(json);
+      this.addChild(json);
+    }
+    catch (error) {
+      console.error(error);
+      return app.errorFeedback(error.message);
+    }
   }
 
   updateTitle() {

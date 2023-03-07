@@ -1,3 +1,5 @@
+/* global module */
+// eslint-disable-next-line no-unused-vars
 const dayjs = require('dayjs');
 const { Journal, Patient } = require('../../models');
 const patientController = require('../patientController');
@@ -18,14 +20,14 @@ const journalController = {
   getJournal: async (journalID) => {
     const journal = await Journal.findByPk(
       journalID, {
-      include: [
-        'patient',
-        {
-          association: 'days', include:
+        include: [
+          'patient',
+          {
+            association: 'days', include:
             { association: 'meals', include: 'dishes' },
-        }
-      ]
-    });
+          }
+        ]
+      });
     if (!journal) return journal;
 
     journal.days.sort((a, b) => a.position - b.position); // Sorting days according to position
@@ -57,7 +59,7 @@ const journalController = {
       order: [['updated_at', 'DESC']],
       where: { patient_id: patientID },
       include: 'patient'
-    }
+    };
     return await Journal.findAll(findData);
   },
 
@@ -135,6 +137,6 @@ const journalController = {
     res.render('createJournal');
   },
 
-}
+};
 
 module.exports = journalController;
