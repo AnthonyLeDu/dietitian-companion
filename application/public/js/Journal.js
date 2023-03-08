@@ -87,6 +87,7 @@ class Journal extends CoreObject {
     this.startDayInputElem.value = start_day;
 
     // Load days
+    // TODO: Prevent DB to be updated when populating UI on load
     data.days?.forEach((dayData) => this.addChild(dayData));
   }
 
@@ -118,7 +119,7 @@ class Journal extends CoreObject {
   handleStartDayChange() {
     this.updatePatientAge();
     this.patchInDatabase();
-    this.updateChildrenLook();
+    this.updateChildrenElemLook();
   }
   
   /**
@@ -150,7 +151,6 @@ class Journal extends CoreObject {
    * @param {Object} childData Day data object.
    */
   addChild(childData) {
-    console.log(childData);
     super.addChild(childData);
     // Move scrollbar to the right (if visible)
     if (this.childrenRowElem.scrollWidth > this.childrenRowElem.clientWidth) {
@@ -174,7 +174,7 @@ class Journal extends CoreObject {
   /**
    * Updates the children arrows and titles
   */
-  updateChildrenLook() {
+  updateChildrenElemLook() {
     this.children.forEach(child => {
       child.updateArrows();
       child.updateTitle();
@@ -182,10 +182,13 @@ class Journal extends CoreObject {
   }
 
   updateChildren() {
-    this.sortChildrenElem();
-    this.updateChildrenLook();
+    super.updateChildren();
+    this.updateChildrenElemLook();
   }
 
+  /**
+   * Patch in DB.
+   */
   async patchInDatabase() {
     const formData = new FormData(this.form);
     try {

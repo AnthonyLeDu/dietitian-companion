@@ -48,13 +48,16 @@ const mealController = {
   },
 
   apiUpdateMeal: async (req, res, next) => {
-    let meal = await mealController.getMeal(req.params.id);
+    const { id } = req.params;
+    let meal = await mealController.getMeal(id);
     if (!meal) return next(); // 404
     // Converting empy values to null
     for (const prop in req.body) {
       req.body[prop] = req.body[prop] || null;
     }
-    meal = await meal.update(req.body);
+    await meal.update(req.body);
+    // Re-get meal in case day_id has been changed.
+    meal = await mealController.getMeal(req.params.id);
     res.json(meal);
   },
 

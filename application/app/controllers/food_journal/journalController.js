@@ -81,13 +81,16 @@ const journalController = {
   },
 
   apiUpdateJournal: async (req, res, next) => {
-    let journal = await journalController.getJournal(req.params.id);
+    const { id } = req.params;
+    let journal = await journalController.getJournal(id);
     if (!journal) return next(); // 404
     // Converting empy values to null
     for (const prop in req.body) {
       req.body[prop] = req.body[prop] || null;
     }
-    journal = await journal.update(req.body);
+    await journal.update(req.body);
+    // Re-get journal in case patient_id has been changed.
+    journal = await journalController.getJournal(id);
     res.json(journal);
   },
 

@@ -1,4 +1,4 @@
-/* global CoreObject, Dish, createChildElement, createDeleteElement */
+/* global app, BASE_URL, CoreObject, Dish, createChildElement, createDeleteElement */
 
 // eslint-disable-next-line no-unused-vars
 class Meal extends CoreObject {
@@ -14,6 +14,7 @@ class Meal extends CoreObject {
   constructor(parent, data, mainElem = null) {
     mainElem = mainElem || createChildElement(parent.childrenElem, 'div', 'meal');
     super(parent, mainElem);
+    this.id = data.id;
     this.childrenClass = Dish;
 
     const headerElem = createChildElement(this.mainElem, 'div', 'meal-header');
@@ -28,7 +29,7 @@ class Meal extends CoreObject {
     this.timeElem.required = true;
     this.timeElem.onkeydown = 'return false';
     this.timeElem.name = `day${this.parent.index}-meal${this.index}__time`;
-    this.timeElem.addEventListener('change', () => this.self.parent.sortChildren());
+    this.timeElem.addEventListener('change', () => this.self.handleTimeChange());
     // Dishes
     this.childrenRowElem = createChildElement(this.mainElem, 'div', 'meal-row');
     this.childrenElem = createChildElement(this.childrenRowElem, 'div', 'dishes');
@@ -36,6 +37,52 @@ class Meal extends CoreObject {
     addDishElem.type = 'button';
     addDishElem.value = 'Ajouter un aliment';
     addDishElem.addEventListener('click', () => this.self.createChild());
+
+    this.loadData(data);
+  }
+
+  get time() {
+    return this.timeElem.value;
+  }
+
+  set time(value) {
+    this.timeElem.value = value;
+  }
+
+  /**
+   * Load json data into the UI.
+   */
+  loadData(data) {
+    this.time = data.time;
+    // Load dishes
+    data.dishes?.forEach((dishData) => this.addChild(dishData));
+  }
+
+  handleTimeChange() {
+    this.parent.updateChildren();
+  }
+
+  /**
+   * Patch in DB.
+   */
+  async patchInDatabase() {
+    // TODO : each component should store what's meant to be patched in DB so we can use a generic patchInDatabase method (in CoreObject).
+    try {
+      const formData = new FormData();
+      formData.append('time', this.time);
+      // PATCH fetch
+      const response = await fetch(`${BASE_URL}/api/meal/${this.id}`, {
+        method: 'PATCH',
+        body: formData,
+      });
+      const json = await response.json();
+      if (!response.ok) throw json;
+      app.successFeedback('Repas mis à jour.');
+    }
+    catch (error) {
+      console.error(error);
+      return app.errorFeedback(error.message);
+    }
   }
 
 }

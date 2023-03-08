@@ -35,7 +35,7 @@ class Day extends CoreObject {
     this.arrowRightElem.addEventListener('click', (event) => {
       callIfEnabled(() => this.self.index += 1, event.target);
     });
-    // Image sources set will be triggered by the parent.updateChildrenLook
+    // Image sources set will be triggered by the parent.updateChildrenElemLook
 
     // Meals
     this.childrenRowElem = createChildElement(this.mainElem, 'div', 'meals-row');
@@ -71,8 +71,29 @@ class Day extends CoreObject {
       });
       const json = await response.json();
       if (!response.ok) throw json;
-      console.log(json);
       this.addChild(json);
+    }
+    catch (error) {
+      console.error(error);
+      return app.errorFeedback(error.message);
+    }
+  }
+
+  /**
+   * Patch in DB.
+   */
+  async patchInDatabase() {
+    try {
+      const formData = new FormData();
+      formData.append('position', this.index);
+      // PATCH fetch
+      const response = await fetch(`${BASE_URL}/api/day/${this.id}`, {
+        method: 'PATCH',
+        body: formData,
+      });
+      const json = await response.json();
+      if (!response.ok) throw json;
+      app.successFeedback('Journée mise à jour.');
     }
     catch (error) {
       console.error(error);
@@ -115,7 +136,6 @@ class Day extends CoreObject {
       const valueB = childB.timeElem.value || '23:59:59';
       return dayjs(`2000-01-01 ${valueA}`) - dayjs(`2000-01-01 ${valueB}`);
     });
-    this.sortChildrenElem();
   }
 
   updateChildren() {

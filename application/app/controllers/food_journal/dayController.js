@@ -49,13 +49,16 @@ const dayController = {
   },
 
   apiUpdateDay: async (req, res, next) => {
-    let day = await dayController.getDay(req.params.id);
+    const { id } = req.params;
+    let day = await dayController.getDay(id);
     if (!day) return next(); // 404
     // Converting empy values to null
     for (const prop in req.body) {
       req.body[prop] = req.body[prop] || null;
     }
-    day = await day.update(req.body);
+    await day.update(req.body);
+    // Re-get day in case journal_id has been changed.
+    day = await dayController.getDay(id);
     res.json(day);
   },
 
