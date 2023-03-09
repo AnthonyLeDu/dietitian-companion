@@ -1,3 +1,4 @@
+/* global module */
 const { Food } = require('../models');
 
 const foodController = {
@@ -15,11 +16,17 @@ const foodController = {
     return res.json(foods);
   },
 
+  apiGetFood: async (req, res, next) => {
+    const food = await Food.findByPk(req.params.id);
+    if (!food) return next(); // 404
+    res.json(food);
+  },
+
   foodsPage: async (req, res) => {
     const foods = await foodController.getFoods();
     res.render('foods', { foods });
   }
 
-}
+};
 
 module.exports = foodController;

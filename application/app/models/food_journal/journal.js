@@ -1,3 +1,4 @@
+/* global module */
 const { DataTypes } = require('sequelize');
 const JournalElement = require('./journalElement');
 const getConnexion = require('./getConnexion');
@@ -6,7 +7,7 @@ class Journal extends JournalElement {
   nutrientsSources = this.days;
 
   getClassName() {
-    return "Journal";
+    return 'Journal';
   }
 
   /**
@@ -18,17 +19,17 @@ class Journal extends JournalElement {
   static async fetchByPkWithCalculations(primaryKey) {
     const journal = await Journal.findByPk(
       primaryKey, {
-      include: [
-        'patient',
-        {
-          association: 'days',
-          include: [
-            'journal',
-            { association: 'meals', include: 'dishes' },
-          ]
-        }
-      ]
-    });
+        include: [
+          'patient',
+          {
+            association: 'days',
+            include: [
+              'journal',
+              { association: 'meals', include: 'dishes' },
+            ]
+          }
+        ]
+      });
 
     if (!journal) return null; // Early return if no journal found
 
@@ -76,7 +77,7 @@ Journal.init(
     modelName: 'Journal',
     tableName: 'journal'
   }
-)
+);
 
 
 module.exports = Journal;

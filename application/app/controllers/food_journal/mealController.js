@@ -8,7 +8,6 @@ const mealController = {
   // -----------------
   getMeals: async () => {
     return await Meal.findAll({
-      order: [['updated_at', 'DESC']],
       include: 'day'
     });
   },

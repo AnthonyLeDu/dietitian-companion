@@ -36,7 +36,7 @@ class Meal extends CoreObject {
     const addDishElem = createChildElement(this.childrenRowElem, 'input', 'add-dish');
     addDishElem.type = 'button';
     addDishElem.value = 'Ajouter un aliment';
-    addDishElem.addEventListener('click', () => this.self.createChild());
+    addDishElem.addEventListener('click', () => this.self.postChild());
 
     this.loadData(data);
   }
@@ -58,8 +58,34 @@ class Meal extends CoreObject {
     data.dishes?.forEach((dishData) => this.addChild(dishData));
   }
 
+  /**
+   * Sort the Day's Meals and patch Meals in DB
+   */
   handleTimeChange() {
     this.parent.updateChildren();
+  }
+
+  /**
+   * Post a new Dish for this Meal in the DB.
+   * @returns {Object} Created Dish data object.
+   */
+  async postChild() {
+    try {
+      const formData = new FormData();
+      formData.append('meal_id', this.id);
+      // POST fetch
+      const response = await fetch(`${BASE_URL}/api/dish`, {
+        method: 'POST',
+        body: formData,
+      });
+      const json = await response.json();
+      if (!response.ok) throw json;
+      this.addChild(json);
+    }
+    catch (error) {
+      console.error(error);
+      return app.errorFeedback(error.message);
+    }
   }
 
   /**

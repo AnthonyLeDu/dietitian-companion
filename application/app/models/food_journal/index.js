@@ -1,3 +1,4 @@
+/* global module */
 const dayjs = require('dayjs');
 const Day = require('./day');
 const Dish = require('./dish');

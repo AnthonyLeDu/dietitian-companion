@@ -18,6 +18,10 @@ const journalController = {
   },
 
   getJournal: async (journalID) => {
+    return await Journal.findByPk(journalID);
+  },
+
+  getFullJournal: async (journalID) => {
     const journal = await Journal.findByPk(
       journalID, {
         include: [
@@ -106,7 +110,7 @@ const journalController = {
   },
 
   apiGetJournal: async (req, res, next) => {
-    const journal = await journalController.getJournal(req.params.id);
+    const journal = await journalController.getFullJournal(req.params.id);
     if (!journal) return next(); // 404
     res.json(journal);
   },
@@ -131,7 +135,7 @@ const journalController = {
   },
 
   journalPage: async (req, res, next) => {
-    const journal = await journalController.getJournal(req.params.id);
+    const journal = await journalController.getFullJournal(req.params.id);
     if (!journal) return next(); // 404
     res.render('journal', { journal });
   },

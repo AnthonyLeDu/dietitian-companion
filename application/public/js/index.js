@@ -151,7 +151,9 @@ const app = {
     // Fill the datalist
     const foodsDataListElem = document.getElementById(FOODS_DATALIST);
     for (const food of app.dbFoods) {
-      createChildElement(foodsDataListElem, 'option').value = food.name_fr;
+      const option = createChildElement(foodsDataListElem, 'option');
+      option.value = food.name_fr;
+      option.dataset.code = food.code;
     }
   },
 

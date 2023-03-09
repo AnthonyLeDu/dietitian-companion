@@ -8,7 +8,6 @@ const dayController = {
   // -----------------
   getDays: async () => {
     return await Day.findAll({
-      order: [['updated_at', 'DESC']],
       include: 'journal'
     });
   },

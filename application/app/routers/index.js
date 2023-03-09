@@ -1,3 +1,4 @@
+/* global module */
 const express = require('express');
 const { catchErrors } = require('../middlewares/handlers/errorHandlers');
 const mainController = require('../controllers/mainController');
@@ -5,7 +6,7 @@ const foodController = require('../controllers/foodController');
 const journalController = require('../controllers/food_journal/journalController');
 const patientController = require('../controllers/patientController');
 
-router = express.Router();
+const router = express.Router();
 
 router.get('/', catchErrors(mainController.homePage));
 

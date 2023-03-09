@@ -16,6 +16,7 @@ class Journal extends CoreObject {
     this.childrenElem = document.getElementById('days');
 
     // Patient inputs
+    this.patientIdElem = this.mainElem.querySelector('input[name=patient_id]');
     this.patientNameInputElem = this.mainElem.querySelector('input[name=patient_fullname]');
     this.patientAgeInputElem = this.mainElem.querySelector('input[name=patient_age]');
     this.patientWeightInputElem = this.mainElem.querySelector('input[name=patient_weight]');
@@ -35,7 +36,7 @@ class Journal extends CoreObject {
   }
 
   get patientId() {
-    const id = this.mainElem.querySelector('input[name=patient_id]').value;
+    const id = this.patientIdElem.value;
     return (id !== '') ? Number(id) : undefined;
   }
 
@@ -43,7 +44,7 @@ class Journal extends CoreObject {
    * @param {Integer} id
    */
   set patientId(id) {
-    this.mainElem.querySelector('input[name=patient_id]').value = (id !== undefined) ? String(id) : '';
+    this.patientIdElem.value = (id !== undefined) ? String(id) : '';
   }
 
   get patient() {
