@@ -54,7 +54,6 @@ const dishController = {
     for (const prop in req.body) {
       req.body[prop] = req.body[prop] || null;
     }
-    console.log(req.body);
     await dish.update(req.body);
     // Re-get meal in case day_id has been changed.
     dish = await dishController.getDish(req.params.id);
