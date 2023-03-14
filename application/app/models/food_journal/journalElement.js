@@ -17,12 +17,13 @@ class JournalElement extends Model {
    * the nutrientsSources nutrients, doing so recursively.
    */
   async calculateNutrients() {
-    const sourcesNutrients = await Promise.all(this.nutrientsSources
-      // Gathering sources nutrients  
-      .map(async source => await source.getNutrients()));
-
+    const sourcesNutrients = await Promise.all(
+      this.nutrientsSources.map(async source => await source.getNutrients()) // Gathering sources nutrients
+    );
     // Cumulating nutrients amounts
-    if (sourcesNutrients.length === 0) return; // Early return, this.nutrients remain undefined
+    this.nutrients = [];
+    if (sourcesNutrients.length === 0) return; // Early return, this.nutrients remain empty
+    // this.nutrients = [...sourcesNutrients[0]];
     this.nutrients = JSON.parse(JSON.stringify(sourcesNutrients[0])); // Deep copy using JSON
     for (let i = 1; i < sourcesNutrients.length; i++) { // Skipping index 0 as it's alreay been used to init this.nutrients
       sourcesNutrients[i].forEach((sourceNutrient, j) => {

@@ -16,7 +16,7 @@
         </hgroup>
         <% for (dish of meal.dishes) { %>
           <hgroup>
-            <p><%= dish.position %>. <%= dish.food.name_fr %> (<%= dish.amount %>g)</p>
+            <p><%= dish.position %>. <%= dish.food?.name_fr %> (<%= dish.amount %>g)</p>
             <%- include('partials/nutrients', { nutrients: dish.nutrients }) %>
           </hgroup>
         <% } %>

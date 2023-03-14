@@ -48,6 +48,7 @@ const journalController = {
         }
       }
     }
+    await journal.getNutrients();
     return journal;
   },
 
@@ -144,6 +145,7 @@ const journalController = {
 
   journalPage: async (req, res, next) => {
     const journal = await journalController.getFullJournal(req.params.id);
+    // console.log(JSON.stringify(journal, null, 2));
     if (!journal) return next(); // 404
     res.render('journal', { journal });
   },
