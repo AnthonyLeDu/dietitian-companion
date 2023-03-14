@@ -21,7 +21,7 @@ class Day extends CoreObject {
     // Header
     const headerElem = createChildElement(this.mainElem, 'div', 'day-header');
     // Delete button
-    createDeleteElement(headerElem, () => this.destroy());
+    createDeleteElement(headerElem, () => this.handleDelete());
     // Title
     this.titleElem = createChildElement(headerElem, 'h4', 'day__title');
     setTimeout(() => this.updateTitle(), 0); // this needs to be pushed in parent's children array first to have an index
@@ -141,6 +141,25 @@ class Day extends CoreObject {
   updateChildren() {
     this.sortChildren();
     super.updateChildren();
+  }
+
+  /**
+   * Delete in DB and UI.
+   */
+  async handleDelete() {
+    try {
+      // DELETE fetch
+      const response = await fetch(`${BASE_URL}/api/day/${this.id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error(response.statusText);
+      app.successFeedback('Journée supprimée.');
+      this.destroy();
+    }
+    catch (error) {
+      console.error(error);
+      return app.errorFeedback(error.message);
+    }
   }
 
 }

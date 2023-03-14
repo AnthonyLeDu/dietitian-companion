@@ -76,6 +76,14 @@ const dishController = {
     if (!dish) return next(); // 404
     res.json(dish);
   },
+
+  apiDeleteDish: async (req, res, next) => {
+    const { id } = req.params;
+    const dish = await dishController.getDish(id);
+    if (!dish) return next(); // 404
+    dish.destroy();
+    res.status(204).json({});
+  },
 };
 
 module.exports = dishController;

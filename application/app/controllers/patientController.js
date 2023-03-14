@@ -1,3 +1,4 @@
+/* global module */
 const dayjs = require('dayjs');
 const { Patient } = require('../models');
 
@@ -6,7 +7,7 @@ const patientController = {
   // -----------------
   // GENERIC FUNCTIONS
   // -----------------
-  getPatients: (req, res) => {
+  getPatients: () => {
     return Patient.findAll({
       order: [['last_name'], ['first_name']],
       include: 'journals'
@@ -36,7 +37,7 @@ const patientController = {
         feedbackMessage = 'Patient créé avec succès !';
       } else {
         statusCode = 500;
-        feedbackMessage = 'Désolé, le patient n\'a pas pu être créé. Veuillez réessayer plus tard.'
+        feedbackMessage = 'Désolé, le patient n\'a pas pu être créé. Veuillez réessayer plus tard.';
       }
     }
     return { patient, statusCode, feedbackMessage };
@@ -50,7 +51,7 @@ const patientController = {
     res.json(patients);
   },
 
-  apiGetPatient: async (req, res) => {
+  apiGetPatient: async (req, res, next) => {
     const patient = await patientController.getPatient(req.params.id);
     if (!patient) return next(); // 404
     res.json(patient);
@@ -66,6 +67,15 @@ const patientController = {
       error.status = statusCode;
       throw error;
     }
+  },
+
+  apiDeletePatient: async (req, res, next) => {
+    const { id } = req.params;
+    console.log(id);
+    const patient = await patientController.getPatient(id);
+    if (!patient) return next(); // 404
+    patient.destroy();
+    res.status(204).json({});
   },
 
   // ---------------
@@ -96,6 +106,6 @@ const patientController = {
     res.render('patient', { patient });
   },
 
-}
+};
 
 module.exports = patientController;

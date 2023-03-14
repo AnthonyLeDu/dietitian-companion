@@ -19,7 +19,7 @@ class Meal extends CoreObject {
 
     const headerElem = createChildElement(this.mainElem, 'div', 'meal-header');
     // Delete button
-    createDeleteElement(headerElem, () => this.destroy());
+    createDeleteElement(headerElem, () => this.handleDelete());
     // Title
     const titleElem = createChildElement(headerElem, 'h5', 'meal__title');
     titleElem.textContent = 'Repas de';
@@ -104,6 +104,25 @@ class Meal extends CoreObject {
       const json = await response.json();
       if (!response.ok) throw json;
       app.successFeedback('Repas mis à jour.');
+    }
+    catch (error) {
+      console.error(error);
+      return app.errorFeedback(error.message);
+    }
+  }
+
+  /**
+   * Delete in DB and UI.
+   */
+  async handleDelete() {
+    try {
+      // DELETE fetch
+      const response = await fetch(`${BASE_URL}/api/meal/${this.id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error(response.statusText);
+      app.successFeedback('Repas supprimé.');
+      this.destroy();
     }
     catch (error) {
       console.error(error);

@@ -76,6 +76,14 @@ const mealController = {
     if (!meal) return next(); // 404
     res.json(meal);
   },
+
+  apiDeleteMeal: async (req, res, next) => {
+    const { id } = req.params;
+    const meal = await mealController.getMeal(id);
+    if (!meal) return next(); // 404
+    meal.destroy();
+    res.status(204).json({});
+  },
 };
 
 module.exports = mealController;

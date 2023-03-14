@@ -30,7 +30,7 @@ CREATE TABLE "journal"
     "start_day" DATE,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ,
-    "patient_id" INT REFERENCES "patient"("id")
+    "patient_id" INT REFERENCES "patient"("id") ON DELETE CASCADE
 );
 
 CREATE TABLE "day"
@@ -39,7 +39,7 @@ CREATE TABLE "day"
     "position" INT,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ,
-    "journal_id" INT REFERENCES "journal"("id") NOT NULL
+    "journal_id" INT  REFERENCES "journal"("id") ON DELETE CASCADE NOT NULL
 );
 
 CREATE TABLE "meal"
@@ -48,7 +48,7 @@ CREATE TABLE "meal"
     "time" TIME WITHOUT TIME ZONE,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ,
-    "day_id" INT REFERENCES "day"("id") NOT NULL
+    "day_id" INT REFERENCES "day"("id") ON DELETE CASCADE NOT NULL
 );
 
 CREATE TABLE "dish"
@@ -59,7 +59,7 @@ CREATE TABLE "dish"
     "food_code" INT,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ,
-    "meal_id" INT REFERENCES "meal"("id") NOT NULL
+    "meal_id" INT REFERENCES "meal"("id") ON DELETE CASCADE NOT NULL
 );
 
 COMMIT;

@@ -77,6 +77,14 @@ const dayController = {
     if (!day) return next(); // 404
     res.json(day);
   },
+
+  apiDeleteDay: async (req, res, next) => {
+    const { id } = req.params;
+    const day = await dayController.getDay(id);
+    if (!day) return next(); // 404
+    day.destroy();
+    res.status(204).json({});
+  },
 };
 
 module.exports = dayController;

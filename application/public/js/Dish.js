@@ -15,7 +15,7 @@ class Dish extends CoreObject {
     super(parent, mainElem);
     this.id = data.id;
     // Delete button
-    createDeleteElement(this.mainElem, () => this.destroy());
+    createDeleteElement(this.mainElem, () => this.handleDelete());
     // Food selection
     this.foodElem = createChildElement(this.mainElem, 'input', 'dish__food');
     this.foodElem.setAttribute('list', FOODS_DATALIST);
@@ -84,6 +84,25 @@ class Dish extends CoreObject {
       const json = await response.json();
       if (!response.ok) throw json;
       app.successFeedback('Plat mis à jour.');
+    }
+    catch (error) {
+      console.error(error);
+      return app.errorFeedback(error.message);
+    }
+  }
+
+  /**
+   * Delete in DB and UI.
+   */
+  async handleDelete() {
+    try {
+      // DELETE fetch
+      const response = await fetch(`${BASE_URL}/api/dish/${this.id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error(response.statusText);
+      app.successFeedback('Aliment supprimé.');
+      this.destroy();
     }
     catch (error) {
       console.error(error);

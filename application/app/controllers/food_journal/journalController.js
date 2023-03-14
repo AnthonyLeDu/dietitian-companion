@@ -115,6 +115,14 @@ const journalController = {
     res.json(journal);
   },
 
+  apiDeleteJournal: async (req, res, next) => {
+    const { id } = req.params;
+    const journal = await journalController.getJournal(id);
+    if (!journal) return next(); // 404
+    journal.destroy();
+    res.status(204).json({});
+  },
+
   // ---------------
   // PAGES FUNCTIONS
   // ---------------
