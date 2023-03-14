@@ -1,3 +1,4 @@
+/* global module */
 const { DataTypes } = require('sequelize');
 const JournalElement = require('./journalElement');
 const { Food } = require('../ciqual');
@@ -9,11 +10,11 @@ class Dish extends JournalElement {
   nutrients;
 
   getClassName() {
-    return "Dish";
+    return 'Dish';
   }
 
   async fetchFood(force = false) {
-    if (this.food === undefined || force) {
+    if (!this.food || force) {
       this.food = await Food.findByPk(this.food_code);
     }
   }
@@ -62,14 +63,8 @@ Dish.init(
       primaryKey: true
     },
     position: DataTypes.INTEGER, // Just for ordering the Meal dishes
-    amount: {
-      type: DataTypes.FLOAT, // g
-      allowNull: false
-    },
-    food_code: {
-      type: DataTypes.INTEGER, // Ciqual DB food code
-      allowNull: false
-    },
+    amount: DataTypes.FLOAT, // g
+    food_code: DataTypes.INTEGER, // Ciqual DB food code
     created_at: DataTypes.DATE,
     updated_at: DataTypes.DATE
   },
@@ -78,6 +73,6 @@ Dish.init(
     modelName: 'Dish',
     tableName: 'dish'
   }
-)
+);
 
 module.exports = Dish;

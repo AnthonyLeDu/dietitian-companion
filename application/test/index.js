@@ -24,8 +24,8 @@ async function logAllFoods() {
       group: food.food_grp.name_fr,
       sub_group: food.food_ssgrp.name_fr,
       sub_sub_group: food.food_ssssgrp.name_fr,
-    }
-  })
+    };
+  });
   console.log(foodsDisplay);
 }
 
@@ -82,7 +82,7 @@ async function fillJournal() {
       const meal = await Meal.create({
         time: `${Math.round(Math.random() * 24)}:${Math.round(Math.random() * 60)}`,
         day_id: day.id
-      })
+      });
       meal.save();
       // Dishes
       for (let m = 6; m > 0; m--) {

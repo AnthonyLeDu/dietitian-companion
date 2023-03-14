@@ -1,0 +1,126 @@
+#feedback {
+  padding: 0.5em;
+}
+
+#journal {
+  display: none;
+}
+
+#patient-info{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+
+#patient_fullname {
+  flex-grow: 1;
+}
+
+#days-row {
+  display: flex;
+  overflow-x: auto;
+  gap: 0.5em;
+  align-items: stretch;
+}
+
+#add-day {
+  flex-basis: 0;
+}
+
+#days {
+  display: flex;
+  gap: 0.5em;
+}
+
+.day-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.day,
+.meal {
+  border: 1px solid black;
+}
+
+.day {
+  width: 350px;
+  padding: 0.5em;
+  background-color: #EEE;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.meals {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.dish, .meal-header {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+}
+
+.meal__title {
+  width: fit-content;
+}
+
+.dish__amount {
+  flex-basis: 30%;
+}
+
+.meal {
+  padding: 0.5em;
+  background-color: #FFF;
+}
+
+.img-trash,
+.img-clock,
+.img-arrow-left,
+.img-arrow-right {
+  height: 1em;
+  width: 1em;
+  cursor: pointer;
+  background-size: cover;
+  display: inline-block;
+}
+
+.img-trash {
+  background-image: url("../../public/images/trash.svg");
+}
+
+.img-arrow-left {
+  background-image: url("../../public/images/arrow_left.svg");
+}
+
+.img-arrow-left.--disabled {
+  background-image: url("../../public/images/arrow_left_off.svg");
+}
+
+.img-arrow-right {
+  background-image: url("../../public/images/arrow_right.svg");
+}
+
+.img-arrow-right.--disabled {
+  background-image: url("../../public/images/arrow_right_off.svg");
+}
+
+.--disabled {
+  cursor: initial;
+}
+
+.--is-danger {
+  color: #AA3333;
+  background-color: #FFDDDD;
+}
+
+.--is-success {
+  color: #33AA33;
+  background-color: #DDFFDD;
+}
+
+.--is-readonly {
+  background-color: #EEEEEE;
+}

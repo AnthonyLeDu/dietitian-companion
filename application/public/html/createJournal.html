@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le compagnon du diététicien</title>
+  <link rel="stylesheet" href="../../public/css/reset.css">
+  <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+  <link rel="stylesheet" href="../../public/css/journalStyle.css">
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/fr.js"></script>
+  <script src="./../js/CoreObject.js" defer></script>
+  <script src="./../js/Dish.js" defer></script>
+  <script src="./../js/Meal.js" defer></script>
+  <script src="./../js/Day.js" defer></script>
+  <script src="./../js/Journal.js" defer></script>
+  <script src="./../js/index.js" defer></script>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <h1>
+        <a href="/">Le compagnon du diététicien</a>
+      </h1>
+      <a href="/patients">Patients</a>
+      <a href="/journals">Journaux alimentaires</a>
+      <a href="/foods">Table des aliments</a>
+    </nav>
+  </header>
+
+  <!-- <%- include ('partials/header') %> -->
+
+  <main class="container">
+    <h2>Édition de journal</h2>
+    <h5 id="feedback"></h5>
+    <button id="new-journal">Créer un nouveau journal</button>
+    
+    <div id="journal">
+
+        <datalist id="patients-datalist"></datalist>
+        <datalist id="foods-datalist"></datalist>
+
+        <form id="journal-form">
+          <div id="patient-info">
+            <input type="hidden" name="patient_id">
+            <fieldset id="patient_fullname">
+              <label>Patient</label>
+              <input list="patients-datalist" name="patient_fullname" autocomplete="off" required>
+            </fieldset>
+            <fieldset>
+              <label>Âge</label>
+              <input type="number" name="patient_age" min="0" required>
+            </fieldset>
+            <fieldset>
+              <label>Poids</label>
+              <input type="number" name="patient_weight" min="0" required>
+            </fieldset>
+          </div>
+          <fieldset>
+            <label>Date de début</label>
+            <input type="date" name="start_day">
+          </fieldset>
+        </form>
+        
+        <div id="days-row">
+        <div id="days">
+          <!-- <div class="day">
+            <div class="day-header">
+              <div class="img-trash"></div>
+              <h4>Jour 1 (???)</h4>
+              <div class="arrows">
+                <div class="img-arrow-left --disabled"></div>
+                <div class="img-arrow-right"></div>
+              </div>
+            </div>
+            <div class="meals-row">
+              <div class="meals">
+                <div class="meal">
+                  <div class="meal-header">
+                    <h5 class="meal__title">Repas de</h5>
+                    <input type="time" name="day1-meal1__time" required>
+                    <span>X</span>
+                  </div>
+
+                  <div class="dishes">
+                    <div class="dish">
+                      <span>x</span>
+                      <input list="foods-datalist" name="day1-meal1-dish1__name" required>
+                      <input class="dish__amount" type="number" step="10" name="day1-meal1-dish1__amount" required>
+                      <span>g</span>
+                    </div>
+                  </div>
+                  <input type="button" value="Ajouter un aliment">
+                </div>
+                <div class="meal">
+                  <div class="meal-row">
+                    <h5 class="meal__title">Repas de</h5>
+                    <input type="time" name="day1-meal2__time" required>
+                    <span>X</span>
+                  </div>
+                  <input type="button" value="Ajouter un aliment">
+                </div>
+                <input type="button" class="add-meal" value="Ajouter un repas">
+              </div>
+            </div>
+          </div> -->
+        </div>
+        <input type="button" id="add-day" value="Ajouter un jour">
+      </div>
+    </main>
+    
+    <!-- <%- include ('partials/footer') %> -->

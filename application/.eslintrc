@@ -4,12 +4,13 @@
   },
   "env": {
       "browser": true,
-      "es6": true
+      "es6": true,
+      "amd": true
   },
   "extends": "eslint:recommended",
   "rules": {
       "indent": ["error", 2],
-      "quotes": ["warning", "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
+      "quotes": [1, "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
       "semi": ["error", "always"]
   }
 }

@@ -29,9 +29,11 @@
               <%= journal.created_at %>
             </td>
             <td>
-              <a href="/patient/<%= journal.patient_id %>">
-                <%= journal.patient.fullNameAndGender %>
-              </a>
+              <% if (journal.patient) { %>
+                <a href="/patient/<%= journal.patient_id %>">
+                  <%= journal.patient.fullNameAndGender %>
+                </a>
+              <% } %>
             </td>
             <td>
               <%= journal.patient_age %>
