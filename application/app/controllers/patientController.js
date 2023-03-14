@@ -71,7 +71,6 @@ const patientController = {
 
   apiDeletePatient: async (req, res, next) => {
     const { id } = req.params;
-    console.log(id);
     const patient = await patientController.getPatient(id);
     if (!patient) return next(); // 404
     patient.destroy();
