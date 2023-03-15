@@ -151,7 +151,7 @@ const journalController = {
   },
 
   createJournalPage: (req, res) => {
-    res.render('createJournal');
+    res.redirect('/html/createJournal.html');
   },
 
 };
