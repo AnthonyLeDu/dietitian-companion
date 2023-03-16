@@ -2,6 +2,8 @@
 
   <main class="container">
     <h2>Journal alimentaire</h2>
+    <p>Création : <%= journal.created_at %></p>
+    <p>Mise à jour : <%= journal.updated_at %></p>
     <% for (let d=0 ; d < journal.days.length ; d++) {
       day = journal.days[d]; %>
       <section>

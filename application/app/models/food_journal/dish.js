@@ -65,8 +65,6 @@ Dish.init(
     position: DataTypes.INTEGER, // Just for ordering the Meal dishes
     amount: DataTypes.FLOAT, // g
     food_code: DataTypes.INTEGER, // Ciqual DB food code
-    created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE
   },
   {
     sequelize: getConnexion(),

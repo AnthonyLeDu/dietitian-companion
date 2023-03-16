@@ -30,8 +30,6 @@ Meal.init(
         return timeArray.reduce((accumulator, curVal) => accumulator + curVal);
       }
     },
-    created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE
   },
   {
     sequelize: getConnexion(),

@@ -1,3 +1,4 @@
+/* global process, module*/
 const Sequelize = require('sequelize');
 
 function getConnexion() {

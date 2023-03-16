@@ -1,3 +1,4 @@
+/* global module */
 const { Model, DataTypes } = require('sequelize');
 const getConnexion = require('./getConnexion');
 
@@ -26,14 +27,12 @@ Patient.init(
       allowNull: false
     },
     birth_date: DataTypes.DATEONLY,
-    created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE
   },
   {
     sequelize: getConnexion(),
     modelName: 'Patient',
     tableName: 'patient'
   }
-)
+);
 
 module.exports = Patient;

@@ -1,6 +1,5 @@
 /* global module */
 // eslint-disable-next-line no-unused-vars
-const dayjs = require('dayjs');
 const { Journal, Patient } = require('../../models');
 const patientController = require('../patientController');
 
@@ -13,7 +12,7 @@ const journalController = {
   getJournals: async () => {
     return await Journal.findAll({
       order: [['updated_at', 'DESC']],
-      include: 'patient'
+      include: 'patient',
     });
   },
 
