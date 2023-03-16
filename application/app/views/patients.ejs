@@ -11,6 +11,7 @@
         <td>Sexe</td>
         <td>Date de naissance</td>
         <td>Nombres de journaux</td>
+        <td></td>
       </thead>
       <tbody>
         <% for (patient of patients) { %>
@@ -33,6 +34,11 @@
             <td>
               <a href="/journals/?patient=<%= patient.id %>">
                 <%= patient.journals.length %>
+              </a>
+            </td>
+            <td>
+              <a href="/patient/delete/<%= patient.id %>">
+                Supprimer
               </a>
             </td>
           </tr>

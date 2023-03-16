@@ -1,4 +1,4 @@
-const { Food } = require('../models');
+/* global module */
 
 const mainController = {
 
@@ -6,6 +6,6 @@ const mainController = {
     res.render('index');
   },
 
-}
+};
 
 module.exports = mainController;

@@ -154,6 +154,14 @@ const journalController = {
     res.render('createJournal');
   },
 
+  deleteJournal: async (req, res, next) => {
+    const { id } = req.params;
+    const journal = await journalController.getJournal(id);
+    if (!journal) return next(); // 404
+    journal.destroy();
+    res.redirect('/journals');
+  },
+
 };
 
 module.exports = journalController;
