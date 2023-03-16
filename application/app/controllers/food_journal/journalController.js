@@ -150,8 +150,8 @@ const journalController = {
     res.render('journal', { journal });
   },
 
-  createJournalPage: (req, res) => {
-    res.redirect('/html/createJournal.html');
+  createJournalPage: async (req, res) => {
+    res.render('createJournal');
   },
 
 };

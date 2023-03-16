@@ -1,37 +1,13 @@
-<!DOCTYPE html>
-<html lang="fr">
+<%- include ('partials/header') %>
 
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le compagnon du diététicien</title>
-    <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/journalStyle.css">
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/fr.js"></script>
-    <script src="../js/CoreObject.js" defer></script>
-    <script src="../js/Dish.js" defer></script>
-    <script src="../js/Meal.js" defer></script>
-    <script src="../js/Day.js" defer></script>
-    <script src="../js/Journal.js" defer></script>
-    <script src="../js/index.js" defer></script>
-  </head>
-
-  <body class="container">
-    <header>
-      <nav>
-        <h1>
-          <a href="/">Le compagnon du diététicien</a>
-        </h1>
-        <a href="/journal/create">Créer un journal</a>
-        <a href="/patients">Patients</a>
-        <a href="/journals">Journaux alimentaires</a>
-        <a href="/foods">Table des aliments</a>
-      </nav>
-    </header>
+    <script src="/js/CoreObject.js" defer></script>
+    <script src="/js/Dish.js" defer></script>
+    <script src="/js/Meal.js" defer></script>
+    <script src="/js/Day.js" defer></script>
+    <script src="/js/Journal.js" defer></script>
+    <script src="/js/index.js" defer></script>
 
     <main class="container">
       <h2>Édition de journal</h2>
@@ -73,5 +49,5 @@
       </div>
     </main>
     
-  </body>
-</html>
+
+<%- include ('partials/footer') %>
