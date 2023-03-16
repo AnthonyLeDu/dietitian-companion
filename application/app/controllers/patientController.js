@@ -142,7 +142,6 @@ const patientController = {
   },
 
   updatePatient: async (req, res) => {
-    console.log(req.params);
     const { patient, statusCode, feedbackMessage } = await patientController.patchPatient(
       req.params.id,
       req.body
