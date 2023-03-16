@@ -105,6 +105,14 @@ const patientController = {
     res.render('patient', { patient });
   },
 
+  deletePatient: async (req, res, next) => {
+    const { id } = req.params;
+    const patient = await patientController.getPatient(id);
+    if (!patient) return next(); // 404
+    patient.destroy();
+    res.redirect('/patients');
+  },
+
 };
 
 module.exports = patientController;

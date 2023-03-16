@@ -18,12 +18,13 @@ router
   .get('/journal/create', catchErrors(journalController.createJournalPage))
   .get('/journal/:id', catchErrors(journalController.journalPage))
   .get('/journal/delete/:id', catchErrors(journalController.deleteJournal));
-
+  
 router
   .get('/patient/create', catchErrors(patientController.createPatientPage))
   .post('/patient/create', sanitizeRequestBody, catchErrors(patientController.submitPatient))
   .get('/patients', catchErrors(patientController.patientsPage))
-  .get('/patient/:id', catchErrors(patientController.patientPage));
+  .get('/patient/:id', catchErrors(patientController.patientPage))
+  .get('/patient/delete/:id', catchErrors(patientController.deletePatient));
 
 
 module.exports = router;
