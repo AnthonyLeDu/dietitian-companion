@@ -10,17 +10,22 @@
     <table>
       <thead>
         <td></td>
+        <td></td>
         <td>Date de dernière mise à jour</td>
         <td>Date de création</td>
         <td>Patient</td>
         <td>Âge du patient (au moment du journal)</td>
         <td>Poids du patient (au moment du journal)</td>
+        <td></td>
       </thead>
       <tbody>
         <% for (journal of journals) { %>
           <tr>
             <td>
               <a href="/journal/<%= journal.id %>">Voir</a>
+            </td>
+            <td>
+              <a href="/journal/create?journal=<%= journal.id %>">Éditer</a>
             </td>
             <td>
               <%= journal.updated_at %>
@@ -40,6 +45,9 @@
             </td>
             <td>
               <%= journal.patient_weight %>
+            </td>
+            <td>
+              <a href="/journal/delete/<%= journal.id %>">Supprimer</a>
             </td>
           </tr>
           <% } %>

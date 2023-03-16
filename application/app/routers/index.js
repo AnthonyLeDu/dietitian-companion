@@ -13,14 +13,17 @@ router.get('/', catchErrors(mainController.homePage));
 
 router.get('/foods', catchErrors(foodController.foodsPage));
 
-router.get('/journals', catchErrors(journalController.journalsPage));
-router.get('/journal/create', catchErrors(journalController.createJournalPage));
-router.get('/journal/:id', catchErrors(journalController.journalPage));
+router
+  .get('/journals', catchErrors(journalController.journalsPage))
+  .get('/journal/create', catchErrors(journalController.createJournalPage))
+  .get('/journal/:id', catchErrors(journalController.journalPage))
+  .get('/journal/delete/:id', catchErrors(journalController.deleteJournal));
 
-router.get('/patient/create', catchErrors(patientController.createPatientPage));
-router.post('/patient/create', sanitizeRequestBody, catchErrors(patientController.submitPatient));
-router.get('/patients', catchErrors(patientController.patientsPage));
-router.get('/patient/:id', catchErrors(patientController.patientPage));
+router
+  .get('/patient/create', catchErrors(patientController.createPatientPage))
+  .post('/patient/create', sanitizeRequestBody, catchErrors(patientController.submitPatient))
+  .get('/patients', catchErrors(patientController.patientsPage))
+  .get('/patient/:id', catchErrors(patientController.patientPage));
 
 
 module.exports = router;
