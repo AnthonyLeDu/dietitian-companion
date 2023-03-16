@@ -1,4 +1,9 @@
-const Sequelize = require('sequelize');
+/* global process, module */
+const dayjs = require('dayjs');
+dayjs.locale(require('dayjs/locale/fr'));
+const { Sequelize, DataTypes } = require('sequelize');
+
+const DATES_FORMAT = 'ddd D MMMM YYYY (HH[h]mm)';
 
 function getConnexion() {
   const sequelize = new Sequelize(
@@ -11,6 +16,24 @@ function getConnexion() {
       logging: false
     }
   );
+
+  sequelize.addHook('beforeDefine', (attributes) => {
+    Object.assign(attributes, {
+      created_at: {
+        type: DataTypes.DATE,
+        get() {
+          return dayjs(this.getDataValue('created_at')).format(DATES_FORMAT);
+        }
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        get() {
+          return dayjs(this.getDataValue('updated_at')).format(DATES_FORMAT);
+        }
+      }
+    });
+  });
+
   return sequelize;
 }
 

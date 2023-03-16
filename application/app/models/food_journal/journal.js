@@ -29,8 +29,6 @@ Journal.init(
     start_day: {
       type: DataTypes.DATEONLY,
     },
-    created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE
   },
   {
     sequelize: getConnexion(),

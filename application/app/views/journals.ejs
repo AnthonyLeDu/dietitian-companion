@@ -11,8 +11,8 @@
       <thead>
         <td></td>
         <td></td>
-        <td>Date de dernière mise à jour</td>
-        <td>Date de création</td>
+        <td>Création</td>
+        <td>Mise à jour</td>
         <td>Patient</td>
         <td>Âge du patient (au moment du journal)</td>
         <td>Poids du patient (au moment du journal)</td>
@@ -28,10 +28,10 @@
               <a href="/journal/create?journal=<%= journal.id %>">Éditer</a>
             </td>
             <td>
-              <%= journal.updated_at %>
+              <%= journal.created_at %>
             </td>
             <td>
-              <%= journal.created_at %>
+              <%= journal.updated_at %>
             </td>
             <td>
               <% if (journal.patient) { %>

@@ -20,8 +20,6 @@ Day.init(
       primaryKey: true
     },
     position: DataTypes.INTEGER, // Relative to journal.start_day
-    created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE
   },
   {
     sequelize: getConnexion(),
