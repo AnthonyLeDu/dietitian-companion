@@ -16,12 +16,15 @@ router.get('/foods', catchErrors(foodController.foodsPage));
 router
   .get('/journals', catchErrors(journalController.journalsPage))
   .get('/journal/create', catchErrors(journalController.createJournalPage))
+  .get('/journal/edit/:id', catchErrors(journalController.editJournalPage))
   .get('/journal/:id', catchErrors(journalController.journalPage))
   .get('/journal/delete/:id', catchErrors(journalController.deleteJournal));
   
 router
   .get('/patient/create', catchErrors(patientController.createPatientPage))
   .post('/patient/create', sanitizeRequestBody, catchErrors(patientController.submitPatient))
+  .get('/patient/edit/:id', catchErrors(patientController.editPatientPage))
+  .post('/patient/edit/:id', catchErrors(patientController.updatePatient))
   .get('/patients', catchErrors(patientController.patientsPage))
   .get('/patient/:id', catchErrors(patientController.patientPage))
   .get('/patient/delete/:id', catchErrors(patientController.deletePatient));

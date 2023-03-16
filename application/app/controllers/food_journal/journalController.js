@@ -153,6 +153,10 @@ const journalController = {
     res.render('createJournal');
   },
 
+  editJournalPage: async (req, res) => {
+    res.render('editJournal');
+  },
+
   deleteJournal: async (req, res, next) => {
     const { id } = req.params;
     const journal = await journalController.getJournal(id);

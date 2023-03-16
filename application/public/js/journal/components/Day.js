@@ -1,4 +1,4 @@
-/* global app, dayjs, BASE_URL, CoreObject, Meal, callIfEnabled, createChildElement, createDeleteElement */
+/* global userFeedback, dayjs, BASE_URL, CoreObject, Meal, callIfEnabled, createChildElement, createDeleteElement */
 
 // eslint-disable-next-line no-unused-vars
 class Day extends CoreObject {
@@ -74,8 +74,7 @@ class Day extends CoreObject {
       this.addChild(json);
     }
     catch (error) {
-      console.error(error);
-      return app.errorFeedback(error.message);
+      return userFeedback.error(error);
     }
   }
 
@@ -93,11 +92,10 @@ class Day extends CoreObject {
       });
       const json = await response.json();
       if (!response.ok) throw json;
-      app.successFeedback('Journée mise à jour.');
+      userFeedback.success('Journée mise à jour.');
     }
     catch (error) {
-      console.error(error);
-      return app.errorFeedback(error.message);
+      return userFeedback.error(error);
     }
   }
 
@@ -153,12 +151,11 @@ class Day extends CoreObject {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error(response.statusText);
-      app.successFeedback('Journée supprimée.');
+      userFeedback.success('Journée supprimée.');
       this.destroy();
     }
     catch (error) {
-      console.error(error);
-      return app.errorFeedback(error.message);
+      return userFeedback.error(error);
     }
   }
 

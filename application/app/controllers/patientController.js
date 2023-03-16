@@ -2,6 +2,11 @@
 const dayjs = require('dayjs');
 const { Patient } = require('../models');
 
+const DEFAULT_FORM_DATA = {
+  patient: {},
+  maxDate: dayjs().format('YYYY-MM-DD'),
+};
+
 const patientController = {
 
   // -----------------
@@ -38,6 +43,28 @@ const patientController = {
       } else {
         statusCode = 500;
         feedbackMessage = 'Désolé, le patient n\'a pas pu être créé. Veuillez réessayer plus tard.';
+      }
+    }
+    return { patient, statusCode, feedbackMessage };
+  },
+
+  patchPatient: async (patientId, patientData) => {
+    let patient, statusCode, feedbackMessage;
+    patientData.birth_date = new Date(patientData.birth_date);
+
+    // Check that patient exists
+    patient = await patientController.getPatient(patientId);
+    if (!patient) {
+      statusCode = 404;
+      feedbackMessage = 'Ce patient n\'existe pas !';
+    } else {
+      patient = await patient.update(patientData);
+      if (patient) {
+        statusCode = 200;
+        feedbackMessage = 'Patient mis à jour avec succès !';
+      } else {
+        statusCode = 500;
+        feedbackMessage = 'Désolé, le patient n\'a pas pu être mis à jour. Veuillez réessayer plus tard.';
       }
     }
     return { patient, statusCode, feedbackMessage };
@@ -82,15 +109,15 @@ const patientController = {
   // ---------------
 
   createPatientPage: async (req, res) => {
-    res.render('createPatient', { maxDate: dayjs().format('YYYY-MM-DD') });
+    res.render('createPatient', DEFAULT_FORM_DATA);
   },
 
   submitPatient: async (req, res) => {
     const { statusCode, feedbackMessage } = await patientController.createPatient(req.body);
     // Refresh page with feedback message
     res.status(statusCode).render('createPatient', {
-      maxDate: dayjs().format('YYYY-MM-DD'),
-      feedbackMessage
+      ...DEFAULT_FORM_DATA,
+      feedbackMessage,
     });
   },
 
@@ -103,6 +130,29 @@ const patientController = {
     const patient = await patientController.getPatient(req.params.id);
     if (!patient) return next(); // 404
     res.render('patient', { patient });
+  },
+
+  editPatientPage: async (req, res, next) => {
+    const patient = await patientController.getPatient(req.params.id);
+    if (!patient) return next(); // 404
+    res.render('editPatient', {
+      maxDate: dayjs().format('YYYY-MM-DD'),
+      patient
+    });
+  },
+
+  updatePatient: async (req, res) => {
+    console.log(req.params);
+    const { patient, statusCode, feedbackMessage } = await patientController.patchPatient(
+      req.params.id,
+      req.body
+    );
+    // Refresh page with feedback message
+    res.status(statusCode).render('editPatient', {
+      ...DEFAULT_FORM_DATA,
+      feedbackMessage,
+      patient
+    });
   },
 
   deletePatient: async (req, res, next) => {

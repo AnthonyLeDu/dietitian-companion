@@ -1,11 +1,9 @@
 <%- include ('partials/header') %>
 
-  <main class="container">
-    <hgroup>
-      <h2>Erreur <%= error.status %></h2>
-      <h3><%= error.message %></h3>
-      <p><%= error.stack %></p>
-    </hgroup>
-  </main>
+<hgroup>
+  <h2>Erreur <%= error.status %></h2>
+  <h3><%= error.message %></h3>
+  <p><%= error.stack %></p>
+</hgroup>
 
 <%- include ('partials/footer') %>

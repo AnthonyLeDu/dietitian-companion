@@ -1,30 +1,28 @@
 <%- include ('partials/header') %>
 
-  <main class="container">
-    <h2>Journal alimentaire</h2>
-    <p>Création : <%= journal.created_at %></p>
-    <p>Mise à jour : <%= journal.updated_at %></p>
-    <% for (let d=0 ; d < journal.days.length ; d++) {
-      day = journal.days[d]; %>
-      <section>
-        <hgroup>
-          <h3>Jour <%= d+1 %><% if (day.name) { %> (<%= day.name %>)<% } %></h3>
-          <%- include('partials/nutrients', { nutrients: day.nutrients }) %>
-        </hgroup>
-      <% for (meal of day.meals) { %>
-        <hgroup>
-          <h4>Repas de <%= meal.time %></h4>
-          <%- include('partials/nutrients', { nutrients: meal.nutrients }) %>
-        </hgroup>
-        <% for (dish of meal.dishes) { %>
-          <hgroup>
-            <p><%= dish.position %>. <%= dish.food?.name_fr %> (<%= dish.amount %>g)</p>
-            <%- include('partials/nutrients', { nutrients: dish.nutrients }) %>
-          </hgroup>
-        <% } %>
-      <% } %>
-      </section>
+<h2>Journal alimentaire</h2>
+<p>Création : <%= journal.created_at %></p>
+<p>Mise à jour : <%= journal.updated_at %></p>
+<% for (let d=0 ; d < journal.days.length ; d++) {
+  day = journal.days[d]; %>
+  <section>
+    <hgroup>
+      <h3>Jour <%= d+1 %><% if (day.name) { %> (<%= day.name %>)<% } %></h3>
+      <%- include('partials/nutrients', { nutrients: day.nutrients }) %>
+    </hgroup>
+  <% for (meal of day.meals) { %>
+    <hgroup>
+      <h4>Repas de <%= meal.time %></h4>
+      <%- include('partials/nutrients', { nutrients: meal.nutrients }) %>
+    </hgroup>
+    <% for (dish of meal.dishes) { %>
+      <hgroup>
+        <p><%= dish.position %>. <%= dish.food?.name_fr %> (<%= dish.amount %>g)</p>
+        <%- include('partials/nutrients', { nutrients: dish.nutrients }) %>
+      </hgroup>
     <% } %>
-  </main>
+  <% } %>
+  </section>
+<% } %>
 
   <%- include ('partials/footer') %>

@@ -1,11 +1,11 @@
 <%- include ('partials/header') %>
 
-<h2>Ajout d'un patient</h2>
+<h2>Édition d'un patient (<%= patient.fullName %>)</h2>
 <form action="" method="post" class="container">
 
   <%- include ('partials/patientFormFields')%>
 
-  <button type="submit">Créer le patient</button>
+  <button type="submit">Sauvegarder les modifications</button>
 
   <% if (typeof feedbackMessage !== 'undefined') { %>
     <mark><%= feedbackMessage %></mark>
