@@ -88,23 +88,23 @@
 }
 
 .img-trash {
-  background-image: url("../../public/images/trash.svg");
+  background-image: url("/images/trash.svg");
 }
 
 .img-arrow-left {
-  background-image: url("../../public/images/arrow_left.svg");
+  background-image: url("/images/arrow_left.svg");
 }
 
 .img-arrow-left.--disabled {
-  background-image: url("../../public/images/arrow_left_off.svg");
+  background-image: url("/images/arrow_left_off.svg");
 }
 
 .img-arrow-right {
-  background-image: url("../../public/images/arrow_right.svg");
+  background-image: url("/images/arrow_right.svg");
 }
 
 .img-arrow-right.--disabled {
-  background-image: url("../../public/images/arrow_right_off.svg");
+  background-image: url("/images/arrow_right_off.svg");
 }
 
 .--disabled {
