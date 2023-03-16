@@ -1,4 +1,4 @@
-/* global app, dayjs, CoreObject, Day, BASE_URL */
+/* global app, userFeedback, dayjs, CoreObject, Day, BASE_URL */
 
 // eslint-disable-next-line no-unused-vars
 class Journal extends CoreObject {
@@ -142,8 +142,7 @@ class Journal extends CoreObject {
       this.addChild(json);
     }
     catch (error) {
-      console.error(error);
-      return app.errorFeedback(error.message);
+      return userFeedback.error(error);
     }
   }
 
@@ -199,10 +198,10 @@ class Journal extends CoreObject {
       });
       const json = await response.json();
       if (!response.ok) throw json;
-      app.successFeedback('Journal mis à jour.');
+      userFeedback.success('Journal mis à jour.');
     } catch (error) {
       console.error(error);
-      return app.errorFeedback(error.message);
+      return userFeedback.error(error);
     }
   }
 

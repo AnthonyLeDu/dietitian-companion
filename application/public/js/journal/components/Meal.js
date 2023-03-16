@@ -1,4 +1,4 @@
-/* global app, BASE_URL, CoreObject, Dish, createChildElement, createDeleteElement */
+/* global userFeedback, BASE_URL, CoreObject, Dish, createChildElement, createDeleteElement */
 
 // eslint-disable-next-line no-unused-vars
 class Meal extends CoreObject {
@@ -83,8 +83,7 @@ class Meal extends CoreObject {
       this.addChild(json);
     }
     catch (error) {
-      console.error(error);
-      return app.errorFeedback(error.message);
+      return userFeedback.error(error);
     }
   }
 
@@ -103,11 +102,10 @@ class Meal extends CoreObject {
       });
       const json = await response.json();
       if (!response.ok) throw json;
-      app.successFeedback('Repas mis à jour.');
+      userFeedback.success('Repas mis à jour.');
     }
     catch (error) {
-      console.error(error);
-      return app.errorFeedback(error.message);
+      return userFeedback.error(error);
     }
   }
 
@@ -121,12 +119,11 @@ class Meal extends CoreObject {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error(response.statusText);
-      app.successFeedback('Repas supprimé.');
+      userFeedback.success('Repas supprimé.');
       this.destroy();
     }
     catch (error) {
-      console.error(error);
-      return app.errorFeedback(error.message);
+      return userFeedback.error(error);
     }
   }
 

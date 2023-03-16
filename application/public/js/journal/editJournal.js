@@ -1,9 +1,8 @@
-/* global dayjs, Journal */
+/* global dayjs, Journal, BASE_URL, userFeedback */
 dayjs.locale('fr');
 
 const PATIENTS_DATALIST = 'patients-datalist';
 const FOODS_DATALIST = 'foods-datalist';
-const BASE_URL = 'http://localhost:3000';
 
 function createChildElement(parentElement, elementTag, elementClass = null, elementId = null) {
   const newElem = document.createElement(elementTag);
@@ -40,71 +39,32 @@ function callIfEnabled(fn, element) {
 }
 
 const app = {
-  feedbackElem: undefined,
   dbPatients: undefined,
   dbFoods: undefined,
   journal: undefined,
   
   init: async function () {
-    app.findDOMElements();   
-    app.setupEventListeners(); 
     // Init datalists
     app.fetchFoods();
     await app.fetchPatients();
-    app.loadJournalIfQueried();
-  },
-
-  findDOMElements() {
-    app.feedbackElem = document.getElementById('feedback');
-  },
-
-  setupEventListeners() {
-    app.feedbackElem.addEventListener('click', app.clearFeedback);
-    document.getElementById('new-journal').addEventListener(
-      'click', app.handleCreateJournal);
-  },
-
-  /**
-   * Load journal if searched for in URL
-   */
-  loadJournalIfQueried() {
-    const match = document.location.search.match(/journal=(\d+)(&|$)/);
-    if (match && match[1]) {
-      document.getElementById('new-journal').style.display = 'none';
-      app.loadJournal(Number(match[1])); // Journal ID
-    }
+    app.loadJournal();
   },
 
   /**
    * Fetch Journal from API and load it in the App.
    */
-  async loadJournal(id) {
+  async loadJournal() {
+    const match = document.location.pathname.match(/journal\/edit\/(\d+)/);
     try {
-      const response = await fetch(`${BASE_URL}/api/journal/${id}`);
+      if (!match || !match[1]) throw new Error("Impossible de récupérer l'id du journal dans l'URL.");
+      const response = await fetch(`${BASE_URL}/api/journal/${match[1]}`);
       const json = await response.json();
       if (!response.ok) throw json;
       app.journal = new Journal(json, document.getElementById('journal'));
-    } catch (error) {
-      console.error(error.message);
-      return app.errorFeedback(error.message);
     }
-  },
-
-  successFeedback(message) {
-    app.feedbackElem.className = '';
-    app.feedbackElem.textContent = message;
-    app.feedbackElem.classList.add('--is-success');
-  },
-  
-  errorFeedback(message) {
-    app.feedbackElem.className = '';
-    app.feedbackElem.textContent = message;
-    app.feedbackElem.classList.add('--is-danger');
-  },
-
-  clearFeedback() {
-    app.feedbackElem.textContent = '';
-    app.feedbackElem.className = '';
+    catch (error) {
+      return userFeedback.error(error);
+    }
   },
 
   /**
@@ -122,7 +82,7 @@ const app = {
         return patient;
       });
     } catch (error) {
-      console.error(error.message);
+      userFeedback.error(error);
       return;
     }
     // Fill the datalist
@@ -144,8 +104,9 @@ const app = {
       const json = await response.json();
       if (!response.ok) throw json;
       app.dbFoods = json;
-    } catch (error) {
-      console.error(error.stack);
+    }
+    catch (error) {
+      userFeedback.error(error);
       return;
     }
     // Fill the datalist
@@ -154,23 +115,6 @@ const app = {
       const option = createChildElement(foodsDataListElem, 'option');
       option.value = food.name_fr;
       option.dataset.code = food.code;
-    }
-  },
-
-  async handleCreateJournal(event) {
-    event.preventDefault();
-    try {
-      // POST fetch
-      const response = await fetch(`${BASE_URL}/api/journal`, {
-        method: 'POST'
-      });
-      const json = await response.json();
-      if (!response.ok) throw json;
-      // Update URL
-      document.location.search = `?journal=${json.id}`; // Reloads the page
-    } catch (error) {
-      console.error(error);
-      return app.errorFeedback(error.message);
     }
   },
 

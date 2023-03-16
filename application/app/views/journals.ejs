@@ -1,58 +1,56 @@
 <%- include ('partials/header') %>
 
-  <main class="container">
-    <h2>Journaux alimentaires<% if (typeof patient !== 'undefined') { %>
-        de <a href="/patient/<%= patient.id %>">
-          <%= patient.fullName %>
-        </a>
-        <% } %>
-    </h2>
-    <table>
-      <thead>
-        <td></td>
-        <td></td>
-        <td>Création</td>
-        <td>Mise à jour</td>
-        <td>Patient</td>
-        <td>Âge du patient (au moment du journal)</td>
-        <td>Poids du patient (au moment du journal)</td>
-        <td></td>
-      </thead>
-      <tbody>
-        <% for (journal of journals) { %>
-          <tr>
-            <td>
-              <a href="/journal/<%= journal.id %>">Voir</a>
-            </td>
-            <td>
-              <a href="/journal/create?journal=<%= journal.id %>">Éditer</a>
-            </td>
-            <td>
-              <%= journal.created_at %>
-            </td>
-            <td>
-              <%= journal.updated_at %>
-            </td>
-            <td>
-              <% if (journal.patient) { %>
-                <a href="/patient/<%= journal.patient_id %>">
-                  <%= journal.patient.fullNameAndGender %>
-                </a>
-              <% } %>
-            </td>
-            <td>
-              <%= journal.patient_age %>
-            </td>
-            <td>
-              <%= journal.patient_weight %>
-            </td>
-            <td>
-              <a href="/journal/delete/<%= journal.id %>">Supprimer</a>
-            </td>
-          </tr>
+<h2>Journaux alimentaires<% if (typeof patient !== 'undefined') { %>
+    de <a href="/patient/<%= patient.id %>">
+      <%= patient.fullName %>
+    </a>
+    <% } %>
+</h2>
+<table>
+  <thead>
+    <td></td>
+    <td></td>
+    <td>Création</td>
+    <td>Mise à jour</td>
+    <td>Patient</td>
+    <td>Âge du patient (au moment du journal)</td>
+    <td>Poids du patient (au moment du journal)</td>
+    <td></td>
+  </thead>
+  <tbody>
+    <% for (journal of journals) { %>
+      <tr>
+        <td>
+          <a href="/journal/<%= journal.id %>">Voir</a>
+        </td>
+        <td>
+          <a href="/journal/edit/<%= journal.id %>">Éditer</a>
+        </td>
+        <td>
+          <%= journal.created_at %>
+        </td>
+        <td>
+          <%= journal.updated_at %>
+        </td>
+        <td>
+          <% if (journal.patient) { %>
+            <a href="/patient/<%= journal.patient_id %>">
+              <%= journal.patient.fullNameAndGender %>
+            </a>
           <% } %>
-      </tbody>
-    </table>
-  </main>
+        </td>
+        <td>
+          <%= journal.patient_age %>
+        </td>
+        <td>
+          <%= journal.patient_weight %>
+        </td>
+        <td>
+          <a href="/journal/delete/<%= journal.id %>">Supprimer</a>
+        </td>
+      </tr>
+      <% } %>
+  </tbody>
+</table>
 
-  <%- include ('partials/footer') %>
+<%- include ('partials/footer') %>

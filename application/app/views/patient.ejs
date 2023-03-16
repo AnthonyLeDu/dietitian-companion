@@ -1,30 +1,31 @@
 <%- include ('partials/header') %>
 
-  <main class="container">
-    <h2>
-      <%= patient.fullName %>
-    </h2>
-    <p>Création : <%= journal.created_at %></p>
-    <p>Mise à jour : <%= journal.updated_at %></p>
+<h2>
+  <%= patient.fullName %>
+</h2>
+<p>Création : <%= patient.created_at %></p>
+<p>Mise à jour : <%= patient.updated_at %></p>
 
-    <h3>Sexe</h3>
-    <p>
-      <%= patient.gender %>
-    </p>
+<h3>Sexe</h3>
+<p>
+  <%= patient.gender %>
+</p>
 
-    <h3>Date de naissance</h3>
-    <p>
-      <%= patient.birth_date %>
-    </p>
+<h3>Date de naissance</h3>
+<p>
+  <%= patient.birth_date %>
+</p>
 
-    <a href="/journals?patient=<%= patient.id %>">
-      <p>Voir les journaux du patient</p>
-    </a>
+<a href="/journals?patient=<%= patient.id %>">
+  <p>Voir les journaux du patient</p>
+</a>
 
-    <a href="/patient/delete/<%= patient.id %>">
-      <p>Supprimer le patient</p>
-    </a>
+<a href="/patient/edit/<%= patient.id %>">
+  <p>Éditer le patient</p>
+</a>
 
-  </main>
+<a href="/patient/delete/<%= patient.id %>">
+  <p>Supprimer le patient</p>
+</a>
 
-  <%- include ('partials/footer') %>
+<%- include ('partials/footer') %>

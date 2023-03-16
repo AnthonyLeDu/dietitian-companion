@@ -1,50 +1,48 @@
 <%- include ('partials/header') %>
 
-  <main class="container">
-    <h2>Patients</h2>
-    <a href="/patient/create"><p>Ajouter un nouveau patient</p></a>
-    <table>
-      <thead>
-        <td></td>
-        <td>Nom</td>
-        <td>Prénom</td>
-        <td>Sexe</td>
-        <td>Date de naissance</td>
-        <td>Nombres de journaux</td>
-        <td></td>
-      </thead>
-      <tbody>
-        <% for (patient of patients) { %>
-          <tr>
-            <td>
-              <a href="/patient/<%= patient.id %>">Profil</a>
-            </td>
-            <td>
-              <%= patient.last_name %>
-            </td>
-            <td>
-              <%= patient.first_name %>
-            </td>
-            <td>
-              <%= patient.gender %>
-            </td>
-            <td>
-              <%= patient.birth_date %>
-            </td>
-            <td>
-              <a href="/journals/?patient=<%= patient.id %>">
-                <%= patient.journals.length %>
-              </a>
-            </td>
-            <td>
-              <a href="/patient/delete/<%= patient.id %>">
-                Supprimer
-              </a>
-            </td>
-          </tr>
-          <% } %>
-      </tbody>
-    </table>
-  </main>
+<h2>Patients</h2>
+<a href="/patient/create"><p>Ajouter un nouveau patient</p></a>
+<table>
+  <thead>
+    <td></td>
+    <td>Nom</td>
+    <td>Prénom</td>
+    <td>Sexe</td>
+    <td>Date de naissance</td>
+    <td>Nombres de journaux</td>
+    <td></td>
+  </thead>
+  <tbody>
+    <% for (patient of patients) { %>
+      <tr>
+        <td>
+          <a href="/patient/<%= patient.id %>">Profil</a>
+        </td>
+        <td>
+          <%= patient.last_name %>
+        </td>
+        <td>
+          <%= patient.first_name %>
+        </td>
+        <td>
+          <%= patient.gender %>
+        </td>
+        <td>
+          <%= patient.birth_date %>
+        </td>
+        <td>
+          <a href="/journals/?patient=<%= patient.id %>">
+            <%= patient.journals.length %>
+          </a>
+        </td>
+        <td>
+          <a href="/patient/delete/<%= patient.id %>">
+            Supprimer
+          </a>
+        </td>
+      </tr>
+      <% } %>
+  </tbody>
+</table>
 
-  <%- include ('partials/footer') %>
+<%- include ('partials/footer') %>

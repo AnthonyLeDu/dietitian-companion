@@ -1,4 +1,4 @@
-/* global app, BASE_URL, FOODS_DATALIST, CoreObject, createChildElement, createDeleteElement */
+/* global app, userFeedback, BASE_URL, FOODS_DATALIST, CoreObject, createChildElement, createDeleteElement */
 
 // eslint-disable-next-line no-unused-vars
 class Dish extends CoreObject {
@@ -83,11 +83,10 @@ class Dish extends CoreObject {
       });
       const json = await response.json();
       if (!response.ok) throw json;
-      app.successFeedback('Plat mis à jour.');
+      userFeedback.success('Plat mis à jour.');
     }
     catch (error) {
-      console.error(error);
-      return app.errorFeedback(error.message);
+      return userFeedback.error(error);
     }
   }
 
@@ -101,12 +100,11 @@ class Dish extends CoreObject {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error(response.statusText);
-      app.successFeedback('Aliment supprimé.');
+      userFeedback.success('Aliment supprimé.');
       this.destroy();
     }
     catch (error) {
-      console.error(error);
-      return app.errorFeedback(error.message);
+      userFeedback.error(error);
     }
   }
 
