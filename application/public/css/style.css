@@ -6,3 +6,8 @@ thead {
 td {
   border: 1px solid #000;
 }
+
+.--is-danger {
+  color: #AA3333;
+  background-color: #FFDDDD;
+}
