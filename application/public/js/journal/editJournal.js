@@ -1,4 +1,4 @@
-/* global dayjs, Journal, BASE_URL, userFeedback */
+/* global dayjs, Journal, userFeedback */
 dayjs.locale('fr');
 
 const PATIENTS_DATALIST = 'patients-datalist';
@@ -57,7 +57,7 @@ const app = {
     const match = document.location.pathname.match(/journal\/edit\/(\d+)/);
     try {
       if (!match || !match[1]) throw new Error("Impossible de récupérer l'id du journal dans l'URL.");
-      const response = await fetch(`${BASE_URL}/api/journal/${match[1]}`);
+      const response = await fetch(`/api/journal/${match[1]}`);
       const json = await response.json();
       if (!response.ok) throw json;
       app.journal = new Journal(json, document.getElementById('journal'));
@@ -73,7 +73,7 @@ const app = {
   async fetchPatients() {
     try {
       // Fetching using API
-      const response = await fetch(`${BASE_URL}/api/patients`);
+      const response = await fetch('/api/patients');
       const json = await response.json();
       if (!response.ok) throw json;
       // Add the fullname-and-gender
@@ -100,7 +100,7 @@ const app = {
   async fetchFoods() {
     try {
       // Fetching using API
-      const response = await fetch(`${BASE_URL}/api/foods`);
+      const response = await fetch('/api/foods');
       const json = await response.json();
       if (!response.ok) throw json;
       app.dbFoods = json;

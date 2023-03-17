@@ -1,4 +1,4 @@
-/* global userFeedback, dayjs, BASE_URL, CoreObject, Meal, callIfEnabled, createChildElement, createDeleteElement */
+/* global userFeedback, dayjs, CoreObject, Meal, callIfEnabled, createChildElement, createDeleteElement */
 
 // eslint-disable-next-line no-unused-vars
 class Day extends CoreObject {
@@ -65,7 +65,7 @@ class Day extends CoreObject {
       const formData = new FormData();
       formData.append('day_id', this.id);
       // POST fetch
-      const response = await fetch(`${BASE_URL}/api/meal`, {
+      const response = await fetch('/api/meal', {
         method: 'POST',
         body: formData,
       });
@@ -86,7 +86,7 @@ class Day extends CoreObject {
       const formData = new FormData();
       formData.append('position', this.index);
       // PATCH fetch
-      const response = await fetch(`${BASE_URL}/api/day/${this.id}`, {
+      const response = await fetch(`/api/day/${this.id}`, {
         method: 'PATCH',
         body: formData,
       });
@@ -147,7 +147,7 @@ class Day extends CoreObject {
   async handleDelete() {
     try {
       // DELETE fetch
-      const response = await fetch(`${BASE_URL}/api/day/${this.id}`, {
+      const response = await fetch(`/api/day/${this.id}`, {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error(response.statusText);

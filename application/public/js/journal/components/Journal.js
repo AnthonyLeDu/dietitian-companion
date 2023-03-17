@@ -1,4 +1,4 @@
-/* global app, userFeedback, dayjs, CoreObject, Day, BASE_URL */
+/* global app, userFeedback, dayjs, CoreObject, Day */
 
 // eslint-disable-next-line no-unused-vars
 class Journal extends CoreObject {
@@ -133,7 +133,7 @@ class Journal extends CoreObject {
       formData.append('journal_id', this.id);
       formData.append('position', this.children.length);
       // POST fetch
-      const response = await fetch(`${BASE_URL}/api/day`, {
+      const response = await fetch('/api/day', {
         method: 'POST',
         body: formData,
       });
@@ -192,7 +192,7 @@ class Journal extends CoreObject {
   async patchInDatabase() {
     const formData = new FormData(this.form);
     try {
-      const response = await fetch(`${BASE_URL}/api/journal/${this.id}`, {
+      const response = await fetch(`/api/journal/${this.id}`, {
         method: 'PATCH',
         body: formData
       });

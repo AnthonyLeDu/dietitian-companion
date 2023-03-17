@@ -1,4 +1,4 @@
-/* global app, userFeedback, BASE_URL, FOODS_DATALIST, CoreObject, createChildElement, createDeleteElement */
+/* global app, userFeedback, FOODS_DATALIST, CoreObject, createChildElement, createDeleteElement */
 
 // eslint-disable-next-line no-unused-vars
 class Dish extends CoreObject {
@@ -77,7 +77,7 @@ class Dish extends CoreObject {
       formData.append('amount', this.amount || '');
 
       // PATCH fetch
-      const response = await fetch(`${BASE_URL}/api/dish/${this.id}`, {
+      const response = await fetch(`/api/dish/${this.id}`, {
         method: 'PATCH',
         body: formData,
       });
@@ -96,7 +96,7 @@ class Dish extends CoreObject {
   async handleDelete() {
     try {
       // DELETE fetch
-      const response = await fetch(`${BASE_URL}/api/dish/${this.id}`, {
+      const response = await fetch(`/api/dish/${this.id}`, {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error(response.statusText);

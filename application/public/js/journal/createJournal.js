@@ -1,4 +1,4 @@
-/* global BASE_URL, userFeedback */
+/* global userFeedback */
 const app = {
 
   init() {
@@ -14,7 +14,7 @@ const app = {
     event.preventDefault();
     try {
       // POST fetch
-      const response = await fetch(`${BASE_URL}/api/journal`, {
+      const response = await fetch('/api/journal', {
         method: 'POST'
       });
       const json = await response.json();
