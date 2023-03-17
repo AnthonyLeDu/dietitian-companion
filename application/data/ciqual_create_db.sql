@@ -29,7 +29,7 @@ CREATE TABLE "food_ssssgrp"
 
 CREATE TABLE "food" 
 (
-    "code"	INT AS PRIMARY KEY,
+    "code"	INT AS IDENTITY PRIMARY KEY,
     "name_fr"	VARCHAR(255),
     "food_grp_code"	INT REFERENCES "food_grp"("code"),
     "food_ssgrp_code"	INT REFERENCES "food_ssgrp"("code"),
