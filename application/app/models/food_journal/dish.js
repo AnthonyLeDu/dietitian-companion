@@ -20,14 +20,16 @@ class Dish extends JournalElement {
   }
 
   /**
-   * Fetch associated food
+   * Fetch associated food nutrients
    */
   async calculateNutrients() {
+    const shareOfRefAmount = this.amount / 100.0; // All nutrients are per 100g.
 
     await this.fetchFood(); // Making sure this.food is accessible
     this.nutrients = [];
     for (const nutrientData of nutrientsData) {
       const ownNutrient = {...nutrientData, minAmount: 0, maxAmount: 0, traces: false };
+      if (!this.amount) continue;
       const sourceNutrientValue = this.food[nutrientData.dbName];
       // If traces
       if (sourceNutrientValue.includes('traces')) {
@@ -35,11 +37,11 @@ class Dish extends JournalElement {
       }
       // If below X (add to maxAmount)
       else if (sourceNutrientValue.startsWith('<')) {
-        ownNutrient.maxAmount = parseFloat(sourceNutrientValue.replace('<', ''));
+        ownNutrient.maxAmount = shareOfRefAmount * parseFloat(sourceNutrientValue.replace('<', ''));
       }
       // If a number (add to minAmount)
       else if (!isNaN(Number(sourceNutrientValue))) {
-        ownNutrient.minAmount = ownNutrient.maxAmount = Number(sourceNutrientValue);
+        ownNutrient.minAmount = ownNutrient.maxAmount = shareOfRefAmount * Number(sourceNutrientValue);
       }
       // Unhandled (throw error)
       else {

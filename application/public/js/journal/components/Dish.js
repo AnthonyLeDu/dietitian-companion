@@ -49,11 +49,11 @@ class Dish extends CoreObject {
   }
 
   set amount(value) {
-    this.amountElem.value = (value !== undefined) ? String(value) : '';
+    this.amountElem.value = (value !== undefined) ? String(value) : '0';
   }
 
   get amount() {
-    return this.amountElem.value ? Number(this.amountElem.value) : undefined;
+    return this.amountElem.value ? Number(this.amountElem.value) : 0;
   }
 
   /**
@@ -74,7 +74,7 @@ class Dish extends CoreObject {
       const formData = new FormData();
       formData.append('position', this.index);
       formData.append('food_code', this.foodCode || '');
-      formData.append('amount', this.amount || '');
+      formData.append('amount', this.amount);
 
       // PATCH fetch
       const response = await fetch(`/api/dish/${this.id}`, {
