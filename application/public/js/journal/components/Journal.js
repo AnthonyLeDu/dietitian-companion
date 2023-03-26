@@ -20,12 +20,24 @@ class Journal extends CoreObject {
     this.patientNameInputElem = this.mainElem.querySelector('input[name=patient_fullname]');
     this.patientAgeInputElem = this.mainElem.querySelector('input[name=patient_age]');
     this.patientWeightInputElem = this.mainElem.querySelector('input[name=patient_weight]');
+    this.patientPregnantInputElem = this.mainElem.querySelector('input[name=patient_pregnant]');
+    this.patientNursingInputElem = this.mainElem.querySelector('input[name=patient_nursing]');
+    this.patientMenopausalInputElem = this.mainElem.querySelector('input[name=patient_menopausal]');
+    this.patientHeavyMensesInputElem = this.mainElem.querySelector('input[name=patient_heavy_menses]');
     this.startDayInputElem = this.mainElem.querySelector('input[name=start_day]');
     
     this.patientNameInputElem.addEventListener('change', event => this.self.handlePatientNameChange(event));
-    this.patientAgeInputElem.addEventListener('change', event => this.self.handlePatientAgeChange(event));
-    this.patientWeightInputElem.addEventListener('change', event => this.self.handlePatientWeightChange(event));
     this.startDayInputElem.addEventListener('change', event => this.self.handleStartDayChange(event));
+    for (const elem of [
+      this.patientAgeInputElem,
+      this.patientWeightInputElem,
+      this.patientPregnantInputElem,
+      this.patientNursingInputElem,
+      this.patientMenopausalInputElem,
+      this.patientHeavyMensesInputElem,
+    ]) {
+      elem.addEventListener('change', event => this.self.patchInDatabase(event));
+    }
     document.getElementById('add-day').addEventListener('click', () => this.self.postChild());
     
     this.loadData(data);
@@ -78,14 +90,17 @@ class Journal extends CoreObject {
   async loadData(data) {
     // Show the journal form and fill it
     this.mainElem.style.display = 'block';
-    const { patient, patient_age, patient_weight, start_day } = data;
-    if (patient) {
-      this.patientId = patient.id;
+    if (data.patient) {
+      this.patientId = data.patient.id;
       this.patientNameInputElem.value = this.patient.fullNameAndGender;
     }
-    this.patientAgeInputElem.value = patient_age;
-    this.patientWeightInputElem.value = patient_weight;
-    this.startDayInputElem.value = start_day;
+    this.patientAgeInputElem.value = data.patient_age;
+    this.patientWeightInputElem.value = data.patient_weight;
+    this.startDayInputElem.value = data.start_day;
+    this.patientPregnantInputElem.checked = data.patient_pregnant;
+    this.patientNursingInputElem.checked = data.patient_nursing;
+    this.patientMenopausalInputElem.checked = data.patient_menopausal;
+    this.patientHeavyMensesInputElem.checked = data.patient_heavy_menses;
 
     // Load days
     // TODO: Prevent DB to be updated when populating UI on load
@@ -106,14 +121,6 @@ class Journal extends CoreObject {
       this.patientId = patient.id;
     }
     this.updatePatientAge();
-    this.patchInDatabase();
-  }
-  
-  handlePatientAgeChange() {
-    this.patchInDatabase();
-  }
-  
-  handlePatientWeightChange() {
     this.patchInDatabase();
   }
   
@@ -191,6 +198,12 @@ class Journal extends CoreObject {
    */
   async patchInDatabase() {
     const formData = new FormData(this.form);
+    // Set options to false if checkbox not checked (otherwise it's not sent at all)
+    for (const option of ['patient_pregnant', 'patient_nursing', 'patient_menopausal', 'patient_heavy_menses']) {
+      if (!formData.get(option)) {
+        formData.append(option, false);
+      }
+    }
     try {
       const response = await fetch(`/api/journal/${this.id}`, {
         method: 'PATCH',

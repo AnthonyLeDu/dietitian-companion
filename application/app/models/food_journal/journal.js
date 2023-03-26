@@ -26,6 +26,18 @@ Journal.init(
     patient_weight: {
       type: DataTypes.INTEGER, // kg
     },
+    patient_pregnant: {
+      type: DataTypes.BOOLEAN,
+    },
+    patient_nursing: {
+      type: DataTypes.BOOLEAN,
+    },
+    patient_menopausal: {
+      type: DataTypes.BOOLEAN,
+    },
+    patient_heavy_menses: {
+      type: DataTypes.BOOLEAN,
+    },
     start_day: {
       type: DataTypes.DATEONLY,
     },

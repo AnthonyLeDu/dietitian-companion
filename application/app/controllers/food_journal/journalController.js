@@ -2,6 +2,73 @@
 // eslint-disable-next-line no-unused-vars
 const { Journal, Patient } = require('../../models');
 const patientController = require('../patientController');
+const nutrientsData = require('../../data/nutrientsData.json');
+
+/**
+ * Given a journal instance, returns the corresponding recommended daily intakes.
+ * @param {Journal} journal
+ * @returns Recommended intakes object
+ */
+const getRecommendedIntakes = function(journal) {
+  // Calculate recommended daily income if enough info provided
+  const recommended_intakes = {};
+  if (!journal.patient || journal.patient_age === undefined) return journal;
+
+  const patientAge = journal.patient_age * 12; // In months
+  for (const nutrientData of nutrientsData) {
+    if (!nutrientData.recommended_intake) continue;
+    let amount;
+    const populations = nutrientData.recommended_intake.populations;
+    // Is pregnant ?
+    if (journal.patient_pregnant && Object.prototype.hasOwnProperty.call(populations, 'pregnant')) {
+      amount = populations.pregnant;
+    }
+    // Is nursing ?
+    else if (journal.patient_nursing && Object.prototype.hasOwnProperty.call(populations, 'nursing')) {
+      amount = populations.nursing;
+    }
+    // Using age (in months)
+    else {
+      const populationAges = Object.keys(populations)
+        .map((key) => Number(key))
+        .filter((key) => !isNaN(key)) // Keep only numbers and remove 'pregnant', 'nursing', etc.
+        .sort((a, b) => b - a); // Reverse sort
+
+      let matchingAge = populationAges.find((populationAge) => populationAge <= patientAge); // Finding the first age below the journal's patient age.
+      if (matchingAge) {
+        matchingAge = String(matchingAge);
+        if (typeof populations[matchingAge] === 'number') {
+          amount = populations[matchingAge];
+        }
+        else { // There is a gender sub-object (male of female)
+          const genderData = populations[matchingAge][journal.patient.gender];
+          if (typeof genderData === 'number') {
+            amount = genderData;
+          }
+          else { // There is a specificities sub-object (menopausal or heavy_menses)
+            if (journal.patient_menopausal && Object.prototype.hasOwnProperty.call(genderData, 'menopausaul')) {
+              amount = genderData.menopausaul;
+            }
+            else if (journal.patient_heavy_menses && Object.prototype.hasOwnProperty.call(genderData, 'heavy_menses')) {
+              amount = genderData.heavy_menses;
+            }
+            // No matching specificities, using standard value if found
+            else if (Object.prototype.hasOwnProperty.call(genderData, 'standard')) {
+              amount = genderData.standard;
+            }
+          }
+        }
+      }
+    }
+
+    recommended_intakes[nutrientData.dbName] = {
+      'unit': nutrientData.recommended_intake.unit,
+      'amount': amount
+    };
+    // console.log(nutrientData.dbName, amount, nutrientData.recommended_intake.unit);
+  }
+  return recommended_intakes;
+};
 
 const journalController = {
 
@@ -39,7 +106,6 @@ const journalController = {
       day.journal = journal;
       // Getting the Food corresponding to the dish food_code
       day.meals.sort((a, b) => a.time_float - b.time_float); // Sorting days according to time
-      // console.table(day.meals[0].toJSON());
       for (const meal of day.meals) {
         meal.dishes.sort((a, b) => a.position - b.position); // Sorting dishes according to position
         for (const dish of meal.dishes) {
@@ -48,6 +114,8 @@ const journalController = {
       }
     }
     await journal.getNutrients();
+    
+    journal.recommended_intakes = getRecommendedIntakes(journal);
     return journal;
   },
 
