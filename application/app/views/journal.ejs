@@ -19,7 +19,7 @@
     </hgroup>
     <% for (dish of meal.dishes) { %>
       <hgroup>
-        <p><%= dish.position %>. <%= dish.food?.name_fr %> (<%= dish.amount %>g)</p>
+        <p><%= dish.position %>. <% if (dish.food) { %> <%= dish.food.name_fr %> (<%= dish.amount %>g) <% } %></p>
       </hgroup>
     <% } %>
   <% } %>
