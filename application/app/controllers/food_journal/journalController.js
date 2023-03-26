@@ -65,7 +65,7 @@ const getRecommendedIntakes = function(journal) {
       'unit': nutrientData.recommended_intake.unit,
       'amount': amount
     };
-    console.log(nutrientData.dbName, amount, nutrientData.recommended_intake.unit);
+    // console.log(nutrientData.dbName, amount, nutrientData.recommended_intake.unit);
   }
   return recommended_intakes;
 };

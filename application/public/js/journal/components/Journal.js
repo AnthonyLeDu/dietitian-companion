@@ -97,7 +97,6 @@ class Journal extends CoreObject {
     this.patientAgeInputElem.value = data.patient_age;
     this.patientWeightInputElem.value = data.patient_weight;
     this.startDayInputElem.value = data.start_day;
-    console.log(data.patient_heavy_menses);
     this.patientPregnantInputElem.checked = data.patient_pregnant;
     this.patientNursingInputElem.checked = data.patient_nursing;
     this.patientMenopausalInputElem.checked = data.patient_menopausal;
