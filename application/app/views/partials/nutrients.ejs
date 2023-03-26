@@ -1,6 +1,22 @@
 <% nutrients = nutrients || [] %>
-<div>
+<table class="container">
+  <thead>
+    <tr>
+      <td>Nutriment</td>
+      <td>Calculé</td>
+      <td>Recommandé</td>
+    </tr>
+  </thead>
   <% for (const nutrient of nutrients) { %>
-    <span><%= nutrient.shortName %> <%= nutrient.avgAmount %> <%= nutrient.unit %> |</span>
+    <tr>
+      <td><%= nutrient.shortName %> (<%= nutrient.unit %>)</td>
+      <td><%= nutrient.avgAmount %> <%= nutrient.unit %></td>
+      <td>
+        <% const nutrientRecommendedIntake = journal.recommended_intakes[nutrient.dbName];
+        if (nutrientRecommendedIntake) { %>
+          <%= nutrientRecommendedIntake.amount %> <%= nutrientRecommendedIntake.unit %>
+        <% } %>
+      </td>
+    </tr>
   <% } %>
-</div>
+</table>

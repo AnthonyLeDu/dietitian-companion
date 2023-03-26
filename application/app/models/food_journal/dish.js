@@ -28,7 +28,14 @@ class Dish extends JournalElement {
     await this.fetchFood(); // Making sure this.food is accessible
     this.nutrients = [];
     for (const nutrientData of nutrientsData) {
-      const ownNutrient = {...nutrientData, minAmount: 0, maxAmount: 0, traces: false };
+      const ownNutrient = {
+        dbName: nutrientData.dbName,
+        shortName: nutrientData.shortName,
+        unit: nutrientData.unit,
+        minAmount: 0,
+        maxAmount: 0,
+        traces: false
+      };
       if (!this.amount) continue;
       const sourceNutrientValue = this.food[nutrientData.dbName];
       // If traces

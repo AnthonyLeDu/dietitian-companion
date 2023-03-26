@@ -249,37 +249,142 @@
     "dbName": "calcium",
     "shortName": "Calcium",
     "longName": "Calcium",
-    "unit": "mg"
+    "unit": "mg",
+    "recommended_intake": {
+      "unit": "mg/j",
+      "populations": {
+        "0": 200,
+        "6": 280,
+        "12": 450,
+        "48": 800,
+        "132": 1150,
+        "216": 1000,
+        "300": 950,
+        "pregnant": 950,
+        "nursing": 950
+      }
+    }
   },
   {
     "dbName": "chloride",
     "shortName": "Chlorure",
     "longName": "Chlorure",
-    "unit": "mg"
+    "unit": "mg",
+    "recommended_intake": {
+      "unit": "mg/j",
+      "populations": {
+        "0": 170,
+        "6": 570,
+        "12": 1200,
+        "48": 1500,
+        "108": 1900,
+        "168": 2300
+      }
+    }
   },
   {
     "dbName": "copper",
     "shortName": "Cuivre",
     "longName": "Cuivre",
-    "unit": "mg"
+    "unit": "mg",
+    "recommended_intake": {
+      "unit": "mg/j",
+      "populations": {
+        "0": 0.3,
+        "6": 0.5,
+        "12": 0.8,
+        "48": 1.0,
+        "84": 1.2,
+        "132": 1.3,
+        "180": {
+          "male": 1.5,
+          "female": 1.1
+        },
+        "216": {
+          "male": 1.9,
+          "female": 1.5
+        },
+        "pregnant": 1.7,
+        "nursing": 1.7
+      }
+    }
   },
   {
     "dbName": "iron",
     "shortName": "Fer",
     "longName": "Fer",
-    "unit": "mg"
+    "unit": "mg",
+    "recommended_intake": {
+      "unit": "mg/j",
+      "populations": {
+        "0": 0.3,
+        "6": 11,
+        "12": 5,
+        "36": 4,
+        "84": 6,
+        "144": {
+          "male": 11,
+          "female": {
+            "standard": 11,
+            "heavy_menses": 13
+          }
+        },
+        "216": {
+          "male": 11,
+          "female": {
+            "standard": 11,
+            "heavy_menses": 16,
+            "menopausaul": 11
+          }
+        },
+        "pregnant": 16,
+        "nursing": 16
+      }
+    }
   },
   {
     "dbName": "iodine",
     "shortName": "Iode",
     "longName": "Iode",
-    "unit": "µg"
+    "unit": "µg",
+    "recommended_intake": {
+      "unit": "µg/j",
+      "populations": {
+        "0": 90,
+        "6": 70,
+        "12": 90,
+        "132": 120,
+        "180": 130,
+        "216": 150,
+        "pregnant": 200,
+        "nursing": 200
+      }
+    }
   },
   {
     "dbName": "magnesium",
     "shortName": "Magnésium",
     "longName": "Magnésium",
-    "unit": "mg"
+    "unit": "mg",
+    "recommended_intake": {
+      "unit": "mg/j",
+      "populations": {
+        "0": 25,
+        "6": 80,
+        "12": 180,
+        "48": 210,
+        "84": 240,
+        "132": 265,
+        "180": {
+          "male": 295,
+          "female": 225
+        },
+        "216": {
+          "male": 380,
+          "female": 300
+        }
+      }
+    }
   },
   {
     "dbName": "manganese",
@@ -291,37 +396,121 @@
     "dbName": "phosphorus",
     "shortName": "Phosphore",
     "longName": "Phosphore",
-    "unit": "mg"
+    "unit": "mg",
+    "recommended_intake": {
+      "unit": "mg/j",
+      "populations": {
+        "0": 100,
+        "6": 160,
+        "12": 250,
+        "48": 440,
+        "132": 640,
+        "216": 550
+      }
+    }
   },
   {
     "dbName": "potassium",
     "shortName": "Potassium",
     "longName": "Potassium",
-    "unit": "mg"
+    "unit": "mg",
+    "recommended_intake": {
+      "unit": "mg/j",
+      "populations": {
+        "0": 400,
+        "6": 750,
+        "12": 800,
+        "48": 1100,
+        "84": 1800,
+        "132": 2700,
+        "180": 3500,
+        "nursing": 4000
+      }
+    }
   },
   {
     "dbName": "selenium",
     "shortName": "Sélénium",
     "longName": "Sélénium",
-    "unit": "µg"
+    "unit": "µg",
+    "recommended_intake": {
+      "unit": "µg/j",
+      "populations": {
+        "0": 12.5,
+        "6": 15,
+        "48": 20,
+        "84": 35,
+        "132": 55,
+        "180": 70,
+        "nursing": 85
+      }
+    }
   },
   {
     "dbName": "sodium",
     "shortName": "Sodium",
     "longName": "Sodium",
-    "unit": "mg"
+    "unit": "mg",
+    "recommended_intake": {
+      "unit": "mg/j",
+      "populations": {
+        "0": 110,
+        "6": 370,
+        "12": 800,
+        "48": 1000,
+        "108": 1200,
+        "168": 1500
+      }
+    }
   },
   {
     "dbName": "zinc",
     "shortName": "Zinc",
     "longName": "Zinc",
-    "unit": "mg"
+    "unit": "mg",
+    "recommended_intake": {
+      "unit": "mg/j",
+      "populations": {
+        "0": 2,
+        "6": 2.9,
+        "12": 4.3,
+        "48": 5.5,
+        "84": 7.4,
+        "132": 10.7,
+        "180": {
+          "male": 14.2,
+          "female": 11.9
+        },
+        "216": {
+          "male": 11.7,
+          "female": 9.3
+        },
+        "pregnant": 10.9,
+        "nursing": 12.2
+      }
+    }
   },
   {
     "dbName": "retinol",
     "shortName": "Rétinol",
     "longName": "Rétinol",
-    "unit": "µg"
+    "unit": "µg",
+    "recommended_intake": {
+      "unit": "µg/j",
+      "populations": {
+        "0": 350,
+        "6": 250,
+        "48": 300,
+        "84": 400,
+        "132": 600,
+        "180": {
+          "male": 750,
+          "female": 650
+        },
+        "pregnant": 700,
+        "nursing": 1300
+      }
+    }
   },
   {
     "dbName": "beta_carotene",
@@ -333,19 +522,55 @@
     "dbName": "vitamin_d",
     "shortName": "Vitamine D",
     "longName": "Vitamine D",
-    "unit": "µg"
+    "unit": "µg",
+    "recommended_intake": {
+      "unit": "µg/j",
+      "populations": {
+        "0": 10,
+        "12": 15
+      }
+    }
   },
   {
     "dbName": "vitamin_e",
     "shortName": "Vitamine E",
     "longName": "Vitamine E",
-    "unit": "mg"
+    "unit": "mg",
+    "recommended_intake": {
+      "unit": "mg/j",
+      "populations": {
+        "0": 4,
+        "6": 5,
+        "12": 7,
+        "84": 9,
+        "132": 10,
+        "180": {
+          "male": 10,
+          "female": 8
+        },
+        "216": {
+          "male": 10,
+          "female": 9
+        }
+      }
+    }
   },
   {
     "dbName": "vitamin_k1",
     "shortName": "Vitamine K1",
     "longName": "Vitamine K1",
-    "unit": "µg"
+    "unit": "µg",
+    "recommended_intake": {
+      "unit": "µg/j",
+      "populations": {
+        "0": 5,
+        "6": 10,
+        "12": 29,
+        "48": 42,
+        "84": 45,
+        "216": 79
+      }
+    }
   },
   {
     "dbName": "vitamin_k2",
@@ -357,48 +582,146 @@
     "dbName": "vitamin_c",
     "shortName": "Vitamine C",
     "longName": "Vitamine C",
-    "unit": "mg"
+    "unit": "mg",
+    "recommended_intake": {
+      "unit": "mg/j",
+      "populations": {
+        "0": 20,
+        "48": 30,
+        "84": 45,
+        "132": 70,
+        "180": 100,
+        "216": 110,
+        "pregnant": 120,
+        "nursing": 170
+      }
+    }
   },
   {
     "dbName": "vitamin_b1",
     "shortName": "Vitamine B1",
     "longName": "Vitamine B1 ou Thiamine",
-    "unit": "mg"
+    "unit": "mg",
+    "recommended_intake": {
+      "unit": "mg/MJ",
+      "populations": {
+        "0": 0.2,
+        "6": 0.1
+      }
+    }
   },
   {
     "dbName": "vitamin_b2",
     "shortName": "Vitamine B2",
     "longName": "Vitamine B2 ou Riboflavine",
-    "unit": "mg"
+    "unit": "mg",
+    "recommended_intake": {
+      "unit": "mg/j",
+      "populations": {
+        "0": 0.3,
+        "6": 0.4,
+        "12": 0.6,
+        "48": 0.7,
+        "84": 1.0,
+        "132": 1.4,
+        "180": 1.6,
+        "pregnant": 1.9,
+        "nursing": 2.0
+      }
+    }
   },
   {
     "dbName": "vitamin_b3",
     "shortName": "Vitamine B3",
     "longName": "Vitamine B3 ou PP ou Niacine",
-    "unit": "mg"
+    "unit": "mg",
+    "recommended_intake": {
+      "unit": "mg EN/MJ",
+      "populations": {
+        "0": 2.0,
+        "6": 1.6
+      }
+    }
   },
   {
     "dbName": "vitamin_b5",
     "shortName": "Vitamine B5",
     "longName": "Vitamine B5 ou Acide pantothénique",
-    "unit": "mg"
+    "unit": "mg",
+    "recommended_intake": {
+      "unit": "mg/j",
+      "populations": {
+        "0": 2,
+        "6": 3,
+        "12": 4,
+        "48": 4.5,
+        "84": 5,
+        "132": 6,
+        "180": {
+          "male": 6,
+          "female": 5
+        },
+        "nursing": 7
+      }
+    }
   },
   {
     "dbName": "vitamin_b6",
     "shortName": "Vitamine B6",
     "longName": "Vitamine B6",
-    "unit": "mg"
+    "unit": "mg",
+    "recommended_intake": {
+      "unit": "mg/j",
+      "populations": {
+        "0": 0.1,
+        "6": 0.3,
+        "12": 0.6,
+        "48": 0.7,
+        "84": 1.0,
+        "132": 1.4,
+        "180": {
+          "male": 1.7,
+          "female": 1.6
+        },
+        "pregnant": 1.8
+      }
+    }
   },
   {
     "dbName": "vitamin_b9",
     "shortName": "Vitamine B9",
     "longName": "Vitamine B9 ou Folates totaux",
-    "unit": "µg"
+    "unit": "µg",
+    "recommended_intake": {
+      "unit": "µg EFA/j",
+      "populations": {
+        "0": 65,
+        "6": 80,
+        "12": 120,
+        "48": 140,
+        "84": 200,
+        "132": 270,
+        "180": 330,
+        "pregnant": 600,
+        "nursing": 500
+      }
+    }
   },
   {
     "dbName": "vitamin_b12",
     "shortName": "Vitamine B12",
     "longName": "Vitamine B12",
-    "unit": "µg"
+    "unit": "µg",
+    "recommended_intake": {
+      "unit": "µg/j",
+      "populations": {
+        "0": 0.4,
+        "6": 1.5,
+        "132": 2.5,
+        "216": 4,
+        "pregnant": 4.5,
+        "nursing": 5
+      }
+    }
   }
 ]

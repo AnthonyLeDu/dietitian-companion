@@ -10,8 +10,8 @@
 
 <fieldset>
   <label for="gender">Sexe</label>
-  <input type="radio" name="gender" id="gender-male" value="Homme" <%=patient.gender !== 'Homme' ? "" : "checked"%> required>Homme
-  <input type="radio" name="gender" id="gender-female" value="Femme" <%=patient.gender !== 'Femme' ? "" : "checked"%> required>Femme
+  <input type="radio" name="gender" id="gender-male" value="male" <% if (patient && patient.gender === 'male') { %> checked <% } %> required>Homme
+  <input type="radio" name="gender" id="gender-female" value="female" <% if (patient && patient.gender === 'female') { %> checked <% } %> required>Femme
 </fieldset>
 
 <fieldset>
