@@ -1,7 +1,7 @@
 ```
-PATIENT (_id_, last_name, first_name, gender)
-JOURNAL (id, patient_age, patient_weight, #PATIENT(id))
-DAY (_id_, position, #JOURNAL(id))
+PATIENT (id, last_name, first_name, gender, birth_date)
+JOURNAL (id, start_day, patient_age, patient_weight, patient_pregnant, patient_nursing, patient_menopausal, patient_heavy_menses, #PATIENT(id))
+DAY (id, position, #JOURNAL(id))
 MEAL (id, time, #DAY(id))
-DISH (_id_, position, amount, #CIQUAL_FOOD(id), #MEAL(id))
+DISH (id, food_code, position, amount, #MEAL(id))
 ```
